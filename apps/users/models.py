@@ -34,3 +34,8 @@ class User(AbstractBaseModel, AbstractUser):
     def __str__(self):
         return self.first_name + " " + self.last_name
     
+    
+    @property
+    def employee_address(self):
+        return f"{self.postal_address}, {self.town}-{self.country}"
+    

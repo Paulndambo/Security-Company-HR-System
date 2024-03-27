@@ -83,12 +83,14 @@ def new_employee(request):
         return redirect("employees")
     return render(request, "employees/new_employees.html")
 
-"""
+
 @login_required(login_url="/users/login/")
-def edit_member(request):
+def edit_employee(request):
     if request.method == "POST":
-        member_id = request.POST.get("member_id")
-        name = request.POST.get("name")
+        employee_id = request.POST.get("employee_id")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        position = request.POST.get("position")
         gender = request.POST.get("gender")
         id_number = request.POST.get("id_number")
         email = request.POST.get("email")
@@ -98,48 +100,44 @@ def edit_member(request):
         county = request.POST.get("county")
         country = request.POST.get("country")
 
-        member = Member.objects.get(id=member_id)
-        member.name = name
-        member.gender = gender
-        member.id_number = id_number
-        member.email = email
-        member.phone_number = phone_number
-        member.address = address
-        member.city = city
-        member.county = county
-        member.country = country
-        member.save()
+        employee = User.objects.get(id=employee_id)
+        employee.first_name = first_name
+        employee.last_name = last_name
+        employee.gender = gender
+        employee.id_number = id_number
+        employee.email = email
+        employee.phone_number = phone_number
+        employee.physical_address = address
+        employee.postal_address = address
+        employee.town = city
+        employee.position = position
+        employee.county = county
+        employee.country = country
+        employee.save()
 
-        return redirect("members")
+        return redirect("employees")
 
-    return render(request, "members/edit_member.html")
+    return render(request, "employees/edit_employee.html")
 
 
 @login_required(login_url="/users/login/")
-def delete_member(request):
+def delete_employee(request):
     if request.method == "POST":
-        member_id = request.POST.get("member_id")
-        member = Member.objects.get(id=member_id)
-        member.delete()
+        employee_id = request.POST.get("employee_id")
+        employee = User.objects.get(id=employee_id)
+        employee.delete()
 
         return redirect("members")
 
-    return render(request, "members/delete_member.html")
+    return render(request, "employees/delete_employee.html")
 
 
 @login_required(login_url="/users/login/")
-def member_details(request, member_id=None):
-    member = Member.objects.get(id=member_id)
-
-    books_issued = member.memberissuedbooks.all()
-    paginator = Paginator(books_issued, 5)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+def employee_details(request, employee_id=None):
+    employee = User.objects.get(id=employee_id)
 
     context = {
-        "member": member,
-        "page_obj": page_obj
+        "employee": employee,
     }
 
-    return render(request, "members/member_details.html", context)
-"""
+    return render(request, "employees/employee_details.html", context)

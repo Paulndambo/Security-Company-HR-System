@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Employees</h3>
+        <h3>Employee Attendance</h3>
     </div>
     <div class="col">
       <form method="POST">
@@ -19,10 +19,11 @@
           </div>
       </form>
     </div>
+   
     <div class="col">
-        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newEmployeeModal">Add Employee</a>
+      <a href="{% url 'generate-attendance' %}" class="btn btn-success">Generate List</a>
 
-    </div>
+  </div>
 
 </div>
 <hr/>
@@ -31,36 +32,31 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">ID Number</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Gender</th>
-              <th scope="col">Address</th>
-              <th scope="col" colspan="3">Actions</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Checkin Date</th>
+              <th scope="col">Checkin Time</th>
+              <th scope="col">Checkout Time</th>
+              <th scope="col">Checked-In By</th>
+              <th scope="col" colspan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for employee in page_obj %}
+            {% for member in page_obj %}
             <tr>
-              <td>{{employee.id}}</td>
-              <td>{{employee.first_name}} {{employee.last_name}}</td>
-              <td>{{employee.id_number}}</td>
-              <td>{{employee.phone_number}}</td>
-              <td>{{employee.gender}}</td>
-              <td>{{employee.employee_address}}</td>
+              <td>{{member.id}}</td>
+              <td>{{member.employee}}</td>
+              <td>{{member.date}}</td>
+              <td>{{member.checkin_time}}</td>
+              <td>{{member.checkout_time}}</td>
+              <td>{{member.checked_in_by}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                <a href="#" class="btn btn-info btn-sm">Present</a>
               </td>
               
-              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEmployeeModal{{ employee.id }}">
-                <i class="bi bi-pencil-square"></i>
-              </a></td>
-              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal{{ employee.id }}">
-                <i class="bi bi-trash"></i>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteMemberModal{{ member.id }}">
+                Absent
               </a></td>
               
-            {% include "employees/edit_employee.html" %}
-            {% include "employees/delete_employee.html" %}
             </tr>
             {% endfor %}
 
