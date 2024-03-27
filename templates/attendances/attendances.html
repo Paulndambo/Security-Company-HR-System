@@ -19,11 +19,11 @@
           </div>
       </form>
     </div>
-   
+   {% if show_generate_attendance %}
     <div class="col">
       <a href="{% url 'generate-attendance' %}" class="btn btn-success">Generate List</a>
-
   </div>
+  {% endif %}
 
 </div>
 <hr/>
@@ -34,29 +34,31 @@
               <th scope="col">#</th>
               <th scope="col">Employee</th>
               <th scope="col">Checkin Date</th>
-              <th scope="col">Checkin Time</th>
-              <th scope="col">Checkout Time</th>
-              <th scope="col">Checked-In By</th>
+              <th scope="col">Time Marked</th>
+              <th scope="col">Marked By</th>
+              <th scope="col">Status</th>
+              <th scope="col">Marked</th>
               <th scope="col" colspan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for member in page_obj %}
+            {% for attendance in page_obj %}
             <tr>
-              <td>{{member.id}}</td>
-              <td>{{member.employee}}</td>
-              <td>{{member.date}}</td>
-              <td>{{member.checkin_time}}</td>
-              <td>{{member.checkout_time}}</td>
-              <td>{{member.checked_in_by}}</td>
+              <td>{{attendance.id}}</td>
+              <td>{{attendance.employee}}</td>
+              <td>{{attendance.date}}</td>
+              <td>{{attendance.checkin_time.time}}</td>
+              <td>{{attendance.checked_in_by}}</td>
+              <td>{{attendance.status}}</td>
+              <td>{{attendance.marked}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm">Present</a>
+                <a href="{% url 'mark-present' attendance.id %}" class="btn btn-info btn-sm">Present</a>
               </td>
               
-              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteMemberModal{{ member.id }}">
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#markAbsentModal{{ attendance.id }}">
                 Absent
               </a></td>
-              
+              {% include "attendances/mark_absent.html" %}
             </tr>
             {% endfor %}
 
