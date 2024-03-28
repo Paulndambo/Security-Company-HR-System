@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from apps.equipments.models import Equipment, EquipmentIssue
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-
+from apps.users.models import User
 
 # Create your views here.
 @login_required(login_url="/users/login")
@@ -72,12 +72,17 @@ def delete_equipment(request):
 def issued_equipment(request):
     issued_equipment = EquipmentIssue.objects.all().order_by("-created")
 
+    employees = User.objects.all()
+    equipments = Equipment.objects.all()
+
     paginator = Paginator(issued_equipment, 15)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
         "page_obj": page_obj,
+        "employees": employees,
+        "equipments": equipments
     }
 
     return render(request, "equipments/issued_equipment.html", context)

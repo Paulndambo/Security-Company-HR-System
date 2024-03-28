@@ -6,6 +6,6 @@ urlpatterns = [
     path("new-equipment", new_equipment, name="new-equipment"),
     path("edit-equipment", edit_equipment, name="edit-equipment"),
     path("delete-equipment", delete_equipment, name="delete-equipment"),
-    path("issued-equipment", issued_equipment, name="issued-equipment"),
+    path("issued-equipments", issued_equipment, name="issued-equipments"),
     path("issue-equipment", issue_equipment, name="issue-equipment"),
 ]   
