@@ -5,24 +5,25 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
+
 # Create your views here.
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
 
-            return redirect('home')
-    return render(request, 'accounts/login.html')
+            return redirect("home")
+    return render(request, "accounts/login.html")
 
 
 def user_logout(request):
     logout(request)
-    return redirect('login')
+    return redirect("login")
 
 
 @login_required(login_url="/users/login/")
@@ -32,17 +33,17 @@ def employees(request):
     if request.method == "POST":
         search_text = request.POST.get("search_text")
         employees = User.objects.filter(
-            Q(first_name__icontains=search_text) | Q(first_name__icontains=search_text) | Q(phone_number__icontains=search_text) | Q(
-                id_number__icontains=search_text)
+            Q(first_name__icontains=search_text)
+            | Q(first_name__icontains=search_text)
+            | Q(phone_number__icontains=search_text)
+            | Q(id_number__icontains=search_text)
         ).order_by("-created")
 
     paginator = Paginator(employees, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj
-    }
+    context = {"page_obj": page_obj}
     return render(request, "employees/employees.html", context)
 
 
@@ -62,7 +63,6 @@ def new_employee(request):
         county = request.POST.get("county")
         position = request.POST.get("position")
 
-
         employee = User.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -77,7 +77,7 @@ def new_employee(request):
             county=county,
             country=country,
             position=position,
-            role="Employee"
+            role="Employee",
         )
 
         return redirect("employees")

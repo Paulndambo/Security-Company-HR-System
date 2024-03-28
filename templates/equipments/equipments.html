@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Equipment List</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+   
+    <div class="col">
+      <a href="#" class="btn btn-success">New Equipment</a>
+  </div>
+  
+
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Amount Issued</th>
+              <th scope="col">Cost</th>
+              <th scope="col" colspan="2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for equipment in page_obj %}
+            <tr>
+              <td>{{equipment.id}}</td>
+              <td>{{equipment.name}}</td>
+              <td>{{equipment.category}}</td>
+              <td>{{equipment.quantity}}</td>
+              <td>{{equipment.issued}}</td>
+              <td>{{equipment.price}}</td>
+            
+              <td>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editEquipmentModal{{ equipment.id }}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+              </td>
+              
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEquipmentModal{{ equipment.id }}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "equipments/edit_equipment.html" %}
+              {% include "equipments/delete_equipment.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+              {% if page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+{% endblock content %}
