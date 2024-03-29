@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Workstations</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newWorkstationModal">New Workstation</a>
+
+    </div>
+
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Phone No.</th>
+              <th scope="col">Email</th>
+              <th scope="col">Guards Posted</th>
+              <th scope="col">Work Shift</th>
+              <th scope="col">Start Date</th>
+              <th scope="col" colspan="3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for workstation in page_obj %}
+            <tr>
+              <td>{{workstation.id}}</td>
+              <td>{{workstation.name}}</td>
+              <td>{{workstation.phone_number}}</td>
+              <td>{{workstation.email}}</td>
+              <td>{{workstation.guards_posted}}</td>
+              <td>{{workstation.work_shift}}</td>
+              <td>{{workstation.contract_start_date}}</td>
+              <td>
+                <a href="{% url 'workstation-detail' workstation.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+              </td>
+              
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#ediModal{{ workstation.id }}">
+                <i class="bi bi-pencil-square"></i>
+              </a></td>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal{{ workstation.id }}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              
+            {% include "workstations/edit_workstation.html" %}
+            {% include "workstations/delete_workstation.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+              {% if page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+{% endblock content %}

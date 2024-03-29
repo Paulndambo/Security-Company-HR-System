@@ -9,6 +9,8 @@ from apps.employees.views import (
     apply_leave,
     mark_attendance,
     reset_attendance,
+    mark_leave_application,
+    delete_leave_application
 )
 
 urlpatterns = [
@@ -23,4 +25,6 @@ urlpatterns = [
 
     path("leave-applications/", leave_applications, name="leave-applications"),
     path("apply-leave/", apply_leave, name="apply-leave"),
+    path("mark-leave/", mark_leave_application, name="mark-leave"),
+    path("delete-leave/", delete_leave_application, name="delete-leave"),
 ]

@@ -75,8 +75,8 @@
                     </div>
                   </div>
                   
-                  
-                  <div class="mb-2">
+                  <div class="row mb-3">
+                  <div class="col">
                     <label class="form-label">Gender</label>
                     <select class="form-select" id="gender" name="gender">
                         <option value="Male">Male</option>
@@ -84,6 +84,15 @@
     
                       </select>
                   </div>
+                  <div class="col">
+                    <label class="form-label">Work Station</label>
+                    <select class="form-select" id="workstation" name="workstation">
+                      {% for workstation in workstations %}
+                        <option value="{{workstation.id}}">{{workstation.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
 
                   <div class="row mb-3">
                     <div class="col">
@@ -129,6 +138,27 @@
                         required
                       />
                     </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Chief's Letter</label>
+                    <input type="file" id="chief_letter" name="chief_letter" class="form-control" >
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Recommendation Letter</label>
+                    <input type="file" id="recommendation_letter" name="recommendation_letter" class="form-control" >
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Scanned ID Card</label>
+                    <input type="file" id="scanned_id" name="scanned_id" class="form-control" >
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Passport Photo</label>
+                    <input type="file" id="passport_photo" name="passport_photo" class="form-control" >
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Police Clearance Letter</label>
+                    <input type="file" id="police_clearance" name="police_clearance" class="form-control" >
                   </div>
          
                 <div class="text-center mt-2">

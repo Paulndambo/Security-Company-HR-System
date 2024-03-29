@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
-
+from apps.core.models import Workstation
 # Create your views here.
 # Create your views here.
 ################ Authentication URLs ##############
@@ -29,6 +29,7 @@ def user_logout(request):
 @login_required(login_url="/users/login/")
 def employees(request):
     employees = User.objects.all().order_by("-created")
+    workstations = Workstation.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
@@ -43,7 +44,7 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj}
+    context = {"page_obj": page_obj, "workstations": workstations}
     return render(request, "employees/employees.html", context)
 
 
@@ -63,6 +64,13 @@ def new_employee(request):
         county = request.POST.get("county")
         position = request.POST.get("position")
 
+        chief_letter = request.FILES.get("chief_letter")
+        police_clearance = request.FILES.get("police_clearance")
+        recommendation_letter = request.FILES.get("recommendation_letter")
+        scanned_id = request.FILES.get("scanned_id")
+        passport_photo = request.FILES.get("passport_photo")
+        workstation = request.POST.get("workstation")
+
         employee = User.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -78,6 +86,12 @@ def new_employee(request):
             country=country,
             position=position,
             role="Employee",
+            workstation_id=workstation,
+            chief_letter=chief_letter,
+            police_clearance=police_clearance,
+            recommendation_letter=recommendation_letter,
+            scanned_id=scanned_id,
+            passport_photo=passport_photo,
         )
 
         return redirect("employees")

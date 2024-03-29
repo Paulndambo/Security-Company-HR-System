@@ -47,6 +47,7 @@ class User(AbstractBaseModel, AbstractUser):
     passport_photo = models.ImageField(
         upload_to="passport_photos/", null=True, blank=True
     )
+    workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True, related_name="workstationsguards")
 
     def __str__(self):
         return self.first_name + " " + self.last_name

@@ -148,3 +148,25 @@ def apply_leave(request):
         return redirect("leave-applications")
         
     return render(request, "leaves/apply_leave.html")
+
+
+def mark_leave_application(request):
+    if request.method == "POST":
+        leave_id = request.POST.get("leave_id")
+        action_type = request.POST.get("action_type")
+
+        leave = EmployeeLeave.objects.get(id=leave_id)
+        leave.status = action_type
+        leave.save()
+
+        return redirect("leave-applications")
+    return render(request, "leaves/mark_leave.html")
+
+
+def delete_leave_application(request):
+    if request.method == "POST":
+        leave_id = request.POST.get("leave_id")
+        leave = EmployeeLeave.objects.get(id=leave_id)
+        leave.delete()
+        return redirect("leave-applications")
+    return render(request, "leaves/delete_leave.html")

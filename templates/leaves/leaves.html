@@ -36,7 +36,7 @@
               <th scope="col">Days Applied</th>
               <th scope="col">Leave Type</th>
               <th scope="col">Status</th>
-              <th scope="col">Actions</th>
+              <th scope="col" colspan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -49,11 +49,15 @@
               <td>{{leave.status}}</td>
             
               <td>
-                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editEquipmentModal{{ leave.id }}">
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#markLeaveModal{{ leave.id }}">
                     <i class="bi bi-pencil-square"></i>
                 </a>
               </td>
-              
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteLeaveModal{{ leave.id }}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "leaves/mark_leave.html" %}
+              {% include "leaves/delete_leave.html" %}
             </tr>
             {% endfor %}
 

@@ -1,0 +1,38 @@
+<div class="modal fade" id="markLeaveModal{{leave.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Approve/Decline Leave Request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'mark-leave' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+              
+                  <div class="row mb-4">
+                    <p>Employee: <strong>{{leave.employee}}</strong></p>
+                    <p>Days Requested: <strong> {{leave.days_applied}}</strong></p>
+                    <p>Start Date: <strong>{{leave.leave_from}}</strong></p>
+                    <p>End Date: <strong>{{leave.leave_to}}</strong></p>
+                    <p>Leave Type: <strong>{{leave.leave_type}}</strong></p>
+                  </div>
+                  <hr>
+                  <input type="number" name="leave_id" id="leave_id" value="{{leave.id}}" hidden >
+                  <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label"><strong>Approve/Reject?</strong></label>
+                        <select class="form-select" id="action_type" name="action_type">
+                                <option value="Approved">Leave Approved</option>
+                                <option value="Rejected">Leave Rejected</option>
+                        </select>
+                    </div>
+                    </div>
+                        
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Submit!</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
