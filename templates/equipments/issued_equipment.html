@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Issued Equipment</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+   
+    <div class="col">
+      <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#issueEquipmentModal">Issue Equipment</a>
+  </div>
+  
+
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Equipment</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Date Issued</th>
+              <th scope="col">Return Date</th>
+              <th scope="col">Issued By</th>
+              <th scope="col">Status</th>
+              <th scope="col" colspan="2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for issued_equipment in page_obj %}
+            <tr>
+              <td>{{issued_equipment.id}}</td>
+              <td>{{issued_equipment.employee}}</td>
+              <td>{{issued_equipment.equipment}}</td>
+              <td>{{issued_equipment.quantity}}</td>
+              <td>{{issued_equipment.date_issued}}</td>
+              <td>{{issued_equipment.return_date}}</td>
+              <td>{{issued_equipment.issued_by}}</td>
+              <td>{{issued_equipment.status}}</td>
+              <td>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#markEquipmentIssueModal{{ issued_equipment.id }}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+              </td>
+              
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEquipmentIssueModal{{ issued_equipment.id }}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "equipments/delete_issue.html" %}
+              {% include "equipments/mark.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+              {% if page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+{% endblock content %}

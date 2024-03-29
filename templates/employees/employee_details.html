@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <img class="img-responsive" src="{{employee.passport_photo.url}}" alt="Employee Passport Image" />
+</div>
+<div class="row">
+    <div class="col-4">
+        <p>Name: {{employee.first_name}} {{employee.last_name}}</p>
+        <p>Position: {{employee.position}}</p>
+        <p>Gender: {{employee.gender}}</p>
+        <p>Phone Number: {{employee.phone_number}}</p>
+    </div>
+    <div class="col-4">
+        <p>ID Number: {{employee.id_number}}</p>
+        <p>NHIF Number: {{employee.nhif_number}}</p>
+        <p>NSSF Number: {{employee.nssf_number}}</p>
+        <p>Daily Pay: {{employee.daily_rate}}</p>
+    </div>
+    <div class="col-4">
+        <p>Address: {{employee.postal_address}}</p>
+        <p>Town: {{employee.town}}</p>
+        <p>County: {{employee.county}}</p>
+        <p>Country: {{employee.country}}</p>
+    </div>
+</div>
+{% endblock content %}

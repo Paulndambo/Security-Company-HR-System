@@ -1,0 +1,45 @@
+<div class="modal fade" id="markEquipmentIssueModal{{issued_equipment.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Return/Lost Equipment</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'mark-issued-equipment' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+              
+                  <div class="row mb-3">
+                    <div class="col">
+                      <p>Equipment Issue: <strong>{{issued_equipment.equipment.name}}</strong></p>
+                      <p>Issued to: <strong>{{issued_equipment.employee}}</strong></p>
+                      <p>Date Issued: <strong>{{issued_equipment.date_issued}}</strong></p>
+                      <p>Return Date: <strong>{{issued_equipment.return_date}}</strong></p>
+                      <p>Issue Status: <strong>{{issued_equipment.status}}</strong></p>
+                      <p>Issued By: <strong>{{issued_equipment.issued_by}}</strong></p>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <input type="hidden" name="issue_id" id="issue_id" value="{{issued_equipment.id}}" />
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Mark as?</label>
+                        <select class="form-select" id="action_type" name="action_type">
+                            <option value="Returned">Returned</option>
+                            <option value="Lost">Lost</option>
+                            <option value="Returned Late">Returned Late</option>
+                        </select>
+                    </div>
+                    </div>
+                   
+                  
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Mark Equipment!</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

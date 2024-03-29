@@ -35,6 +35,31 @@
                         />
                       </div>
                   </div>
+
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">NHIF Number</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="nhif_number"
+                        name="nhif_number"
+                        value="{{employee.nhif_number}}"
+                        required
+                      />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">NSSF Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nssf_number"
+                          name="nssf_number" 
+                          value="{{employee.nssf_number}}"
+                          required
+                        />
+                      </div>
+                  </div>
                   
                   <div class="row mb-3">
                     <div class="col">
@@ -52,8 +77,8 @@
                         <label class="form-label">Position</label>
                         <select class="form-select" id="position" name="position">
                             <option value="">- Position</option>
-                            <option value="">Security Manager</option>
-                            <option value="">Security Guard</option>
+                            <option value="Security Manager">Security Manager</option>
+                            <option value="Security Guard">Security Guard</option>
                         </select>
                     </div>
                     </div>
@@ -82,8 +107,8 @@
                     </div>
                   </div>
                   
-                  
-                  <div class="mb-2">
+                  <div class="row mb-3">
+                  <div class="col">
                     <label class="form-label">Gender</label>
                     <select class="form-select" id="gender" name="gender">
                         <option value="Male">Male</option>
@@ -91,6 +116,15 @@
     
                       </select>
                   </div>
+                  <div class="col">
+                    <label class="form-label">Work Station</label>
+                    <select class="form-select" id="workstation" name="workstation">
+                      {% for workstation in workstations %}
+                        <option value="{{workstation.id}}">{{workstation.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
 
                   <div class="row mb-3">
                     <div class="col">

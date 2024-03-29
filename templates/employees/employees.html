@@ -32,10 +32,12 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
+              <th scope="col">Position</th>
               <th scope="col">ID Number</th>
               <th scope="col">Phone</th>
               <th scope="col">Gender</th>
               <th scope="col">Address</th>
+              <th scope="col">Work Station</th>
               <th scope="col" colspan="3">Actions</th>
             </tr>
           </thead>
@@ -44,12 +46,14 @@
             <tr>
               <td>{{employee.id}}</td>
               <td>{{employee.first_name}} {{employee.last_name}}</td>
+              <td>{{employee.position}}</td>
               <td>{{employee.id_number}}</td>
               <td>{{employee.phone_number}}</td>
               <td>{{employee.gender}}</td>
               <td>{{employee.employee_address}}</td>
+              <td>{{employee.workstation}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                <a href="{% url 'employee-details' employee.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
               </td>
               
               <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEmployeeModal{{ employee.id }}">

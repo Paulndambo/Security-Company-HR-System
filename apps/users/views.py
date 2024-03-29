@@ -5,44 +5,46 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
-# Create your views here.
+from apps.core.models import Workstation
+
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
 
-            return redirect('home')
-    return render(request, 'accounts/login.html')
+            return redirect("home")
+    return render(request, "accounts/login.html")
 
 
 def user_logout(request):
     logout(request)
-    return redirect('login')
+    return redirect("login")
 
 
 @login_required(login_url="/users/login/")
 def employees(request):
     employees = User.objects.all().order_by("-created")
+    workstations = Workstation.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
         employees = User.objects.filter(
-            Q(first_name__icontains=search_text) | Q(first_name__icontains=search_text) | Q(phone_number__icontains=search_text) | Q(
-                id_number__icontains=search_text)
+            Q(first_name__icontains=search_text)
+            | Q(first_name__icontains=search_text)
+            | Q(phone_number__icontains=search_text)
+            | Q(id_number__icontains=search_text)
         ).order_by("-created")
 
     paginator = Paginator(employees, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj
-    }
+    context = {"page_obj": page_obj, "workstations": workstations}
     return render(request, "employees/employees.html", context)
 
 
@@ -61,7 +63,15 @@ def new_employee(request):
         country = request.POST.get("country")
         county = request.POST.get("county")
         position = request.POST.get("position")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
 
+        chief_letter = request.FILES.get("chief_letter")
+        police_clearance = request.FILES.get("police_clearance")
+        recommendation_letter = request.FILES.get("recommendation_letter")
+        scanned_id = request.FILES.get("scanned_id")
+        passport_photo = request.FILES.get("passport_photo")
+        workstation = request.POST.get("workstation")
 
         employee = User.objects.create(
             first_name=first_name,
@@ -77,7 +87,15 @@ def new_employee(request):
             county=county,
             country=country,
             position=position,
-            role="Employee"
+            nhif_number=nhif_number,
+            nssf_number=nssf_number,
+            role="Employee",
+            workstation_id=workstation,
+            chief_letter=chief_letter,
+            police_clearance=police_clearance,
+            recommendation_letter=recommendation_letter,
+            scanned_id=scanned_id,
+            passport_photo=passport_photo,
         )
 
         return redirect("employees")
@@ -87,6 +105,7 @@ def new_employee(request):
 @login_required(login_url="/users/login/")
 def edit_employee(request):
     if request.method == "POST":
+        workstation = request.POST.get("workstation")
         employee_id = request.POST.get("employee_id")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -99,6 +118,8 @@ def edit_employee(request):
         city = request.POST.get("city")
         county = request.POST.get("county")
         country = request.POST.get("country")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
 
         employee = User.objects.get(id=employee_id)
         employee.first_name = first_name
@@ -113,6 +134,9 @@ def edit_employee(request):
         employee.position = position
         employee.county = county
         employee.country = country
+        employee.nhif_number = nhif_number
+        employee.nssf_number = nssf_number
+        employee.workstation_id = workstation
         employee.save()
 
         return redirect("employees")

@@ -37,8 +37,7 @@
               <th scope="col">Time Marked</th>
               <th scope="col">Marked By</th>
               <th scope="col">Status</th>
-              <th scope="col">Marked</th>
-              <th scope="col" colspan="2">Actions</th>
+              <th scope="col" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
@@ -49,16 +48,28 @@
               <td>{{attendance.date}}</td>
               <td>{{attendance.checkin_time.time}}</td>
               <td>{{attendance.checked_in_by}}</td>
-              <td>{{attendance.status}}</td>
-              <td>{{attendance.marked}}</td>
               <td>
-                <a href="{% url 'mark-present' attendance.id %}" class="btn btn-info btn-sm">Present</a>
+                {% if attendance.status == "Present" %}
+                <span class="badge rounded-pill text-bg-success">{{attendance.status}}</span>
+                {% elif attendance.status == "Absent" %}
+                <span class="badge rounded-pill text-bg-warning">{{attendance.status}}</span>
+                {% else %}
+                <span class="badge rounded-pill text-bg-info">Pending</span>
+                {% endif %}
               </td>
+              <td>
+              {% if attendance.marked %}
+              <a href="{% url 'reset-attendance' attendance.id %}" class="btn btn-info btn-sm">Reset</a>
+              {% else %}
+               
+              <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#markAttendanceModal{{ attendance.id }}">
+                Mark
+              </a>
+              {% endif %}
+            </td>
               
-              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#markAbsentModal{{ attendance.id }}">
-                Absent
-              </a></td>
               {% include "attendances/mark_absent.html" %}
+              {% include "attendances/mark_attendance.html" %}
             </tr>
             {% endfor %}
 
