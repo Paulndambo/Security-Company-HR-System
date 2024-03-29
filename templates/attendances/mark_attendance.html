@@ -13,6 +13,7 @@
                     <p>Work station: {{attendance.employee.workstation}}</p>
                     <p>Shift Date: {{attendance.date}}</p>
                 </div>
+                <!--
                     <input
                       type="number"
                       class="form-control"
@@ -30,10 +31,10 @@
                         <option value="Present">Present</option>
                     </select>
                 </div>
-                 
-                <div class="text-center mt-2">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
-                    <button type="submit" class="btn btn-success">Yes, Mark Attendance</button>
+                 -->
+                <div class="text-center mt-2 g-4">
+                  <a href="{% url 'mark-absent' attendance.id %}" class="btn btn-warning">Mark Absent</a>
+                    <a href="{% url 'mark-present' attendance.id %}" class="btn btn-success">Mark Preset</a>
                 </div>
               </div>
               </form>

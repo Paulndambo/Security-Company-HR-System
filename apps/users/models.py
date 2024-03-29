@@ -35,7 +35,7 @@ class User(AbstractBaseModel, AbstractUser):
     county = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
     basic_salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
-
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=350)
     police_clearance = models.FileField(
         upload_to="police_clearances/", null=True, blank=True
     )
@@ -47,7 +47,12 @@ class User(AbstractBaseModel, AbstractUser):
     passport_photo = models.ImageField(
         upload_to="passport_photos/", null=True, blank=True
     )
-    workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True, related_name="workstationsguards")
+    workstation = models.ForeignKey(
+        "core.Workstation",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="workstationsguards",
+    )
 
     def __str__(self):
         return self.first_name + " " + self.last_name

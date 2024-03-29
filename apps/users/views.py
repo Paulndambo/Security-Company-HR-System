@@ -6,6 +6,8 @@ from django.shortcuts import redirect, render
 from apps.users.models import User
 
 from apps.core.models import Workstation
+
+
 # Create your views here.
 # Create your views here.
 ################ Authentication URLs ##############
@@ -63,6 +65,8 @@ def new_employee(request):
         country = request.POST.get("country")
         county = request.POST.get("county")
         position = request.POST.get("position")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
 
         chief_letter = request.FILES.get("chief_letter")
         police_clearance = request.FILES.get("police_clearance")
@@ -85,6 +89,8 @@ def new_employee(request):
             county=county,
             country=country,
             position=position,
+            nhif_number=nhif_number,
+            nssf_number=nssf_number,
             role="Employee",
             workstation_id=workstation,
             chief_letter=chief_letter,
@@ -101,6 +107,7 @@ def new_employee(request):
 @login_required(login_url="/users/login/")
 def edit_employee(request):
     if request.method == "POST":
+        workstation = request.POST.get("workstation")
         employee_id = request.POST.get("employee_id")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -113,6 +120,8 @@ def edit_employee(request):
         city = request.POST.get("city")
         county = request.POST.get("county")
         country = request.POST.get("country")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
 
         employee = User.objects.get(id=employee_id)
         employee.first_name = first_name
@@ -127,6 +136,9 @@ def edit_employee(request):
         employee.position = position
         employee.county = county
         employee.country = country
+        employee.nhif_number = nhif_number
+        employee.nssf_number = nssf_number
+        employee.workstation_id = workstation
         employee.save()
 
         return redirect("employees")

@@ -18,6 +18,7 @@ LEAVE_STATUS_CHOICES = (
     ("Pending Review", "Pending Review"),
 )
 
+
 class Attendance(AbstractBaseModel):
     employee = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     date = models.DateField(null=True, blank=True)
@@ -42,7 +43,14 @@ class EmployeeLeave(AbstractBaseModel):
     employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
     days_applied = models.IntegerField(default=1)
     leave_type = models.CharField(max_length=255, choices=LEAVE_TYPES)
-    status = models.CharField(max_length=255, choices=LEAVE_STATUS_CHOICES, default="Pending Review")
+    status = models.CharField(
+        max_length=255, choices=LEAVE_STATUS_CHOICES, default="Pending Review"
+    )
     leave_from = models.DateField(null=True, blank=True)
     leave_to = models.DateField(null=True)
-    approved_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name="leaveapprovers")
+    approved_by = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="leaveapprovers",
+    )

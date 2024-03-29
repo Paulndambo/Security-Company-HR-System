@@ -43,6 +43,7 @@ class EquipmentIssue(AbstractBaseModel):
     def __str__(self):
         return self.equipment.name
 
+
 class EquipmentLog(AbstractBaseModel):
     equipment = models.CharField(max_length=255)
     quantity = models.IntegerField(default=0)

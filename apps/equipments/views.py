@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from apps.users.models import User
 from django.db.models import Q
 
+
 # Create your views here.
 @login_required(login_url="/users/login")
 def equipments(request):
@@ -81,20 +82,19 @@ def issued_equipment(request):
     employees = User.objects.filter(role="Employee")
     equipments = Equipment.objects.all()
 
-
     if request.method == "POST":
         search_text = request.POST.get("search_text")
-        issued_equipment = EquipmentIssue.objects.filter(Q(employee__first_name__icontains=search_text) | Q(employee__last_name__icontains=search_text) | Q(employee__id_number__icontains=search_text))
+        issued_equipment = EquipmentIssue.objects.filter(
+            Q(employee__first_name__icontains=search_text)
+            | Q(employee__last_name__icontains=search_text)
+            | Q(employee__id_number__icontains=search_text)
+        )
 
     paginator = Paginator(issued_equipment, 15)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj,
-        "employees": employees,
-        "equipments": equipments
-    }
+    context = {"page_obj": page_obj, "employees": employees, "equipments": equipments}
 
     return render(request, "equipments/issued_equipment.html", context)
 
@@ -130,16 +130,16 @@ def mark_issued_equipment(request):
         issued_equipment.status = action_type
         issued_equipment.save()
 
-        return redirect('issued-equipments')
-    return render(request, 'equipments/mark.html')
+        return redirect("issued-equipments")
+    return render(request, "equipments/mark.html")
 
 
 def delete_issued_equipment(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         equipment_issue_id = request.POST.get("issue_id")
-    
+
         issued_equipment = EquipmentIssue.objects.get(id=equipment_issue_id)
         issued_equipment.delete()
-        
-        return redirect('issued-equipments')
-    return render(request, 'equipments/delete_issue.html')
+
+        return redirect("issued-equipments")
+    return render(request, "equipments/delete_issue.html")

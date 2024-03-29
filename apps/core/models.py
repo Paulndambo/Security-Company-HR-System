@@ -9,11 +9,13 @@ class AbstractBaseModel(models.Model):
     class Meta:
         abstract = True
 
+
 SHIFT_CHOICES = (
     ("Day Shift", "Day Shift"),
     ("Night Shift", "Night Shift"),
     ("24 Hours Shift", "24 Hours Shift"),
 )
+
 
 class Workstation(AbstractBaseModel):
     name = models.CharField(max_length=255)
