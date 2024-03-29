@@ -1,0 +1,42 @@
+<div class="modal fade" id="markAttendanceModal{{attendance.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Mark Attendance</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'mark-attendance' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <div class="mb-2">
+                    <p>Employee: {{attendance.employee.first_name}} {{attendance.employee.last_name}}</p>
+                    <p>Work station: {{attendance.employee.workstation}}</p>
+                    <p>Shift Date: {{attendance.date}}</p>
+                </div>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="attendance_id"
+                      name="attendance_id" 
+                      value="{{attendance.id}}"
+                      readonly
+                      hidden
+                      required
+                    />
+                
+                <div class="row mb-3">
+                    <select class="form-select" name="action_type" id="action_type">
+                        <option value="Absent">Absent</option>
+                        <option value="Present">Present</option>
+                    </select>
+                </div>
+                 
+                <div class="text-center mt-2">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                    <button type="submit" class="btn btn-success">Yes, Mark Attendance</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

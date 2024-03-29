@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Employee Attendance</h3>
+        <h3>Employee Leave Applications</h3>
     </div>
     <div class="col">
       <form method="POST">
@@ -11,7 +11,7 @@
         
           <div class="row">
             <div class="col-8">
-              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name. ...">
             </div>
             <div class="col-4">
               <button class="btn btn-info">Search</button>
@@ -19,11 +19,11 @@
           </div>
       </form>
     </div>
-   {% if show_generate_attendance %}
+   
     <div class="col">
-      <a href="{% url 'generate-attendance' %}" class="btn btn-success">Generate List</a>
+      <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#applyEmployeeLeaveModal">Apply Leave</a>
   </div>
-  {% endif %}
+  
 
 </div>
 <hr/>
@@ -33,35 +33,27 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Employee</th>
-              <th scope="col">Checkin Date</th>
-              <th scope="col">Time Marked</th>
-              <th scope="col">Marked By</th>
+              <th scope="col">Days Applied</th>
+              <th scope="col">Leave Type</th>
               <th scope="col">Status</th>
-              <th scope="col" colspan="2"></th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for attendance in page_obj %}
+            {% for leave in page_obj %}
             <tr>
-              <td>{{attendance.id}}</td>
-              <td>{{attendance.employee}}</td>
-              <td>{{attendance.date}}</td>
-              <td>{{attendance.checkin_time.time}}</td>
-              <td>{{attendance.checked_in_by}}</td>
-              <td>{{attendance.status}}</td>
+              <td>{{leave.id}}</td>
+              <td>{{leave.employee}}</td>
+              <td>{{leave.days_applied}}</td>
+              <td>{{leave.leave_type}}</td>
+              <td>{{leave.status}}</td>
+            
               <td>
-              {% if attendance.marked %}
-              <a href="{% url 'reset-attendance' attendance.id %}" class="btn btn-info btn-sm">Reset</a>
-              {% else %}
-               
-              <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#markAttendanceModal{{ attendance.id }}">
-                Mark
-              </a>
-              {% endif %}
-            </td>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editEquipmentModal{{ leave.id }}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+              </td>
               
-              {% include "attendances/mark_absent.html" %}
-              {% include "attendances/mark_attendance.html" %}
             </tr>
             {% endfor %}
 

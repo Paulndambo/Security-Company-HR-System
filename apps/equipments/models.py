@@ -11,6 +11,7 @@ EQUIPMENT_ISSUE_STATUS = (
     ("Returned", "Returned"),
     ("Pending Return", "Pending Return"),
     ("Lost", "Lost"),
+    ("Returned Late", "Returned Late"),
 )
 
 
@@ -41,3 +42,14 @@ class EquipmentIssue(AbstractBaseModel):
 
     def __str__(self):
         return self.equipment.name
+
+class EquipmentLog(AbstractBaseModel):
+    equipment = models.CharField(max_length=255)
+    quantity = models.IntegerField(default=0)
+    actioned_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+
+
+class EquipmentIssueLog(AbstractBaseModel):
+    equipment_issue = models.ForeignKey(EquipmentIssue, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    actioned_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)

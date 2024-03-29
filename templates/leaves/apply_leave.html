@@ -1,0 +1,74 @@
+<div class="modal fade" id="applyEmployeeLeaveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Apply Employee Leave</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'apply-leave' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+              
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Employee</label>
+                        <select class="form-select" id="employee" name="employee">
+                            {% for employee in employees %}
+                                <option value="{{ employee.id }}">{{employee.first_name}} {{employee.last_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Leave Type</label>
+                        <select class="form-select" id="leave_type" name="leave_type">
+                                <option value="Paid Leave">Paid Leave</option>
+                                <option value="Unpaid Leave">Unpaid Leave</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="exampleInputPassword1" class="form-label">Days Applied</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="days_applied"
+                              name="days_applied"
+                              required
+                            />
+                          </div>
+                      </div>
+                    <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Start Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="leave_from"
+                          name="leave_from"
+                          required
+                        />
+                      </div>
+                      <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">End Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="leave_to"
+                          name="leave_to"
+                          required
+                        />
+                      </div>
+                  </div>
+                  
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Submit Application!</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
