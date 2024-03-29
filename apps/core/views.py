@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect
 from apps.core.models import Workstation
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url="/users/login")
 def home(request):
     return render(request, "home.html")
 
 
+@login_required(login_url="/users/login")
 def workstations(request):
     work_stations = Workstation.objects.all().order_by("-created")
 
@@ -25,6 +28,7 @@ def workstations(request):
     return render(request, "workstations/work_stations.html", context)
 
 
+@login_required(login_url="/users/login")
 def new_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -59,7 +63,7 @@ def new_workstation(request):
         return redirect("workstations")
     return render(request, "workstations/new_workstation.html")
 
-
+@login_required(login_url="/users/login")
 def edit_workstation(request):
     if request.method == "POST":
         workstation_id = request.POST.get("workstation_id")
@@ -95,7 +99,7 @@ def edit_workstation(request):
         return redirect("workstations")
     return render(request, "workstations/edit_workstation.html")
 
-
+@login_required(login_url="/users/login")
 def delete_workstation(request):
     if request.method == "POST":
         workstation_id = request.POST.get("workstation_id")
@@ -104,7 +108,7 @@ def delete_workstation(request):
         return redirect("workstations")
     return render(request, "workstations/delete_workstation.html")
 
-
+@login_required(login_url="/users/login")
 def workstation_detail(request, workstation_id):
     workstation = Workstation.objects.get(id=workstation_id)
 

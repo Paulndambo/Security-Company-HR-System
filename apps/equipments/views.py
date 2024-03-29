@@ -120,7 +120,7 @@ def issue_equipment(request):
         return redirect("issued-equipments")
     return render(request, "equipments/issue_equipment.html")
 
-
+@login_required(login_url="/users/login")
 def mark_issued_equipment(request):
     if request.method == "POST":
         equipment_issue_id = request.POST.get("issue_id")
@@ -133,7 +133,7 @@ def mark_issued_equipment(request):
         return redirect("issued-equipments")
     return render(request, "equipments/mark.html")
 
-
+@login_required(login_url="/users/login")
 def delete_issued_equipment(request):
     if request.method == "POST":
         equipment_issue_id = request.POST.get("issue_id")

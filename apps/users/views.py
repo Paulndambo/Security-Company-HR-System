@@ -7,8 +7,6 @@ from apps.users.models import User
 
 from apps.core.models import Workstation
 
-
-# Create your views here.
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
