@@ -71,7 +71,7 @@ def new_employee(request):
         recommendation_letter = request.FILES.get("recommendation_letter")
         scanned_id = request.FILES.get("scanned_id")
         passport_photo = request.FILES.get("passport_photo")
-        workstation = request.POST.get("workstation")
+        #workstation = request.POST.get("workstation")
 
         employee = User.objects.create(
             first_name=first_name,
@@ -90,7 +90,7 @@ def new_employee(request):
             nhif_number=nhif_number,
             nssf_number=nssf_number,
             role="Employee",
-            workstation_id=workstation,
+            #workstation_id=workstation,
             chief_letter=chief_letter,
             police_clearance=police_clearance,
             recommendation_letter=recommendation_letter,
@@ -147,11 +147,12 @@ def edit_employee(request):
 @login_required(login_url="/users/login/")
 def delete_employee(request):
     if request.method == "POST":
+        
         employee_id = request.POST.get("employee_id")
         employee = User.objects.get(id=employee_id)
         employee.delete()
 
-        return redirect("members")
+        return redirect("employees")
 
     return render(request, "employees/delete_employee.html")
 

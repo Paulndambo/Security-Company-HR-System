@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from apps.core.models import Workstation
+from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -7,7 +8,12 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url="/users/login")
 def home(request):
-    return render(request, "home.html")
+    employees_count = User.objects.all().count()
+
+    context = {
+        "employees_count": employees_count
+    }
+    return render(request, "home.html", context)
 
 
 @login_required(login_url="/users/login")

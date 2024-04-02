@@ -153,6 +153,11 @@ def mark_absent(request, attendance_id):
 def leave_applications(request):
     leave_applications = EmployeeLeave.objects.all().order_by("-created")
 
+    if request.method == "POST":
+        search_text = request.POST.get("search_text")
+
+        leave_applications = EmployeeLeave.objects.filter(Q(employee__first_name__icontains=search_text) | Q(employee__last_name__icontains=search_text))
+
     paginator = Paginator(leave_applications, 15)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
