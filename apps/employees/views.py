@@ -93,10 +93,19 @@ def mark_attendance(request):
 
 @login_required(login_url="/users/login")
 def reset_attendance(request, attendance_id):
-    attendace = Attendance.objects.get(id=attendance_id)
-    attendace.marked = False
-    attendace.status = None
-    attendace.save()
+    attendance = Attendance.objects.get(id=attendance_id)
+    current_status = attendance.status
+    attendance.marked = False
+    attendance.status = None
+    attendance.save()
+
+    ## Update Salary
+    if current_status == "Present":
+        salary = EmployeeSalary.objects.filter(employee=attendance.employee).first()
+
+        if salary:
+            salary.total_amount -= salary.daily_rate
+            salary.save()
 
     return redirect("attendances")
 

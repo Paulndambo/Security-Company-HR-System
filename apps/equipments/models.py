@@ -14,6 +14,11 @@ EQUIPMENT_ISSUE_STATUS = (
     ("Returned Late", "Returned Late"),
 )
 
+EQUIPMENT_CONDITION_CHOICES = (
+    ("New", "New"),
+    ("Used", "Used"),
+    ("Faulty", "Faulty"),
+)
 
 class Equipment(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -39,6 +44,7 @@ class EquipmentIssue(AbstractBaseModel):
         null=True,
         related_name="equipmentissuers",
     )
+    condition = models.CharField(max_length=255, choices=EQUIPMENT_CONDITION_CHOICES, null=True)
 
     def __str__(self):
         return self.equipment.name
