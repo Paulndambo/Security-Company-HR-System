@@ -5,21 +5,13 @@
 
     <div class="card m-2" style="width: 16rem;">
         <div class="card-body">
-          <h5 class="card-title">Members</h5>
+          <h5 class="card-title">Employees</h5>
           <hr/>
-          <p class="card-text">Count: 0</p>
-          <a href="#" class="btn btn-info btn-sm">See List</a>
+          <p class="card-text">Count: {{employees_count}}</p>
+          <a href="{% url 'employees' %}" class="btn btn-info btn-sm">See List</a>
         </div>
       </div>
 
-      <div class="card m-2" style="width: 16rem;">
-        <div class="card-body">
-          <h5 class="card-title">Books</h5>
-          <hr/>
-          <p class="card-text">Count: 0</p>
-          <a href="#" class="btn btn-info btn-sm">See List</a>
-        </div>
-      </div>
       
   </div>
 {% endblock %}

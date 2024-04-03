@@ -20,7 +20,7 @@ LEAVE_STATUS_CHOICES = (
 
 
 class Attendance(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
     checkin_time = models.DateTimeField(null=True)
     checkout_time = models.DateTimeField(null=True, blank=True)

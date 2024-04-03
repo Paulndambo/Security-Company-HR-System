@@ -17,5 +17,5 @@ urlpatterns = [
     path("new-employee/", new_employee, name="new-employee"),
     path("<int:employee_id>", employee_details, name="employee-details"),
     path("edit-employee/", edit_employee, name="edit-employee"),
-    path("delete/<int:employee_id>", delete_employee, name="delete-employee"),
+    path("delete/", delete_employee, name="delete-employee"),
 ]

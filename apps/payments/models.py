@@ -17,7 +17,7 @@ MONTHS_LIST = (
 )
 
 class EmployeeSalary(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
     month = models.CharField(max_length=255, choices=MONTHS_LIST)
     year = models.CharField(max_length=10)
     days_worked = models.IntegerField(default=0)
