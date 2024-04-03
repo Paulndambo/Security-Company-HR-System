@@ -107,6 +107,7 @@ def issue_equipment(request):
         equipment = request.POST.get("equipment")
         quantity = request.POST.get("quantity")
         return_date = request.POST.get("return_date")
+        condition = request.POST.get("condition")
 
         EquipmentIssue.objects.create(
             employee_id=employee,
@@ -115,6 +116,7 @@ def issue_equipment(request):
             return_date=return_date,
             issued_by=user,
             status="Pending Return",
+            condition=condition
         )
 
         return redirect("issued-equipments")
