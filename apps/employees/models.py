@@ -54,3 +54,35 @@ class EmployeeLeave(AbstractBaseModel):
         null=True,
         related_name="leaveapprovers",
     )
+
+class EducationInformation(AbstractBaseModel):
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    level = models.CharField(max_length=255)
+    school_name = models.CharField(max_length=255)
+    graduation_year = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.school_name
+
+class BankInformation(AbstractBaseModel):
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    bank_name  = models.CharField(max_length=255, default="Equity Bank Kenya")
+    branch_name = models.CharField(max_length=255)
+    account_name = models.CharField(max_length=255)
+    account_type = models.CharField(max_length=255, null=True)
+    account_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.account_name
+    
+
+class NextOfKin(AbstractBaseModel):
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    email = models.EmailField(null=True)
+    relation = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name

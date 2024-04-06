@@ -105,7 +105,6 @@ def issue_equipment(request):
     if request.method == "POST":
         employee = request.POST.get("employee")
         date_issued = request.POST.get("date_issued")
-       
 
         head_cap_issued = request.POST.get("head_cap_issued")
         shirt_issued = request.POST.get("shirt_issued")
@@ -116,7 +115,6 @@ def issue_equipment(request):
         sweater_issued = request.POST.get("sweater_issued")
         baton_issued = request.POST.get("baton_issued")
         trouser_issued = request.POST.get("trousers_issued")
-       
         
         EquipmentIssue.objects.create(
             employee_id=employee,

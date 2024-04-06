@@ -69,8 +69,11 @@
                         <label class="form-label">Position</label>
                         <select class="form-select" id="position" name="position">
                             <option value=""></option>
-                            <option value="Security Manager">Security Manager</option>
+                            <option value="Security Manager">Supervisor</option>
                             <option value="Security Guard">Security Guard</option>
+                            <option value="Reliever">Reliever</option>
+                            <option value="CCTV Installer">CCTV Installer</option>
+
                         </select>
                     </div>
                     </div>
@@ -98,6 +101,16 @@
                   </div>
                   
                   <div class="row mb-3">
+                    <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">KRA Pin No.</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="kra_pin"
+                      name="kra_pin"
+                      required
+                    />
+                  </div>
                   <div class="col">
                     <label class="form-label">Gender</label>
                     <select class="form-select" id="gender" name="gender">
@@ -106,16 +119,7 @@
     
                       </select>
                   </div>
-                  <!--
-                  <div class="col">
-                    <label class="form-label">Work Station</label>
-                    <select class="form-select" id="workstation" name="workstation">
-                      {% for workstation in workstations %}
-                        <option value="{{workstation.id}}">{{workstation.name}}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  -->
+                  
                 </div>
 
                   <div class="row mb-3">
@@ -163,23 +167,52 @@
                       />
                     </div>
                   </div>
+                  <h6 class="text-center mt-4 mb-4">Academic Documents</h6>
+                  <hr>
+                  <div class="mb-3">
+                    <label for="" class="form-label">KCPE Certficate</label>
+                    <input type="file" name="kcpe_certificate" id="kcpe_certificate" class="form-control" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="" class="form-label">KCSE Certficate</label>
+                    <input type="file" name="kcse_certificate" id="kcse_certificate" class="form-control" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="" class="form-label">University/College Certficate</label>
+                    <input type="file" name="degree_certificate" id="degree_certificate" class="form-control" />
+                  </div>
                   
-                  <div class="mb-3">
-                    <label class="form-label">Chief's Letter</label>
-                    <input type="file" id="chief_letter" name="chief_letter" class="form-control" >
+                  
+                  <h6 class="text-center mt-4 mb-4">Personal Documents</h6>
+                  <hr>
+                  <div class="mb-3 mt-3">
+                    <label class="form-label">KRA Pin Certficate</label>
+                    <input type="file" id="kra_certificate" name="kra_certificate" class="form-control" required>
                   </div>
-                  <div class="mb-3">
-                    <label class="form-label">Recommendation Letter</label>
-                    <input type="file" id="recommendation_letter" name="recommendation_letter" class="form-control" >
-                  </div>
+
                   <div class="mb-3">
                     <label class="form-label">Scanned ID Card</label>
-                    <input type="file" id="scanned_id" name="scanned_id" class="form-control" >
+                    <input type="file" id="scanned_id" name="scanned_id" class="form-control" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label">Passport Photo</label>
-                    <input type="file" id="passport_photo" name="passport_photo" class="form-control" >
+                    <input type="file" id="passport_photo" name="passport_photo" class="form-control" required>
                   </div>
+
+                  <h6 class="text-center mt-4 mb-4">Referral Documents</h6>
+                  <hr>
+                  <div class="mb-3 mt-3">
+                    <label class="form-label">Chief's Letter</label>
+                    <input type="file" id="kra_certificate" name="chief_letter" class="form-control" >
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Referee Letter</label>
+                    <input type="file" id="recommendation_letter" name="recommendation_letter" class="form-control" >
+                  </div>
+                  
                   <div class="mb-3">
                     <label class="form-label">Police Clearance Letter</label>
                     <input type="file" id="police_clearance" name="police_clearance" class="form-control" >
