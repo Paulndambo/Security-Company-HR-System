@@ -3,8 +3,15 @@ from apps.core.models import AbstractBaseModel
 
 # Create your models here.
 EQUIPMENT_TYPES = (
-    ("Uniform", "Uniform"),
-    ("Electronics", "Electronics"),
+    ("Shirt", "Shirt"),
+    ("Head Cap", "Head Cap"),
+    ("Belt", "Belt"),
+    ("Trousers", "Trousers"),
+    ("Chest Guard", "Chest Guard"),
+    ("Shoes", "Shoes"),
+    ("Boots", "Boots"),
+    ("Sweater", "Sweater"),
+    ("Baton", "Baton"),
 )
 
 EQUIPMENT_ISSUE_STATUS = (
@@ -32,19 +39,25 @@ class Equipment(AbstractBaseModel):
 
 
 class EquipmentIssue(AbstractBaseModel):
-    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     employee = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(default=0)
-    date_issued = models.DateField(auto_now_add=True)
-    return_date = models.DateField()
-    status = models.CharField(max_length=255, choices=EQUIPMENT_ISSUE_STATUS)
+    date_issued = models.DateField(null=True)
     issued_by = models.ForeignKey(
         "users.User",
         on_delete=models.SET_NULL,
         null=True,
         related_name="equipmentissuers",
     )
-    condition = models.CharField(max_length=255, choices=EQUIPMENT_CONDITION_CHOICES, null=True)
+    head_cap_issued = models.BooleanField(default=False)
+    shirt_issued = models.BooleanField(default=False)
+    belt_issued = models.BooleanField(default=False)
+    chest_guard_issued = models.BooleanField(default=False)
+    shoes_issued = models.BooleanField(default=False)
+    boots_issued = models.BooleanField(default=False)
+    sweater_issued = models.BooleanField(default=False)
+    baton_issued = models.BooleanField(default=False)
+    trouser_issued = models.BooleanField(default=False)
+
+
 
     def __str__(self):
         return self.equipment.name

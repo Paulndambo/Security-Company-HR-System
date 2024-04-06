@@ -19,49 +19,105 @@
                         </select>
                     </div>
                   </div>
-                  
+                  <hr>
                   <div class="row mb-3">
                     <div class="col">
-                        <label class="form-label">Equipment</label>
-                        <select class="form-select" id="equipment" name="equipment">
-                            {% for equipment in equipments %}
-                                <option value="{{equipment.id}}">{{equipment.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="exampleInputPassword1" class="form-label">Quantity</label>
-                            <input
-                              type="number"
-                              class="form-control"
-                              id="quantity"
-                              name="quantity"
-                              required
-                            />
-                          </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="chest_guard_issued" name="chest_guard_issued">
+                        <label class="form-check-label" for="chest_guard_issued">
+                          Issue Chest Guard
+                        </label>
                       </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="head_cap_issued" name="head_cap_issued">
+                        <label class="form-check-label" for="head_cap_issued">
+                          Head Cap
+                        </label>
+                      </div>
+                    </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                      <div class="col">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="shirt_issued" name="shirt_issued">
+                          <label class="form-check-label" for="shirt_issued">
+                            Issue Shirt
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="belt_issued" name="belt_issued">
+                          <label class="form-check-label" for="belt_issued">
+                            Issue Belt
+                          </label>
+                        </div>
+                      </div>
+                      </div>
+                      <hr>
+                      <div class="row mb-3">
+                        <div class="col">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="shoes_issued" name="shoes_issued">
+                            <label class="form-check-label" for="shoes_issued">
+                              Issue Shoes
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="boots_issued" name="boots_issued">
+                            <label class="form-check-label" for="boots_issued">
+                              Issue Boots
+                            </label>
+                          </div>
+                        </div>
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                          <div class="col">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="sweater_issued" name="sweater_issued">
+                              <label class="form-check-label" for="sweater_issued">
+                                Issue Sweater
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="baton_issued" name="baton_issued">
+                              <label class="form-check-label" for="baton_issued">
+                                Issue Baton
+                              </label>
+                            </div>
+                          </div>
+                          </div>
+                      <hr>
+                   
+                    <div class="row mb-3">
+                      <div class="col">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="trouser_issued" name="trouser_issued">
+                          <label class="form-check-label" for="trouser_issued">
+                            Issue Trousers 
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
                     <div class="row mb-3">
                     <div class="col">
-                        <label for="exampleInputPassword1" class="form-label">Retiurn Date</label>
+                        <label for="exampleInputPassword1" class="form-label">Date Issued</label>
                         <input
                           type="date"
                           class="form-control"
-                          id="return_date"
-                          name="return_date"
+                          id="date_issued"
+                          name="date_issued" placeholder placeholder
                           required
                         />
-                      </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col">
-                        <label for="exampleInputPassword1" class="form-label">Equipment Condition</label>
-                        <select class="form-select" name="condition" id="condition">
-                          <option value="Used">Used</option>
-                          <option value="New">New</option>
-                          <option value="Faulty">Faulty</option>
-                        </select>
                       </div>
                   </div>
                   

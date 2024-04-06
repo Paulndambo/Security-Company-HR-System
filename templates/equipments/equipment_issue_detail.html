@@ -1,0 +1,31 @@
+<div class="modal fade" id="equipmentIssueDetailModal{{issued_equipment.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            
+              <div class="modal-body">
+                <div class="row">
+                  <p>Employee Name: <b>{{issued_equipment.employee}}</b></p>
+                  <hr>
+                  <p class="text-center"><strong>Equipment Issued</strong></p>
+                  <hr>
+                  <p>Shirt Issued: {% if issued_equipment.shirt_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Shoes Issued: {% if issued_equipment.shoes_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Boots Issued: {% if issued_equipment.boots_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Belt Issued: {% if issued_equipment.belt_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Trousers: {% if issued_equipment.trouser_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Shirt Issued: {% if issued_equipment.shirt_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Baton Issued: {% if issued_equipment.baton_issued %} Yes {% else %} No{% endif %}</p>
+                  <p>Head Cap Issued: {% if issued_equipment.head_cap_issued %} Yes {% else %} No{% endif %}</p>
+                  <hr>
+                  <p>Date Issued: {{issued_equipment.date_issued}}</p>
+                  <p>Issued By: {{issued_equipment.issued_by}}</p>
+                </div>
+
+            </div>
+              
+      </div>
+    </div>
+  </div>
