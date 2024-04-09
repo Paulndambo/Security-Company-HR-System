@@ -1,0 +1,36 @@
+<div class="modal fade" id="deleteEducationModal{{education.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Delete Education</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'delete-education-record' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <div class="mb-2">
+                    <p>Are you sure to delete <b>{{education.level}}</b> education record for <b>{{education.employee}}?</b></p>
+                </div>
+                <div class="mb-2">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="education_id"
+                      name="education_id"
+                      value="{{education.id}}"
+                      readonly
+                      hidden
+                      required
+                    />
+                  </div>
+                  <input type="hidden" name="employee_id" id="employee_id" value="{{education.employee.id}}" />
+                 
+                <div class="text-center mt-2">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

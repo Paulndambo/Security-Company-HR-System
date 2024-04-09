@@ -9,7 +9,7 @@
     <div class="col-4"></div>
     
 </div>
-<div class="row ">
+<div class="row">
     <h4>Personal Information</h4>
     <hr>
     <div class="col-4">
@@ -31,4 +31,144 @@
         <p>Country: {{employee.country}}</p>
     </div>
 </div>
+<hr>
+<div class="row">
+    <h4>Bank Information</h4>
+    <div class="col">
+        <p>Bank Name: {{employee.bankingdetails.bank_name}}</p>
+        <p>Branch Name: {{employee.bankingdetails.branch_name}}</p>
+        <p>Account Type: {{employee.bankingdetails.account_type}}</p>
+    </div>
+    <div class="col">
+        <p>Account Name: {{employee.bankingdetails.account_name}}</p>
+        <p>Account Number: {{employee.bankingdetails.account_number}}</p>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        <h3>Next of Kins</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newRelativeModal{{employee.id}}">Add Relative</a>
+
+    </div>
+
+</div>
+<hr/>
+    <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Relationship</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Gender</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for family_member in family_members %}
+            <tr>
+              <td>{{family_member.id}}</td>
+              <td>{{family_member.first_name}} {{family_member.last_name}}</td>
+              <td>{{family_member.relation}}</td>
+              <td>{{family_member.email}}</td>
+              <td>{{family_member.phone_number}}</td>
+              <td>{{family_member.gender}}</td>
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editRelativeModal{{family_member.id}}">
+                <i class="bi bi-pencil-square"></i>
+              </a></td>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRelativeModal{{family_member.id}}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "family/edit_relative.html" %}
+              {% include "family/delete_relative.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      
+      </div>
+<hr>
+<div class="row mt-4">
+    <div class="col">
+        <h3>Education Details</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+        
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newEducationModal{{employee.id}}">Add Education Record</a>
+
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">School Name</th>
+              <th scope="col">Level</th>
+              <th scope="col">Start Year</th>
+              <th scope="col">Graduation Year</th>
+              <th scope="col">Created At.</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for education in education_details %}
+            <tr>
+              <td>{{education.id}}</td>
+              <td>{{education.school_name}}</td>
+              <td>{{education.level}}</td>
+              <td>{{education.start_year}}</td>
+              <td>{{education.graduation_year}}</td>
+              <td>{{education.created}}</td>
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEducationModal{{education.id}}">
+                <i class="bi bi-pencil-square"></i>
+              </a></td>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEducationModal{{education.id}}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "education/delete_education.html" %}
+              {% include "education/edit_education.html" %}
+            </tr> 
+            {% endfor %}
+
+          </tbody>
+        </table>
+</div>
+</div>
+<div class="row mb-5"></div>
 {% endblock content %}

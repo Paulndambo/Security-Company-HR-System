@@ -7,6 +7,7 @@ import calendar
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from apps.payments.models import EmployeeSalary
+from apps.employees.models import NextOfKin, EducationInformation, BankInformation
 
 date_today = datetime.now().date()
 
@@ -222,3 +223,115 @@ def delete_leave_application(request):
         leave.delete()
         return redirect("leave-applications")
     return render(request, "leaves/delete_leave.html")
+
+
+### NEXT OF KIN RECORDS MANAGEMENT
+def new_relative(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        relationship = request.POST.get("relationship")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+
+        relative = NextOfKin.objects.create(
+            employee_id=employee_id, 
+            first_name=first_name, 
+            last_name=last_name, 
+            gender=gender, 
+            relation=relationship,
+            email=email,
+            phone_number=phone_number
+        )
+        
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, "family/new_family_member.html")
+
+
+
+def edit_relative(request):
+    if request.method == "POST":
+        family_member_id = request.POST.get("family_member_id")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        relationship = request.POST.get("relationship")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+
+        relative = NextOfKin.objects.get(id=family_member_id)
+        relative.first_name=first_name
+        relative.last_name=last_name
+        relative.gender=gender
+        relative.relation=relationship
+        relative.email=email
+        relative.phone_number=phone_number
+        relative.save()
+
+        return redirect(f"/users/{relative.employee.id}")
+    return render(request, "family/edit_relative.html")
+
+
+def delete_relative(request):
+    if request.method == "POST":
+        relative_id = request.POST.get("relative_id")
+        relative = NextOfKin.objects.get(id=relative_id)
+        employee_id = relative.employee.id
+        relative.delete()
+        return redirect(f"/users/{employee_id}")
+    
+    return render(request, "family/delete_relative.html")
+
+
+## EDUCATION RECORDS MANAGEMENT
+
+def new_education_record(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        school_name = request.POST.get("school_name")
+        level = request.POST.get("level")
+        start_year = request.POST.get("start_year")
+        graduation_year = request.POST.get("graduation_year")
+
+        EducationInformation.objects.create(
+            employee_id=employee_id,
+            school_name=school_name,
+            level=level,
+            start_year=start_year,
+            graduation_year=graduation_year
+        )
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, "education/new_education.html")
+
+
+def edit_education_record(request):
+    if request.method == "POST":
+        education_id = request.POST.get("education_id")
+        school_name = request.POST.get("school_name")
+        level = request.POST.get("level")
+        start_year = request.POST.get("start_year")
+        graduation_year = request.POST.get("graduation_year")
+
+        education = EducationInformation.objects.get(id=education_id)
+        education.school_name=school_name
+        education.level=level
+        education.start_year=start_year
+        education.graduation_year=graduation_year
+        education.save()
+        
+        return redirect(f"/users/{education.employee.id}")
+    return render(request, "education/edit_education.html")
+
+def delete_education_record(request):
+    if request.method == "POST":
+        education_id = request.POST.get("education_id")
+        employee_id = request.POST.get("employee_id")
+        education = EducationInformation.objects.get(id=education_id)
+        education.delete()
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, "education/delete_education.html")

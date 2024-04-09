@@ -11,6 +11,14 @@ from apps.employees.views import (
     reset_attendance,
     mark_leave_application,
     delete_leave_application,
+
+    new_relative,
+    edit_relative,
+    delete_relative,
+
+    new_education_record,
+    edit_education_record,
+    delete_education_record
 )
 
 urlpatterns = [
@@ -29,4 +37,12 @@ urlpatterns = [
     path("apply-leave/", apply_leave, name="apply-leave"),
     path("mark-leave/", mark_leave_application, name="mark-leave"),
     path("delete-leave/", delete_leave_application, name="delete-leave"),
+
+    path("new-relative/", new_relative, name="new-relative"),
+    path("edit-relative/", edit_relative, name="edit-relative"),
+    path("delete-relative/", delete_relative, name="delete-relative"),
+
+    path("new-education-record/", new_education_record, name="new-education-record"),
+    path("edit-education-record/", edit_education_record, name="edit-education-record"),
+    path("delete-education-record/", delete_education_record, name="delete-education-record"),
 ]

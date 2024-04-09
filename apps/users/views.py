@@ -160,9 +160,13 @@ def delete_employee(request):
 @login_required(login_url="/users/login/")
 def employee_details(request, employee_id=None):
     employee = User.objects.get(id=employee_id)
+    family_members = employee.nextofkins.all()
+    education_details = employee.educationdetails.all()
 
     context = {
         "employee": employee,
+        "family_members": family_members,
+        "education_details": education_details
     }
 
     return render(request, "employees/employee_details.html", context)

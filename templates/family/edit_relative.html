@@ -1,0 +1,97 @@
+<div class="modal fade" id="editRelativeModal{{family_member.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Next of Kin</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-relative' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                    <input type="hidden" id="family_member_id" name="family_member_id" value="{{ family_member.id }}" readonly>
+              
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="first_name"
+                        name="first_name"
+                        value="{{family_member.first_name}}"
+                        required
+                      />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="last_name"
+                          name="last_name"
+                          value="{{family_member.last_name}}"
+                          required
+                        />
+                      </div>
+                  </div>
+                  
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender" value="{{family_member.gender}}">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+        
+                          </select>
+                      </div>
+                    <div class="col">
+                        <label class="form-label">Relationship</label>
+                        <select class="form-select" id="relationship" name="relationship" value="{{family_member.relation}}">
+                            <option value=""></option>
+                            <option value="Wife">Wife</option>
+                            <option value="Husband">Husband</option>
+                            <option value="Son">Son</option>
+                            <option value="Daughter">Daughter</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Niece">Niece</option>
+                            <option value="Nephew">Nephew</option>
+                        </select>
+                    </div>
+
+                    </div>
+                    <div class="row mb-3">
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          name="email"
+                          value="{{family_member.email}}"
+                          required
+                        />
+                      </div>
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Phone Number</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="phone_number"
+                        name="phone_number"
+                        value="{{family_member.phone_number}}"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

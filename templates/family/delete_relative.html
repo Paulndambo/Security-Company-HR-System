@@ -1,0 +1,38 @@
+<div class="modal fade" id="deleteRelativeModal{{family_member.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Delete Next of Kin</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'delete-relative' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <div class="mb-2">
+                    <p>Are you sure to delete <b>{{family_member.first_name}} {{family_member.last_name}}</b>?</b></p>
+                </div>
+                <div class="mb-2">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="relative_id"
+                      name="relative_id"
+                      value="{{family_member.id}}"
+                      readonly
+                      hidden
+                      required
+                    />
+                  </div>
+
+                  <input type="hidden" name="employee_id" id="employee_id" value="{{family_member.employee.id}} />
+                 
+                 
+                <div class="text-center mt-2">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
