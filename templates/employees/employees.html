@@ -31,6 +31,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Created At.</th>
               <th scope="col">Name</th>
               <th scope="col">Position</th>
               <th scope="col">ID Number</th>
@@ -45,6 +46,7 @@
             {% for employee in page_obj %}
             <tr>
               <td>{{employee.id}}</td>
+              <td>{{employee.created}}</td>
               <td>{{employee.first_name}} {{employee.last_name}}</td>
               <td>{{employee.position}}</td>
               <td>{{employee.id_number}}</td>

@@ -19,6 +19,21 @@ LEAVE_STATUS_CHOICES = (
 )
 
 
+class EmployeeDocument(AbstractBaseModel):
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="employeedocuments")
+    police_clearance = models.FileField(upload_to="police_clearances/", null=True, blank=True)
+    chief_letter = models.FileField(upload_to="chief_letters/", null=True, blank=True)
+    referee_letter = models.FileField(upload_to="recommended_letters/", null=True, blank=True)
+    scanned_id = models.FileField(upload_to="scanned_ids/", null=True, blank=True)
+    kcse_certificate = models.FileField(upload_to="kcse_certificates/", null=True)
+    kcpe_certificate = models.FileField(upload_to="kcpe_certificates/", null=True)
+    college_certificate = models.FileField(upload_to="college_certificates/", null=True)
+    kra_certificate = models.FileField(upload_to="kra_certificates", null=True)
+
+    def __str__(self):
+        return self.employee.username
+
+
 class Attendance(AbstractBaseModel):
     employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
