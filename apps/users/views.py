@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from apps.users.models import User
 
 from apps.core.models import Workstation
-
+from apps.employees.models import EmployeeDocument
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
@@ -68,8 +68,13 @@ def new_employee(request):
 
         chief_letter = request.FILES.get("chief_letter")
         police_clearance = request.FILES.get("police_clearance")
-        recommendation_letter = request.FILES.get("recommendation_letter")
+        referee_letter = request.FILES.get("referee_letter")
         scanned_id = request.FILES.get("scanned_id")
+        kra_certificate = request.FILES.get("kra_certificate")
+        kcpe_certificate = request.FILES.get("kcpe_certificate")
+        kcse_certificate = request.FILES.get("kcse_certificate")
+        college_certificate = request.FILES.get("college_certificate")
+
         passport_photo = request.FILES.get("passport_photo")
         #workstation = request.POST.get("workstation")
 
@@ -91,12 +96,20 @@ def new_employee(request):
             nssf_number=nssf_number,
             role="Employee",
             #workstation_id=workstation,
-            chief_letter=chief_letter,
-            police_clearance=police_clearance,
-            recommendation_letter=recommendation_letter,
-            scanned_id=scanned_id,
             passport_photo=passport_photo,
         )
+
+        documents = EmployeeDocument()
+        documents.employee = employee
+        documents.kra_certificate = kra_certificate if kra_certificate else None
+        documents.chief_letter =chief_letter if chief_letter else None
+        documents.police_clearance = police_clearance if police_clearance else None
+        documents.referee_letter = referee_letter if referee_letter else None 
+        documents.scanned_id = scanned_id if scanned_id else None
+        documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
+        documents.kcse_certificate = kcse_certificate if kcse_certificate else None
+        documents.college_certificate = college_certificate if college_certificate else None
+        documents.save()
 
         return redirect("employees")
     return render(request, "employees/new_employees.html")
