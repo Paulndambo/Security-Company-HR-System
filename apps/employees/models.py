@@ -8,8 +8,9 @@ STATUS_CHOICES = (
 )
 
 LEAVE_TYPES = (
-    ("Paid Leave", "Paid Leave"),
-    ("Unpaid Leave", "Unpaid Leave"),
+    ("Sick Leave", "Sick Leave"),
+    ("Emergency Leave", "Emergency Leave"),
+    ("Normal Leave", "Normal Leave"),
 )
 
 LEAVE_STATUS_CHOICES = (
@@ -20,7 +21,7 @@ LEAVE_STATUS_CHOICES = (
 
 
 class EmployeeDocument(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="employeedocuments")
+    employee = models.OneToOneField("users.User", on_delete=models.CASCADE, related_name="employeedocuments")
     police_clearance = models.FileField(upload_to="police_clearances/", null=True, blank=True)
     chief_letter = models.FileField(upload_to="chief_letters/", null=True, blank=True)
     referee_letter = models.FileField(upload_to="recommended_letters/", null=True, blank=True)
@@ -32,6 +33,7 @@ class EmployeeDocument(AbstractBaseModel):
 
     def __str__(self):
         return self.employee.username
+    
 
 
 class Attendance(AbstractBaseModel):

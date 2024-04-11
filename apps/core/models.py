@@ -17,7 +17,7 @@ SHIFT_CHOICES = (
 )
 
 
-class Workstation(AbstractBaseModel):
+class Client(AbstractBaseModel):
     name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     email = models.EmailField(null=True, blank=True)
@@ -30,6 +30,17 @@ class Workstation(AbstractBaseModel):
     town = models.CharField(max_length=255, null=True, blank=True)
     county = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.name
+
+class Workstation(AbstractBaseModel):
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name="workstations")
+    name = models.CharField(max_length=255)
+    guards_posted = models.IntegerField(default=0)
+    guards_needed = models.IntegerField(default=0)
+    work_shift = models.CharField(max_length=255, choices=SHIFT_CHOICES)
+    
 
     def __str__(self):
         return self.name

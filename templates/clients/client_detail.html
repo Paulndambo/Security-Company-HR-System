@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-4">
+        <p>Name: {{client.name}}</p>
+        <p>Phone No: {{client.phone_number}}</p>
+        <p>Email: {{client.email}}</p>
+        <p>Contract Started on: {{client.contract_start_date}}</p>
+    </div>
+    <div class="col-4">
+        <p>Location: {{client.location_description}}</p>
+        <p>Guards Posted: {{client.guards_posted}}</p>
+        <p>Guards Needed: {{client.guards_needed}}</p>
+        <p>Work Shift: {{client.work_shift}}</p>
+    </div>
+    <div class="col-4">
+        <p>Postal Address: {{client.postal_address}}</p>
+        <p>Town: {{client.town}}</p>
+        <p>County: {{client.county}}</p>
+        <p>Country: {{client.country}}</p>
+    </div>
+</div>
+
+<div class="row mt-4"></div>
+<hr>
+
+<div class="row">
+  <div class="col">
+    <h3>Work Stations</h3>
+  </div>
+  <div class="col">
+    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newWorkstationModal{{client.id}}">New Workstation</a>
+  </div>
+</div>
+<div class="table-responsive small">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Guards Needed</th>
+          <th scope="col">Guards Posted</th>
+          <th scope="col">Work Shift</th>
+          <th scope="col" colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for workstation in workstations %}
+        <tr>
+          <td>{{workstation.id}}</td>
+          <td>{{workstation.name}}</td>
+          <td>{{workstation.guards_needed}}</td>
+          <td>{{workstation.guards_posted}}</td>
+          <td>{{workstation.work_shift}}</td>
+         
+          <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editWorkstationModal{{ workstation.id }}">
+            <i class="bi bi-pencil-square"></i>
+          </a></td>
+          <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteWorkstationModal{{workstation.id}}">
+            <i class="bi bi-trash"></i>
+          </a></td>
+          {% include "workstations/delete_workstation.html" %}
+          {% include "workstations/edit_workstation.html" %}
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  
+  </div>
+{% include "workstations/new_workstation.html" %}
+<hr>
+<div class="row mt-4"></div>
+<h3>Guards Lists</h3>
+<div class="table-responsive small">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Position</th>
+          <th scope="col">ID Number</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Gender</th>
+          <th scope="col">Address</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employee in page_obj %}
+        <tr>
+          <td>{{employee.id}}</td>
+          <td>{{employee.first_name}} {{employee.last_name}}</td>
+          <td>{{employee.position}}</td>
+          <td>{{employee.id_number}}</td>
+          <td>{{employee.phone_number}}</td>
+          <td>{{employee.gender}}</td>
+          <td>{{employee.employee_address}}</td>
+          <td>
+            <a href="{% url 'employee-details' employee.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    <div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+          {% if page_obj.has_previous %}   
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+          {% endif %}
+          <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+          {% if page_obj.has_next %}    
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+          {% endif %}   
+        </ul>
+      </nav>
+    </div>
+  </div>
+{% endblock content %}

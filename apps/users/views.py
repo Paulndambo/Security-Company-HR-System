@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
-from apps.core.models import Workstation
-from apps.employees.models import EmployeeDocument
+from apps.core.models import Client
+from apps.employees.models import EmployeeDocument, BankInformation
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
@@ -29,7 +29,7 @@ def user_logout(request):
 @login_required(login_url="/users/login/")
 def employees(request):
     employees = User.objects.all().order_by("-created")
-    workstations = Workstation.objects.all()
+    clients = Client.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
@@ -44,7 +44,7 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "workstations": workstations}
+    context = {"page_obj": page_obj, "clients": clients}
     return render(request, "employees/employees.html", context)
 
 
@@ -118,7 +118,7 @@ def new_employee(request):
 @login_required(login_url="/users/login/")
 def edit_employee(request):
     if request.method == "POST":
-        workstation = request.POST.get("workstation")
+        client_id = request.POST.get("client_id")
         employee_id = request.POST.get("employee_id")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -149,7 +149,7 @@ def edit_employee(request):
         employee.country = country
         employee.nhif_number = nhif_number
         employee.nssf_number = nssf_number
-        employee.workstation_id = workstation
+        employee.client_id = client_id
         employee.save()
 
         return redirect("employees")
@@ -175,11 +175,21 @@ def employee_details(request, employee_id=None):
     employee = User.objects.get(id=employee_id)
     family_members = employee.nextofkins.all()
     education_details = employee.educationdetails.all()
+    documents = EmployeeDocument.objects.filter(employee=employee).first()
+
+    bank_details_found = False
+    banking_details = BankInformation.objects.filter(employee=employee).first()
+
+    if banking_details:
+        bank_details_found = True
 
     context = {
         "employee": employee,
         "family_members": family_members,
-        "education_details": education_details
+        "education_details": education_details,
+        "documents": documents,
+        "banking_details_found": bank_details_found,
+        "banking_info": banking_details
     }
 
     return render(request, "employees/employee_details.html", context)

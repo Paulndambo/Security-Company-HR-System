@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from apps.core.models import Workstation
+from apps.core.models import Workstation, Client
 from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -17,12 +17,12 @@ def home(request):
 
 
 @login_required(login_url="/users/login")
-def workstations(request):
-    work_stations = Workstation.objects.all().order_by("-created")
+def clients(request):
+    work_stations = Client.objects.all().order_by("-created")
 
     if request.method == "POST":
         search_text = request.POST.get("search_text") 
-        work_stations = Workstation.objects.filter(Q(name__icontains=search_text))
+        work_stations = Client.objects.filter(Q(name__icontains=search_text))
 
     paginator = Paginator(work_stations, 12)
     page_number = request.GET.get("page")
@@ -31,11 +31,11 @@ def workstations(request):
     context = {
         "page_obj": page_obj,
     }
-    return render(request, "workstations/work_stations.html", context)
+    return render(request, "clients/clients.html", context)
 
 
 @login_required(login_url="/users/login")
-def new_workstation(request):
+def new_client(request):
     if request.method == "POST":
         name = request.POST.get("name")
         phone_number = request.POST.get("phone_number")
@@ -51,7 +51,7 @@ def new_workstation(request):
         county = request.POST.get("county")
         country = request.POST.get("country")
 
-        Workstation.objects.create(
+        Client.objects.create(
             name=name,
             phone_number=phone_number,
             email=email,
@@ -66,13 +66,13 @@ def new_workstation(request):
             country=country,
         )
 
-        return redirect("workstations")
-    return render(request, "workstations/new_workstation.html")
+        return redirect("clients")
+    return render(request, "clients/new_client.html")
 
 @login_required(login_url="/users/login")
-def edit_workstation(request):
+def edit_client(request):
     if request.method == "POST":
-        workstation_id = request.POST.get("workstation_id")
+        client_id = request.POST.get("client_id")
         name = request.POST.get("name")
         phone_number = request.POST.get("phone_number")
         email = request.POST.get("email")
@@ -87,41 +87,92 @@ def edit_workstation(request):
         county = request.POST.get("county")
         country = request.POST.get("country")
 
-        workstation = Workstation.objects.get(id=workstation_id)
-        workstation.name = name
-        workstation.phone_number = phone_number
-        workstation.email = email
-        workstation.contract_start_date = contract_start_date
-        workstation.guards_needed = guards_needed
-        workstation.guards_posted = guards_posted
-        workstation.work_shift = work_shift
-        workstation.location_description = location_description
-        workstation.postal_address = address
-        workstation.town = town
-        workstation.county = county
-        workstation.country = country
-        workstation.save()
+        client = Client.objects.get(id=client_id)
+        client.name = name
+        client.phone_number = phone_number
+        client.email = email
+        client.contract_start_date = contract_start_date
+        client.guards_needed = guards_needed
+        client.guards_posted = guards_posted
+        client.work_shift = work_shift
+        client.location_description = location_description
+        client.postal_address = address
+        client.town = town
+        client.county = county
+        client.country = country
+        client.save()
 
-        return redirect("workstations")
-    return render(request, "workstations/edit_workstation.html")
+        return redirect("clients")
+    return render(request, "clients/edit_client.html")
 
 @login_required(login_url="/users/login")
-def delete_workstation(request):
+def delete_client(request):
     if request.method == "POST":
-        workstation_id = request.POST.get("workstation_id")
-        workstation = Workstation.objects.get(id=workstation_id)
-        workstation.delete()
-        return redirect("workstations")
-    return render(request, "workstations/delete_workstation.html")
+        client_id = request.POST.get("client_id")
+        client = Client.objects.get(id=client_id)
+        client.delete()
+        return redirect("clients")
+    return render(request, "clients/delete_client.html")
 
 @login_required(login_url="/users/login")
-def workstation_detail(request, workstation_id):
-    workstation = Workstation.objects.get(id=workstation_id)
+def client_detail(request, client_id):
+    client = Client.objects.get(id=client_id)
 
-    guards = workstation.workstationsguards.all()
+    guards = client.clientsguards.all()
+    workstations = client.workstations.all()
     paginator = Paginator(guards, 6)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"workstation": workstation, "page_obj": page_obj}
-    return render(request, "workstations/workstation_detail.html", context)
+    context = {"client": client, "page_obj": page_obj, "workstations": workstations}
+    return render(request, "clients/client_detail.html", context)
+
+
+## Work stations
+def new_workstation(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        client_id = request.POST.get("client_id")
+        guards_needed = request.POST.get("guards_needed")
+        guards_posted = request.POST.get("guards_posted")
+        work_shift = request.POST.get("work_shift")
+
+        Workstation.objects.create(
+            name=name, 
+            client_id=client_id, 
+            guards_needed=guards_needed, 
+            guards_posted=guards_posted,
+            work_shift=work_shift
+        )
+
+        return redirect(f"/clients/{client_id}")
+    return render(request, "workstations/new_workstation.html")
+
+
+def edit_workstation(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        client_id = request.POST.get("client_id")
+        workstation_id = request.POST.get("workstation_id")
+        guards_needed = request.POST.get("guards_needed")
+        guards_posted = request.POST.get("guards_posted")
+        work_shift = request.POST.get("work_shift")
+
+        workstation = Workstation.objects.get(id=workstation_id)
+        workstation.name = name
+        workstation.guards_needed = guards_needed
+        workstation.work_shift = work_shift
+        workstation.guards_posted = guards_posted
+        workstation.save()
+
+        return redirect(f"/clients/{client_id}")
+    return render(request, "workstations/edit_workstation.html")
+
+def delete_workstation(request):
+    if request.method == "POST":
+        workstation_id = request.POST.get('workstation_id')
+        client_id = request.POST.get('client_id')
+        workstation = Workstation.objects.get(id=workstation_id)
+        workstation.delete()
+        return redirect(f"/clients/{client_id}")
+    return render(request, "workstations/delete_workstation.html")

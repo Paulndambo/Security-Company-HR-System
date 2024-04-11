@@ -4,7 +4,9 @@
 <div class="row mb-3">
     <div class="col-4"></div>
     <div class="col-4">
+      {% if employee.passport_photo %}
         <img src="{{employee.passport_photo.url}}" height="100" width="100" alt="Employee Passport Image" />
+      {% endif %}
     </div>
     <div class="col-4"></div>
     
@@ -31,9 +33,22 @@
         <p>Country: {{employee.country}}</p>
     </div>
 </div>
+<div class="row mt-5"></div>
 <hr>
-<div class="row">
+<div class="row mb-3">
+  <div class="col">
     <h4>Bank Information</h4>
+  </div>
+  <div class="col">
+    {% if banking_details_found %}
+    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editBankDetailsModal{{employee.id}}">Edit Bank Details</a>
+    {% else %}
+    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newBankDetailsModal{{employee.id}}">Add Bank Details</a>
+    {% endif %}
+  </div>
+  
+</div>
+<div class="row">
     <div class="col">
         <p>Bank Name: {{employee.bankingdetails.bank_name}}</p>
         <p>Branch Name: {{employee.bankingdetails.branch_name}}</p>
@@ -44,6 +59,9 @@
         <p>Account Number: {{employee.bankingdetails.account_number}}</p>
     </div>
 </div>
+{% include "bank/new_bank_details.html" %}
+{% include "bank/edit_bank_details.html" %}
+<div class="row mt-5"></div>
 <hr>
 <div class="row">
     <div class="col">
@@ -93,6 +111,7 @@
         </table>
       
       </div>
+<div class="row mt-5"></div>
 <hr>
 <div class="row mt-4">
     <div class="col">
@@ -143,40 +162,110 @@
         </table>
 </div>
 </div>
+<div class="row mt-5"></div>
+<hr>
+<div class="row">
+  <div class="col">
+    <h3>Employee Documents</h3>
+  </div>
+  <div class="col">
+    <a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#">
+      Upload Documents
+    </a>
+  </div>
+</div>
+<hr>
 <div class="row mb-3">
-  <h5>Employee Documents</h5>
   <div class="table-responsive small">
     <table class="table table-sm">
       <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col">Date Created</th>
           <th scope="col">Document Name</th>
-          <th scope="col">Level</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
+        {% if documents.kcpe_certificate %}
         <tr>
-          <td>KCSE CERTIFICATE</td>
-          <td></td>
+          <td>{{documents.created}}</td>
+          <td>KCPE Certificate</td>
           <td>
-            <a href="{{employee.scanned_id.url}}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+            <a href="{{ documents.kcpe_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
           </td>
         </tr>
+        {% endif %}
+
+        {% if documents.kcse_certificate %}
         <tr>
-          <td>KCSE CERTIFICATE</td>
-          <td></td>
-          <td></td>
+          <td>{{documents.created}}</td>
+          <td>KCSE Certificate</td>
+          <td>
+            <a href="{{ documents.kcse_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
         </tr>
+        {% endif %}
+
+        {% if documents.kra_certificate %}
         <tr>
-          <td>KCSE CERTIFICATE</td>
-          <td></td>
-          <td></td>
+          <td>{{documents.created}}</td>
+          <td>KRA PIN Certificate</td>
+          <td>
+            <a href="{{ documents.kra_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
         </tr>
+        {% endif %}
+
+        {% if documents.police_clearance %}
         <tr>
-          <td>KCSE CERTIFICATE</td>
-          <td></td>
-          <td></td>
+          <td>{{documents.created}}</td>
+          <td>Police Clearance</td>
+          <td>
+            <a href="{{ documents.police_clearance.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
         </tr>
+        {% endif %}
+
+        {% if documents.chief_letter %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Chief's Letter</td>
+          <td>
+            <a href="{{ documents.chief_letter.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.scanned_id %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Scanned ID</td>
+          <td>
+            <a href="{{ documents.scanned_id.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.college_certificate %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>College/University Certificate</td>
+          <td>
+            <a href="{{ documents.college_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.referee_letter %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Referee Letter</td>
+          <td>
+            <a href="{{ documents.referee_letter.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+        
       </tbody>
     </table>
   </div>

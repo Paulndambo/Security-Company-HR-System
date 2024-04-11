@@ -18,7 +18,10 @@ from apps.employees.views import (
 
     new_education_record,
     edit_education_record,
-    delete_education_record
+    delete_education_record,
+
+    new_bank_details,
+    edit_bank_details,
 )
 
 urlpatterns = [
@@ -45,4 +48,7 @@ urlpatterns = [
     path("new-education-record/", new_education_record, name="new-education-record"),
     path("edit-education-record/", edit_education_record, name="edit-education-record"),
     path("delete-education-record/", delete_education_record, name="delete-education-record"),
+
+    path("new-bank-details/", new_bank_details, name="new-bank-details"),
+    path("edit-bank-details/", edit_bank_details, name="edit-bank-details"),
 ]

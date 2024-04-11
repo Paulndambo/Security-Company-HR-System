@@ -117,10 +117,10 @@
                       </select>
                   </div>
                   <div class="col">
-                    <label class="form-label">Work Station</label>
-                    <select class="form-select" id="workstation" name="workstation">
-                      {% for workstation in workstations %}
-                        <option value="{{workstation.id}}">{{workstation.name}}</option>
+                    <label class="form-label">Client</label>
+                    <select class="form-select" id="client_id" name="client_id">
+                      {% for client in clients %}
+                        <option value="{{client.id}}">{{client.name}}</option>
                       {% endfor %}
                     </select>
                   </div>
