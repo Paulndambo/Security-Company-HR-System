@@ -26,3 +26,13 @@ class EmployeeSalary(AbstractBaseModel):
 
     def __str__(self):
         return self.employee.first_name + " " + self.employee.last_name
+    
+
+class EmployeeOvertime(AbstractBaseModel):
+    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    month = models.CharField(max_length=255, choices=MONTHS_LIST)
+    year = models.CharField(max_length=10)
+    amount = models.DecimalField(max_digits=100, decimal_places=2)
+
+    def __str__(self):
+        return self.year + "-" + self.month
