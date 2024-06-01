@@ -1,0 +1,89 @@
+<div class="modal fade" id="editBankDetailsModal{{employee.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Edit Bank Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'edit-bank-details' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                    <input type="hidden" id="banking_info_id" name="banking_info_id" value="{{ employee.bankingdetails.id }}" readonly>
+                    <input type="hidden" id="employee_id" name="employee_id" value="{{ employee.bankingdetails.employee.id }}" readonly>
+              
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Bank Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="bank_name"
+                        name="bank_name"
+                        value="{{employee.bankingdetails.bank_name}}"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Branch Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="branch_name"
+                        name="branch_name"
+                        value="{{employee.bankingdetails.branch_name}}"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Account Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="account_name"
+                        name="account_name"
+                        value="{{employee.bankingdetails.account_name}}"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Account Type</label>
+                        <select class="form-select" id="account_type" name="account_type">
+                            <option value="Checking Account">Checking Account</option>
+                            <option value="Savings Account">Savings Account</option>
+                            
+                          </select>
+                      </div>
+                   
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                          <label for="exampleInputPassword1" class="form-label">Account Number</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="account_number"
+                            name="account_number"
+                            value="{{employee.bankingdetails.account_number}}"
+                            required
+                          />
+                        </div>
+                      </div>
+                  
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

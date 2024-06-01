@@ -104,20 +104,33 @@ def issue_equipment(request):
     user = request.user
     if request.method == "POST":
         employee = request.POST.get("employee")
-        equipment = request.POST.get("equipment")
-        quantity = request.POST.get("quantity")
-        return_date = request.POST.get("return_date")
-        condition = request.POST.get("condition")
+        date_issued = request.POST.get("date_issued")
 
+        head_cap_issued = request.POST.get("head_cap_issued")
+        shirt_issued = request.POST.get("shirt_issued")
+        belt_issued = request.POST.get("belt_issued")
+        chest_guard_issued = request.POST.get("chest_guard_issued")
+        shoes_issued = request.POST.get("shoes_issued")
+        boots_issued = request.POST.get("boots_issued")
+        sweater_issued = request.POST.get("sweater_issued")
+        baton_issued = request.POST.get("baton_issued")
+        trouser_issued = request.POST.get("trousers_issued")
+        
         EquipmentIssue.objects.create(
             employee_id=employee,
-            equipment_id=equipment,
-            quantity=quantity,
-            return_date=return_date,
+            date_issued=date_issued,
             issued_by=user,
-            status="Pending Return",
-            condition=condition
+            baton_issued= True if baton_issued else False,
+            sweater_issued=True if sweater_issued else False,
+            boots_issued = True if boots_issued else False,
+            shoes_issued = True if shoes_issued else False,
+            chest_guard_issued = True if chest_guard_issued else False,
+            belt_issued = True if belt_issued else False,
+            shirt_issued = True if shirt_issued else False,
+            head_cap_issued = True if head_cap_issued else False,
+            trouser_issued = True if trouser_issued else False,
         )
+        
 
         return redirect("issued-equipments")
     return render(request, "equipments/issue_equipment.html")

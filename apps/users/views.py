@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
-from apps.core.models import Workstation
-
+from apps.core.models import Client
+from apps.employees.models import EmployeeDocument, BankInformation
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):
@@ -29,7 +29,7 @@ def user_logout(request):
 @login_required(login_url="/users/login/")
 def employees(request):
     employees = User.objects.all().order_by("-created")
-    workstations = Workstation.objects.all()
+    clients = Client.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
@@ -44,7 +44,7 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "workstations": workstations}
+    context = {"page_obj": page_obj, "clients": clients}
     return render(request, "employees/employees.html", context)
 
 
@@ -68,8 +68,13 @@ def new_employee(request):
 
         chief_letter = request.FILES.get("chief_letter")
         police_clearance = request.FILES.get("police_clearance")
-        recommendation_letter = request.FILES.get("recommendation_letter")
+        referee_letter = request.FILES.get("referee_letter")
         scanned_id = request.FILES.get("scanned_id")
+        kra_certificate = request.FILES.get("kra_certificate")
+        kcpe_certificate = request.FILES.get("kcpe_certificate")
+        kcse_certificate = request.FILES.get("kcse_certificate")
+        college_certificate = request.FILES.get("college_certificate")
+
         passport_photo = request.FILES.get("passport_photo")
         #workstation = request.POST.get("workstation")
 
@@ -91,12 +96,20 @@ def new_employee(request):
             nssf_number=nssf_number,
             role="Employee",
             #workstation_id=workstation,
-            chief_letter=chief_letter,
-            police_clearance=police_clearance,
-            recommendation_letter=recommendation_letter,
-            scanned_id=scanned_id,
             passport_photo=passport_photo,
         )
+
+        documents = EmployeeDocument()
+        documents.employee = employee
+        documents.kra_certificate = kra_certificate if kra_certificate else None
+        documents.chief_letter =chief_letter if chief_letter else None
+        documents.police_clearance = police_clearance if police_clearance else None
+        documents.referee_letter = referee_letter if referee_letter else None 
+        documents.scanned_id = scanned_id if scanned_id else None
+        documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
+        documents.kcse_certificate = kcse_certificate if kcse_certificate else None
+        documents.college_certificate = college_certificate if college_certificate else None
+        documents.save()
 
         return redirect("employees")
     return render(request, "employees/new_employees.html")
@@ -105,7 +118,7 @@ def new_employee(request):
 @login_required(login_url="/users/login/")
 def edit_employee(request):
     if request.method == "POST":
-        workstation = request.POST.get("workstation")
+        client_id = request.POST.get("client_id")
         employee_id = request.POST.get("employee_id")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -136,7 +149,7 @@ def edit_employee(request):
         employee.country = country
         employee.nhif_number = nhif_number
         employee.nssf_number = nssf_number
-        employee.workstation_id = workstation
+        employee.client_id = client_id
         employee.save()
 
         return redirect("employees")
@@ -160,9 +173,23 @@ def delete_employee(request):
 @login_required(login_url="/users/login/")
 def employee_details(request, employee_id=None):
     employee = User.objects.get(id=employee_id)
+    family_members = employee.nextofkins.all()
+    education_details = employee.educationdetails.all()
+    documents = EmployeeDocument.objects.filter(employee=employee).first()
+
+    bank_details_found = False
+    banking_details = BankInformation.objects.filter(employee=employee).first()
+
+    if banking_details:
+        bank_details_found = True
 
     context = {
         "employee": employee,
+        "family_members": family_members,
+        "education_details": education_details,
+        "documents": documents,
+        "banking_details_found": bank_details_found,
+        "banking_info": banking_details
     }
 
     return render(request, "employees/employee_details.html", context)

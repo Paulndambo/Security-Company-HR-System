@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Workstations</h3>
+        <h3>Clients</h3>
     </div>
     <div class="col">
       <form method="POST">
@@ -20,7 +20,7 @@
       </form>
     </div>
     <div class="col">
-        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newWorkstationModal">New Workstation</a>
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newClientModal">New Client</a>
 
     </div>
 
@@ -41,28 +41,28 @@
             </tr>
           </thead>
           <tbody>
-            {% for workstation in page_obj %}
+            {% for client in page_obj %}
             <tr>
-              <td>{{workstation.id}}</td>
-              <td>{{workstation.name}}</td>
-              <td>{{workstation.phone_number}}</td>
-              <td>{{workstation.email}}</td>
-              <td>{{workstation.guards_posted}}</td>
-              <td>{{workstation.work_shift}}</td>
-              <td>{{workstation.contract_start_date}}</td>
+              <td>{{client.id}}</td>
+              <td>{{client.name}}</td>
+              <td>{{client.phone_number}}</td>
+              <td>{{client.email}}</td>
+              <td>{{client.guards_posted}}</td>
+              <td>{{client.work_shift}}</td>
+              <td>{{client.contract_start_date}}</td>
               <td>
-                <a href="{% url 'workstation-detail' workstation.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                <a href="{% url 'client-detail' client.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
               </td>
               
-              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editWorkstationModal{{ workstation.id }}">
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editClientModal{{ client.id }}">
                 <i class="bi bi-pencil-square"></i>
               </a></td>
-              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteWorkstationModal{{ workstation.id }}">
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteClientModal{{ client.id }}">
                 <i class="bi bi-trash"></i>
               </a></td>
               
-            {% include "workstations/edit_workstation.html" %}
-            {% include "workstations/delete_workstation.html" %}
+            {% include "clients/edit_client.html" %}
+            {% include "clients/delete_client.html" %}
             </tr>
             {% endfor %}
 

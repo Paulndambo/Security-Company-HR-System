@@ -36,22 +36,11 @@ class User(AbstractBaseModel, AbstractUser):
     country = models.CharField(max_length=255, null=True)
     basic_salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=350)
-    police_clearance = models.FileField(
-        upload_to="police_clearances/", null=True, blank=True
-    )
-    chief_letter = models.FileField(upload_to="chief_letters/", null=True, blank=True)
-    recommendation_letter = models.FileField(
-        upload_to="recommended_letters/", null=True, blank=True
-    )
-    scanned_id = models.FileField(upload_to="scanned_ids/", null=True, blank=True)
-    passport_photo = models.ImageField(
-        upload_to="passport_photos/", null=True, blank=True
-    )
-    workstation = models.ForeignKey(
-        "core.Workstation",
+    client = models.ForeignKey(
+        "core.Client",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="workstationsguards",
+        related_name="clientsguards",
     )
 
     def __str__(self):
