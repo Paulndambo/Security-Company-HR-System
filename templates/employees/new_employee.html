@@ -167,6 +167,13 @@
                       />
                     </div>
                   </div>
+                  <div class="mb-3">
+                    <select class="form-select" id="job_category" name="job_category">
+                      {% for config in payment_configs %}
+                        <option value="{{config.id}}">{{config.job_group}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
                   <h6 class="text-center mt-4 mb-4">Academic Documents</h6>
                   <hr>
                   <div class="mb-3">

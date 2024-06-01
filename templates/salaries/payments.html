@@ -29,11 +29,13 @@
               <td>{{payment.daily_rate}}</td>
               <td>{{payment.overtime}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm"><i class="bi bi-pencil-square"></i></a>
+                <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editPaymentConfigModal{{ payment.id }}"><i class="bi bi-pencil-square"></i></a>
               </td>
               <td>
-                <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePaymentConfigModal{{ payment.id }}"><i class="bi bi-trash"></i></a>
               </td>
+              {% include "salaries/delete_payment_config.html" %}
+              {% include "salaries/edit_payment_config.html" %}
             </tr>
             {% endfor %}
 

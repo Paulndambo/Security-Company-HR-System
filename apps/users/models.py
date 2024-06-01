@@ -42,6 +42,8 @@ class User(AbstractBaseModel, AbstractUser):
         null=True,
         related_name="clientsguards",
     )
+    job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
+    passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name

@@ -201,3 +201,31 @@ def new_payment_config(request):
 
         return redirect("payment-configs")
     return render(request, "salaries/new_payment_config.html")
+
+
+def edit_payment_config(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        job_group = request.POST.get("job_group")
+        overtime = request.POST.get("overtime")
+        daily_rate = request.POST.get("daily_rate")
+
+        payment_config = PaymentConfig.objects.get(id=payment_id)
+        payment_config.job_group = job_group
+        payment_config.overtime = overtime
+        payment_config.daily_rate = daily_rate
+        payment_config.save()
+
+        return redirect("payment-configs")
+    return render(request, "salaries/edit_payment_config.html")
+
+def delete_payment_config(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        payment_config = PaymentConfig.objects.get(id=payment_id)
+        payment_config.delete()
+
+        return redirect("payment-configs")
+    return render(request, "salaries/delete_payment_config.html")
+
+
