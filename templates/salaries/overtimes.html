@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Employee Overtimes</h3>
+    </div>
+    <div class="col">
+      <form method="POST">
+        {% csrf_token %}
+          <div class="row">
+            <div class="col-8">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+            </div>
+            <div class="col-4">
+              <button class="btn btn-info">Search</button>
+            </div>
+          </div>
+      </form>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newEmployeeModal">Record Overtime</a>
+    </div>
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Month</th>
+              <th scope="col">Year</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Date</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for overtime in page_obj %}
+            <tr>
+              <td>{{overtime.id}}</td>
+              <td>{{overtime.employee}}</td>
+              <td>{{overtime.month}}-{{overtime.year}}</td>
+              <td>{{overtime.days_worked}}</td>
+              <td>{{overtime.daily_rate}}</td>
+              <td>{{overtime.total_amount}}</td>
+              <td>
+                <a href="#" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+              {% if page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+{% endblock content %}

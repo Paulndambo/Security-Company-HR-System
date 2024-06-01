@@ -1,0 +1,52 @@
+<div class="modal fade" id="newConfigModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Payment Config</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-payment-config' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Job Group</label>
+                    <select class="form-select" id="job_group" name="job_group">
+                        <option value="Security Guard">Security Guard</option>
+                        <option value="Security Manager">Security Manager</option>
+                        <option value="CCTV Installer">CCTV Installer</option>
+                        </select>
+                </div>
+              
+                <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Daily Rate</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="daily_rate"
+                        name="daily_rate"
+                        required
+                      />
+                </div>
+
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Overtime Rate</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="overtime"
+                          name="overtime"
+                          required
+                        />
+                      </div>
+                  </div>
+                 
+                 
+                <div class="text-center mt-3 mb-3">
+                  <button type="submit" class="btn btn-primary">Recond Config</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>
