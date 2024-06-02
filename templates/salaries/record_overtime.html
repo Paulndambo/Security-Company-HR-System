@@ -1,0 +1,39 @@
+<div class="modal fade" id="newOvertimeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Record Overtime</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'record-overtime' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Employee</label>
+                    <select class="form-select" id="employee_id" name="employee_id">
+                      {% for employee in employees %}
+                          <option value="{{employee.id}}">{{employee}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                    <div class="col">
+                        <label class="form-label fw-bold">Overtime Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="overtime_date"
+                          name="overtime_date"
+                          required
+                        />
+                      </div>
+                  </div>
+                 
+                <div class="text-center mt-3 mb-3">
+                  <button type="submit" class="btn btn-primary">Recond Overtime</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

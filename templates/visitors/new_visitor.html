@@ -1,0 +1,138 @@
+<div class="modal fade" id="newVisitorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Record New Visitor</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-visitor' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+              
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="first_name"
+                        name="first_name"
+                        required
+                      />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Last Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="last_name"
+                          name="last_name"
+                          required
+                        />
+                      </div>
+                  </div>
+                 
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">ID Number</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="id_number"
+                        name="id_number"
+                        required
+                      />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Phone Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="phone_number"
+                          name="phone_number"
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                  <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+    
+                      </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Office Visiting</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="office_visiting"
+                        name="office_visiting"
+                      />
+                    </div>
+            
+                </div>
+
+                <div class="form-floating">
+                    <textarea
+                      class="form-control"
+                      placeholder="Brief Description of the topic"
+                      id="visitation_reason"
+                      name="visitation_reason"
+                    ></textarea>
+                    <label for="floatingTextarea">Visitation Reason</label>
+                  </div>
+    
+                  <h6 class="text-center mt-4 mb-4">Car Details</h6>
+                  
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="exampleInputPassword1" class="form-label">Make/Model</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="model"
+                        name="model"
+                      />
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1" class="form-label">Plate Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="plate_number"
+                          name="plate_number"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                          <label for="exampleInputPassword1" class="form-label">Color</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="color"
+                            name="color"
+            
+                          />
+                        </div>
+                
+                        </div>
+                  
+                 
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Recond Visitor</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

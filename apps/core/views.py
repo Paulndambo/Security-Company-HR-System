@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from apps.core.models import Workstation, Client
+from apps.core.models import Workstation, Client, PaymentConfig
 from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -176,3 +176,56 @@ def delete_workstation(request):
         workstation.delete()
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/delete_workstation.html")
+
+
+def payments(request):
+    payments = PaymentConfig.objects.all()
+    context = {
+        "payments": payments
+    }
+
+    return render(request, "salaries/payments.html", context)
+
+
+def new_payment_config(request):
+    if request.method == "POST":
+        job_group = request.POST.get("job_group")
+        overtime = request.POST.get("overtime")
+        daily_rate = request.POST.get("daily_rate")
+
+        PaymentConfig.objects.create(
+            job_group=job_group,
+            overtime=overtime,
+            daily_rate=daily_rate
+        )
+
+        return redirect("payment-configs")
+    return render(request, "salaries/new_payment_config.html")
+
+
+def edit_payment_config(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        job_group = request.POST.get("job_group")
+        overtime = request.POST.get("overtime")
+        daily_rate = request.POST.get("daily_rate")
+
+        payment_config = PaymentConfig.objects.get(id=payment_id)
+        payment_config.job_group = job_group
+        payment_config.overtime = overtime
+        payment_config.daily_rate = daily_rate
+        payment_config.save()
+
+        return redirect("payment-configs")
+    return render(request, "salaries/edit_payment_config.html")
+
+def delete_payment_config(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        payment_config = PaymentConfig.objects.get(id=payment_id)
+        payment_config.delete()
+
+        return redirect("payment-configs")
+    return render(request, "salaries/delete_payment_config.html")
+
+

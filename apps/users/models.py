@@ -15,9 +15,16 @@ GENDER_CHOICES = (
 )
 
 
+EMPLOYEE_STATUS = (
+    ("Available", "Available"),
+    ("On Leave", "On Leave"),
+    ("Suspended", "Suspended"),
+)
+
 EMPLOYMENT_POSITION_CHOICES = (
     ("Security Manager", "Security Manager"),
     ("Security Guard", "Security Guard"),
+    ("CCTV Installer", "CCTV Installer"),
 )
 
 
@@ -42,6 +49,9 @@ class User(AbstractBaseModel, AbstractUser):
         null=True,
         related_name="clientsguards",
     )
+    job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
+    passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
+    status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Available")
 
     def __str__(self):
         return self.first_name + " " + self.last_name

@@ -7,7 +7,6 @@ from apps.employees.views import (
     mark_present,
     leave_applications,
     apply_leave,
-    mark_attendance,
     reset_attendance,
     mark_leave_application,
     delete_leave_application,
@@ -28,7 +27,6 @@ urlpatterns = [
     path("attendances/", attendaces, name="attendances"),
     path("new-attendance/", new_attendance, name="new-attendance"),
     path("generate-attendance/", generate_attendance, name="generate-attendance"),
-    path("mark-attendance/", mark_attendance, name="mark-attendance"),
     path(
         "reset-attendance/<int:attendance_id>/",
         reset_attendance,

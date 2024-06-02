@@ -10,6 +10,11 @@ from apps.core.views import (
     new_workstation,
     edit_workstation,
     delete_workstation,
+
+    payments,
+    new_payment_config,
+    edit_payment_config,
+    delete_payment_config,
 )
 
 urlpatterns = [
@@ -23,4 +28,9 @@ urlpatterns = [
     path("new-workstation", new_workstation, name="new-workstation"),
     path("edit-workstation", edit_workstation, name="edit-workstation"),
     path("delete-workstation", delete_workstation, name="delete-workstation"),
+
+    path("payment-configs/", payments, name="payment-configs"),
+    path("new-payment-config/", new_payment_config, name="new-payment-config"),
+    path("edit-payment-config/", edit_payment_config, name="edit-payment-config"),
+    path("delete-payment-config/", delete_payment_config, name="delete-payment-config"),
 ]

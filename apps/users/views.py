@@ -5,7 +5,8 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from apps.users.models import User
 
-from apps.core.models import Client
+
+from apps.core.models import Client, PaymentConfig
 from apps.employees.models import EmployeeDocument, BankInformation
 # Create your views here.
 ################ Authentication URLs ##############
@@ -30,6 +31,7 @@ def user_logout(request):
 def employees(request):
     employees = User.objects.all().order_by("-created")
     clients = Client.objects.all()
+    payment_configs = PaymentConfig.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
@@ -44,7 +46,7 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "clients": clients}
+    context = {"page_obj": page_obj, "clients": clients, "payment_configs": payment_configs}
     return render(request, "employees/employees.html", context)
 
 
@@ -65,6 +67,8 @@ def new_employee(request):
         position = request.POST.get("position")
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
+
+        job_category = request.POST.get("job_category")
 
         chief_letter = request.FILES.get("chief_letter")
         police_clearance = request.FILES.get("police_clearance")
@@ -97,6 +101,7 @@ def new_employee(request):
             role="Employee",
             #workstation_id=workstation,
             passport_photo=passport_photo,
+            job_category_id=job_category
         )
 
         documents = EmployeeDocument()
@@ -134,6 +139,8 @@ def edit_employee(request):
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
 
+        job_category = request.POST.get("job_category")
+
         employee = User.objects.get(id=employee_id)
         employee.first_name = first_name
         employee.last_name = last_name
@@ -150,6 +157,7 @@ def edit_employee(request):
         employee.nhif_number = nhif_number
         employee.nssf_number = nssf_number
         employee.client_id = client_id
+        employee.job_category_id = job_category
         employee.save()
 
         return redirect("employees")

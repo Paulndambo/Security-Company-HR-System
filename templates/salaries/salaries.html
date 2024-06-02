@@ -32,8 +32,9 @@
               <th scope="col">Period</th>
               <th scope="col">Days Worked</th>
               <th scope="col">Daily Rate</th>
+              <th scope="col">Overtime</th>
               <th scope="col">Total Amount</th>
-              <th scope="col">Actions</th>
+              <th scope="col" colspan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -44,9 +45,13 @@
               <td>{{salary.month}}-{{salary.year}}</td>
               <td>{{salary.days_worked}}</td>
               <td>{{salary.daily_rate}}</td>
+              <td>{{salary.overtime}}</td>
               <td>{{salary.total_amount}}</td>
               <td>
                 <a href="#" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+              </td>
+              <td>
+                <a href="#" class="btn btn-warning btn-sm"><i class="bi bi-printer"></i></a>
               </td>
               
             </tr>

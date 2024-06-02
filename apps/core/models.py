@@ -16,6 +16,13 @@ SHIFT_CHOICES = (
     ("24 Hours Shift", "24 Hours Shift"),
 )
 
+class PaymentConfig(AbstractBaseModel):
+    job_group = models.CharField(max_length=255)
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2)
+    overtime = models.DecimalField(max_digits=100, decimal_places=0)
+
+    def __str__(self):
+        return self.job_group
 
 class Client(AbstractBaseModel):
     name = models.CharField(max_length=255)
