@@ -5,6 +5,11 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from apps.users.models import User
 import calendar
+
+date_today = datetime.now().date()
+current_month = calendar.month_name[date_today.month]
+current_year = str(date_today.year)
+
 # Create your views here.
 @login_required(login_url="/users/login")
 def employee_salaries(request):
@@ -52,6 +57,29 @@ def record_overtime(request):
             year=str(overtime_date.year),
             amount=employee.job_category.overtime
         )
+
+        # Update Salary
+        salary = EmployeeSalary.objects.filter(
+            employee=employee, 
+            year=current_year,
+            month=current_month
+        ).first()
+
+        if salary:
+            salary.total_amount += employee.job_category.overtime
+            salary.overtime += employee.job_category.overtime
+            salary.save()
+        else:
+            salary = EmployeeSalary.objects.create(
+                employee=employee,
+                month=current_month,
+                year=current_year,
+                days_worked=1,
+                daily_rate=employee.job_category.daily_rate,
+                total_amount=employee.job_category.daily_rate,
+                overtime=employee.job_category.overtime
+            )
+
 
         return redirect("overtimes")
     

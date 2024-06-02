@@ -34,7 +34,7 @@ def attendaces(request):
     if attendances_today < employees.count():
         show_generate_attendance = True
 
-    paginator = Paginator(atteandaces, 15)
+    paginator = Paginator(atteandaces, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -105,7 +105,7 @@ def reset_attendance(request, attendance_id):
         salary = EmployeeSalary.objects.filter(employee=attendance.employee).first()
 
         if salary:
-            salary.total_amount -= salary.daily_rate
+            salary.total_amount -= salary.employee.job_category.daily_rate
             salary.days_worked -= 1
             salary.save()
 
@@ -130,7 +130,7 @@ def mark_present(request, attendance_id):
     ).first()
 
     if salary:
-        salary.total_amount += user.daily_rate
+        salary.total_amount += attendace.employee.job_category.daily_rate
         salary.days_worked += 1
         salary.save()
     else:
@@ -139,8 +139,8 @@ def mark_present(request, attendance_id):
             month=current_month,
             year=current_year,
             days_worked=1,
-            daily_rate=user.daily_rate,
-            total_amount=user.daily_rate
+            daily_rate=attendace.employee.job_category.daily_rate,
+            total_amount=attendace.employee.job_category.daily_rate
         )
 
     return redirect("attendances")

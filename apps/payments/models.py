@@ -21,7 +21,7 @@ class EmployeeSalary(AbstractBaseModel):
     month = models.CharField(max_length=255, choices=MONTHS_LIST)
     year = models.CharField(max_length=10)
     days_worked = models.IntegerField(default=0)
-    daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=350)
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2)
     overtime = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=100, decimal_places=2)
 

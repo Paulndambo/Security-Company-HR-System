@@ -139,6 +139,8 @@ def edit_employee(request):
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
 
+        job_category = request.POST.get("job_category")
+
         employee = User.objects.get(id=employee_id)
         employee.first_name = first_name
         employee.last_name = last_name
@@ -155,6 +157,7 @@ def edit_employee(request):
         employee.nhif_number = nhif_number
         employee.nssf_number = nssf_number
         employee.client_id = client_id
+        employee.job_category_id = job_category
         employee.save()
 
         return redirect("employees")
