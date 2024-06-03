@@ -140,3 +140,9 @@ def generate_payslips(request):
 
         return redirect("payslips")
     return render(request, "salaries/generate_payslips.html")
+
+
+def payslip_receipt(request, id):
+    payslip = Payslip.objects.get(id=id)
+
+    return render(request, "salaries/payslip_receipt.html", {"payslip": payslip})

@@ -80,6 +80,7 @@ def new_employee(request):
         college_certificate = request.FILES.get("college_certificate")
 
         passport_photo = request.FILES.get("passport_photo")
+        kra_pin = request.POST.get("kra_pin")
         #workstation = request.POST.get("workstation")
 
         employee = User.objects.create(
@@ -88,6 +89,7 @@ def new_employee(request):
             username=id_number,
             gender=gender,
             id_number=id_number,
+            kra_pin=kra_pin,
             phone_number=phone_number,
             email=email,
             physical_address=physical_address,
@@ -186,6 +188,7 @@ def edit_employee(request):
         country = request.POST.get("country")
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
+        kra_pin = request.POST.get("kra_pin")
 
         job_category = request.POST.get("job_category")
 
@@ -206,6 +209,7 @@ def edit_employee(request):
         employee.nssf_number = nssf_number
         employee.client_id = client_id
         employee.job_category_id = job_category
+        employee.kra_pin = kra_pin
         employee.save()
 
         return redirect("employees")

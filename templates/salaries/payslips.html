@@ -55,7 +55,7 @@
                 <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#payslipDetailModal{{payslip.id}}"><i class="bi bi-eye-fill"></i></a>
               </td>
               <td>
-                <a href="#" class="btn btn-warning btn-sm"><i class="bi bi-printer"></i></a>
+                <a href="{% url 'payslip-receipt' payslip.id %}" class="btn btn-warning btn-sm"><i class="bi bi-printer"></i></a>
               </td>
               <td>
                 <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePayslipModal{{payslip.id}}"><i class="bi bi-trash"></i></a>

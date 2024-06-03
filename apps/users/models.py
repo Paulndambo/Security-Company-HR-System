@@ -37,6 +37,7 @@ class User(AbstractBaseModel, AbstractUser):
     id_number = models.CharField(max_length=255, null=True)
     nhif_number = models.CharField(max_length=255, null=True)
     nssf_number = models.CharField(max_length=255, null=True)
+    kra_pin = models.CharField(max_length=255, null=True)
     position = models.CharField(max_length=255, choices=EMPLOYMENT_POSITION_CHOICES)
     postal_address = models.CharField(max_length=255, null=True)
     physical_address = models.CharField(max_length=255, null=True)
