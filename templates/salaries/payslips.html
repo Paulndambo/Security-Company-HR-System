@@ -38,7 +38,7 @@
               <th scope="col">Daily Rate</th>
               <th scope="col">Overtime</th>
               <th scope="col">Total Amount</th>
-              <th scope="col"></th>
+              <th scope="col" colspan="3"></th>
             </tr>
           </thead>
           <tbody>
@@ -52,9 +52,16 @@
               <td>{{payslip.overtime}}</td>
               <td>{{payslip.total_amount}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#deletePayslipModal{{payslip.id}}"><i class="bi bi-eye-fill"></i></a>
+                <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#payslipDetailModal{{payslip.id}}"><i class="bi bi-eye-fill"></i></a>
+              </td>
+              <td>
+                <a href="#" class="btn btn-warning btn-sm"><i class="bi bi-printer"></i></a>
+              </td>
+              <td>
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePayslipModal{{payslip.id}}"><i class="bi bi-trash"></i></a>
               </td>
               {% include "salaries/delete_payslip.html" %}
+              {% include "salaries/payslip.html" %}
             </tr>
             {% endfor %}
 

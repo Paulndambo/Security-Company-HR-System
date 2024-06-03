@@ -113,9 +113,30 @@ def generate_payslips(request):
     if request.method == "POST":
         month_name = request.POST.get("month")
         year = request.POST.get("year")
+        action_type = request.POST.get("action_type")
 
-        salaries = EmployeeSalary.objects.filter(month=month_name, year=year)
-        print(salaries)
+        
+        if action_type.lower() == "delete":
+            payslips = Payslip.objects.filter(month=month_name, year=year)
+            print(payslips)
+        elif action_type.lower() == "generate":
+            salaries = EmployeeSalary.objects.filter(month=month_name, year=year)
+            salaries_list = []
+            for salary in salaries:
+                salaries_list.append(
+                    Payslip(
+                        employee=salary.employee,
+                        month=salary.month,
+                        year=salary.year,
+                        days_worked=salary.days_worked,
+                        daily_rate=salary.daily_rate,
+                        overtime=salary.overtime,
+                        total_amount=salary.total_amount
+                    )
+                )
+
+            Payslip.objects.bulk_create(salaries_list)
+            #print(salaries_list)
 
         return redirect("payslips")
     return render(request, "salaries/generate_payslips.html")

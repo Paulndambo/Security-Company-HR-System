@@ -58,3 +58,9 @@ class Payslip(AbstractBaseModel):
 
     def __str__(self):
         return self.employee.email
+    
+    def daily_total(self):
+        return self.total_amount - self.overtime
+    
+    def current_date(self):
+        return datetime.now().date()

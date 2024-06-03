@@ -1,0 +1,27 @@
+<div class="modal fade" id="payslipDetailModal{{payslip.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5 text-center">Month Payslip Breakdown</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+              <div class="modal-body">
+                <div class="row">
+                  <p><b>Name:</b> {{payslip.employee}}</p>
+                  <hr>
+                  <p><b>Daily Rate:</b> {{payslip.daily_rate}}</p>
+                  <p><b>Days Worked:</b> {{payslip.days_worked}}</p>
+                  <p><b>Daily Work Total:</b> {{payslip.daily_total}}</p>
+                  <hr>
+                  <p><b>Overtime Rate:</b> {{payslip.overtime}}</p>
+                  <p><b>Total Overtime:</b> {{payslip.overtime}}</p>
+                  <hr>
+                  <p><b>Month Total payslip:</b> {{payslip.total_amount}}</p>
+                  <hr>
+                  <p><b>Date Today</b>: {{payslip.current_date}}</p>
+                </div>
+            </div>
+              
+      </div>
+    </div>
+  </div>

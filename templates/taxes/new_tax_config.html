@@ -1,0 +1,141 @@
+<div class="modal fade" id="newTaxConfigModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Tax Configuration</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'new-tax-config' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Tax Category</label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="1st Band">First Band</option>
+                        <option value="2nd Band">Second Band</option>
+                        <option value="3rd Band">Third Band</option>
+                    </select>
+                </div>
+              <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Lower End</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="lower_end"
+                        name="lower_end"
+                        required
+                      />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Upper End</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="upper_end"
+                        name="upper_end"
+                        required
+                      />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">NHIF</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="nhif"
+                        name="nhif"
+                        required
+                      />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">SHIF</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="shif"
+                        name="shif"
+                        required
+                      />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">NSSF Tier 1</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="nssf_tier_one"
+                        name="nssf_tier_one"
+                        required
+                      />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">NSSF Tier 2</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="nssf_tier_two"
+                        name="nssf_tier_two"
+                        required
+                      />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Housing Levy</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="housing_levy"
+                        name="housing_levy"
+                        required
+                      />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Tax Relief</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="tax_relief"
+                        name="tax_relief"
+                        required
+                      />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Insurance Relief</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="insurance_relief"
+                        name="insurance_relief"
+                        required
+                      />
+                </div>
+                <div class="col">
+                    <label for="exampleInputPassword1" class="form-label">Allowabe Deduction</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="allowable_deductions"
+                        name="allowable_deductions"
+                        required
+                      />
+                </div>
+              </div>
+                <div class="text-center mt-3 mb-3">
+                  <button type="submit" class="btn btn-primary">Recond Tax Config</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

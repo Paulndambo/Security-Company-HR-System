@@ -10,8 +10,9 @@
                 <div class="modal-body">
 
                 <div class="mb-3">
-                    <label class="form-label">Month</label>
-                    <select class="form-select" id="month" name="month">
+                    <label class="form-label fw-bold">Month</label>
+                    <select class="form-select" id="month" name="month" required>
+                      <option></option>
                         <option value="January">January</option>
                         <option value="February">February</option>
                         <option value="March">March</option>
@@ -27,8 +28,9 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Year</label>
-                    <select class="form-select" id="year" name="year">
+                    <label class="form-label fw-bold">Year</label>
+                    <select class="form-select" id="year" name="year" required>
+                      <option></option>
                         <option value="2024">2024</option>
                         <option value="2025">2025</option>
                         <option value="2026">2026</option>
@@ -37,6 +39,15 @@
                         <option value="2029">2029</option>
                         <option value="2030">2030</option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-bold">What are you doing?</label>
+                  <select class="form-select" id="action_type" name="action_type" required>
+                  <option></option>
+                  <option value="generate">Generating Payslips</option>
+                  <option value="delete">Deleting Payslips</option>
+                </select>
                 </div>
                    
                 <div class="text-center mt-3 mb-3">

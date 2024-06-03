@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from apps.core.models import Workstation, Client, PaymentConfig
+from apps.core.models import Workstation, Client, PaymentConfig, TaxBand
 from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -231,3 +231,84 @@ def delete_payment_config(request):
     return render(request, "salaries/delete_payment_config.html")
 
 
+### Tax Configurations
+def tax_configurations(request):
+    tax_configurations = TaxBand.objects.all()
+    context = {
+        "tax_configurations": tax_configurations
+    }
+    return render(request, "taxes/tax_configs.html", context)
+
+def new_tax_config(request):
+    if request.method == "POST":
+        category = request.POST.get("category")
+        lower_end = request.POST.get("lower_end")
+        upper_end = request.POST.get("upper_end")
+        nhif = request.POST.get("nhif")
+        shif = request.POST.get("shif")
+        nssf_tier_one = request.POST.get("nssf_tier_one")
+        nssf_tier_two = request.POST.get("nssf_tier_two")
+        housing_levy = request.POST.get("housing_levy")
+        tax_relief = request.POST.get("tax_relief")
+        allowable_deductions = request.POST.get("allowable_deductions")
+        insurance_relief = request.POST.get("insurance_relief")
+
+        band = TaxBand.objects.create(
+            category=category,
+            lower_end=lower_end,
+            upper_end=upper_end,
+            nhif=nhif,
+            shif=shif,
+            nssf_tier_one=nssf_tier_one,
+            nssf_tier_two=nssf_tier_two,
+            housing_levy=housing_levy,
+            tax_relief=tax_relief,
+            allowable_deductions=allowable_deductions,
+            insurance_relief=insurance_relief
+        )
+
+        return redirect("tax-configurations")
+    return render(request, "taxes/new_tax_config.html")
+
+
+def edit_tax_config(request):
+    if request.method == "POST":
+        tax_config_id = request.POST.get("tax_config_id")
+        category = request.POST.get("category")
+        lower_end = request.POST.get("lower_end")
+        upper_end = request.POST.get("upper_end")
+        nhif = request.POST.get("nhif")
+        shif = request.POST.get("shif")
+        nssf_tier_one = request.POST.get("nssf_tier_one")
+        nssf_tier_two = request.POST.get("nssf_tier_two")
+        housing_levy = request.POST.get("housing_levy")
+        tax_relief = request.POST.get("tax_relief")
+        allowable_deductions = request.POST.get("allowable_deductions")
+        insurance_relief = request.POST.get("insurance_relief")
+
+        tax_band = TaxBand.objects.get(id=tax_config_id)
+        tax_band.category=category
+        tax_band.lower_end=lower_end
+        tax_band.upper_end=upper_end
+        tax_band.nhif=nhif
+        tax_band.shif=shif
+        tax_band.nssf_tier_one=nssf_tier_one
+        tax_band.nssf_tier_two=nssf_tier_two
+        tax_band.housing_levy=housing_levy
+        tax_band.tax_relief=tax_relief
+        tax_band.allowable_deductions=allowable_deductions
+        tax_band.insurance_relief=insurance_relief
+        tax_band.save()
+        
+        return redirect("tax-configurations")
+    return render(request, "taxes/edit_tax_config.html")
+
+
+def delete_tax_config(request):
+    if request.method == "POST":
+        tax_config_id = request.POST.get("tax_config_id")
+        band = TaxBand.objects.get(id=tax_config_id)
+        band.delete()
+
+        return redirect("tax-configurations")
+    return render(request, "taxes/delete_tax_config.html")

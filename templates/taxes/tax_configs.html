@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Deductions Configurations</h3>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTaxConfigModal">New Tax Config</a>
+    </div>
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Tax Band</th>
+              <th scope="col">Lower End</th>
+              <th scope="col">Upper End</th>
+              <th scope="col">Tax Relief</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tax_config in page_obj %}
+            <tr>
+              <td>{{tax_config.id}}</td>
+              <td>{{tax_config.category}}</td>
+              <td>{{tax_config.lower_end}}</td>
+              <td>{{tax_config.upper_end}}</td>
+              <td>{{tax_config.tax_relief}}</td>
+              <td>
+                <a href="#" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+{% endblock content %}
