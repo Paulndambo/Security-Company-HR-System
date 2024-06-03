@@ -1,0 +1,72 @@
+<div class="modal fade" id="uploadDocumentsModal{{employee.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Upload Documents</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'upload-documents' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  
+                <input type="text" id="employee_id" name="employee_id" hidden required readonly value="{{employee.id}}" />
+              
+                  <h6 class="text-center mt-2 mb-4">Academic Documents</h6>
+                  <hr>
+                  <div class="mb-3">
+                    <label for="" class="form-label">KCPE Certficate</label>
+                    <input type="file" name="kcpe_certificate" id="kcpe_certificate" class="form-control" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="" class="form-label">KCSE Certficate</label>
+                    <input type="file" name="kcse_certificate" id="kcse_certificate" class="form-control" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="" class="form-label">University/College Certficate</label>
+                    <input type="file" name="college_certificate" id="college_certificate" class="form-control" />
+                  </div>
+                  
+                  
+                  <h6 class="text-center mt-4 mb-4">Personal Documents</h6>
+                  <hr>
+                  <div class="mb-3 mt-3">
+                    <label class="form-label">KRA Pin Certficate</label>
+                    <input type="file" id="kra_certificate" name="kra_certificate" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Scanned ID Card</label>
+                    <input type="file" id="scanned_id" name="scanned_id" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Passport Photo</label>
+                    <input type="file" id="passport_photo" name="passport_photo" class="form-control">
+                  </div>
+
+                  <h6 class="text-center mt-4 mb-4">Referral Documents</h6>
+                  <hr>
+                  <div class="mb-3 mt-3">
+                    <label class="form-label">Chief's Letter</label>
+                    <input type="file" id="chief_letter" name="chief_letter" class="form-control" >
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Referee Letter</label>
+                    <input type="file" id="referee_letter" name="referee_letter" class="form-control" >
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Police Clearance Letter</label>
+                    <input type="file" id="police_clearance" name="police_clearance" class="form-control" >
+                  </div>
+         
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

@@ -35,7 +35,6 @@
               <th scope="col">Name</th>
               <th scope="col">Category</th>
               <th scope="col">Quantity</th>
-              <th scope="col">Amount Issued</th>
               <th scope="col">Cost</th>
               <th scope="col" colspan="2">Actions</th>
             </tr>
@@ -47,7 +46,6 @@
               <td>{{equipment.name}}</td>
               <td>{{equipment.category}}</td>
               <td>{{equipment.quantity}}</td>
-              <td>{{equipment.issued}}</td>
               <td>{{equipment.price}}</td>
             
               <td>
@@ -59,7 +57,7 @@
               <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEquipmentModal{{ equipment.id }}">
                 <i class="bi bi-trash"></i>
               </a></td>
-              
+              {% include "equipments/edit_equipment.html" %}
               {% include "equipments/delete_equipment.html" %}
             </tr>
             {% endfor %}

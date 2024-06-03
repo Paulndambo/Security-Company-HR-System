@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payslip Receipt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container mt-2">
+        <div class="row">
+            <h5 class="text-center">GUARD FORCE PAYSLIP</h5>
+        </div>
+        <div class="row">
+            <p><b>EMPLOYEE DETAILS</b></p>
+            <div class="col">
+                <p>Name: {{payslip.employee}}</p>
+                <p>ID Number: {{payslip.employee.id_number}}</p>
+                <p>NHIF Number: {{payslip.employee.nhif_number}}</p>
+            </div>
+            <div class="col">
+                <p>NSSF Number: {{payslip.employee.nssf_number}}</p>
+                <p>KRA Pin: {{payslip.employee.kra_pin}}</p>
+            </div>
+            <p><b>SALARY INFORMATION</b></p>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>BASIC PAY</td>
+                        <td>{{payslip.daily_total}}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>OVERTIME</td>
+                        <td>{{payslip.overtime}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><b>GROSS PAY</b></td>
+                        <td><b>{{payslip.total_amount}}</b></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>NSSF (Tier I)</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>NSSF (Tier II)</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>NHIF</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>HOUSING LEVY</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><b>TOTAL DEDUCTIONS</b></td>
+                        <td><b>0</b></td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td>7</td>
+                        <td>TAXABLE INCOME</td>
+                        <td>{{payslip.daily_total}}</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>TAX CHARGEABLE</td>
+                        <td>2160</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>MONTHLY RELIEF</td>
+                        <td>2400</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>INSURANCE RELIEF</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><b>NET PAY</b></td>
+                        <td><b>{{payslip.total_amount}}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        window.print()
+    </script>
+</body>
+</html>

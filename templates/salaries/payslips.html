@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Payslips</h3>
+    </div>
+  
+        <div class="col">
+          <form method="POST">
+            {% csrf_token %}
+              <div class="row">
+                <div class="col-8">
+                  <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-info">Search</button>
+                </div>
+              </div>
+          </form>
+        </div>
+        
+    <div class="col">
+      <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterPayslipsModal">Filter</a>
+      <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generatePayslipModal">Generate Payslips</a>
+  </div>
+
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Period</th>
+              <th scope="col">Days Worked</th>
+              <th scope="col">Daily Rate</th>
+              <th scope="col">Overtime</th>
+              <th scope="col">Total Amount</th>
+              <th scope="col" colspan="3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for payslip in page_obj %}
+            <tr>
+              <td>{{payslip.id}}</td>
+              <td>{{payslip.employee}}</td>
+              <td>{{payslip.month}}-{{payslip.year}}</td>
+              <td>{{payslip.days_worked}}</td>
+              <td>{{payslip.daily_rate}}</td>
+              <td>{{payslip.overtime}}</td>
+              <td>{{payslip.total_amount}}</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#payslipDetailModal{{payslip.id}}"><i class="bi bi-eye-fill"></i></a>
+              </td>
+              <td>
+                <a href="{% url 'payslip-receipt' payslip.id %}" class="btn btn-warning btn-sm"><i class="bi bi-printer"></i></a>
+              </td>
+              <td>
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePayslipModal{{payslip.id}}"><i class="bi bi-trash"></i></a>
+              </td>
+              {% include "salaries/delete_payslip.html" %}
+              {% include "salaries/payslip.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+              {% if page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+{% endblock content %}

@@ -15,6 +15,11 @@ from apps.core.views import (
     new_payment_config,
     edit_payment_config,
     delete_payment_config,
+
+    tax_configurations,
+    new_tax_config,
+    edit_tax_config,
+    delete_tax_config
 )
 
 urlpatterns = [
@@ -33,4 +38,9 @@ urlpatterns = [
     path("new-payment-config/", new_payment_config, name="new-payment-config"),
     path("edit-payment-config/", edit_payment_config, name="edit-payment-config"),
     path("delete-payment-config/", delete_payment_config, name="delete-payment-config"),
+
+    path("tax-configurations/", tax_configurations, name="tax-configurations"),
+    path("new-tax-config/", new_tax_config, name="new-tax-config"),
+    path("edit-tax-config/", edit_tax_config, name="edit-tax-config"),
+    path("delete-tax-config/", delete_tax_config, name="delete-tax-config"),
 ]

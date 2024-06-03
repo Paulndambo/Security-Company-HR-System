@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from apps.payments.models import EmployeeSalary, EmployeeOvertime
+from apps.payments.models import EmployeeSalary, EmployeeOvertime, Payslip
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -84,3 +84,65 @@ def record_overtime(request):
         return redirect("overtimes")
     
     return render(request, "salaries/record_overtime.html")
+
+
+def payslips(request):
+    payslips = Payslip.objects.all()
+
+    paginator = Paginator(payslips, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj
+    }
+
+    return render(request, "salaries/payslips.html", context)
+
+
+def delete_payslip(request):
+    if request.method == "POST":
+        payslip_id = request.POST.get("payslip_id")
+        payslip = Payslip.objects.get(id=payslip_id)
+        payslip.delete()
+
+        return redirect("payslips")
+    return redirect(request, "salaries/delete_payslip.html")
+
+def generate_payslips(request):
+    if request.method == "POST":
+        month_name = request.POST.get("month")
+        year = request.POST.get("year")
+        action_type = request.POST.get("action_type")
+
+        
+        if action_type.lower() == "delete":
+            payslips = Payslip.objects.filter(month=month_name, year=year)
+            print(payslips)
+        elif action_type.lower() == "generate":
+            salaries = EmployeeSalary.objects.filter(month=month_name, year=year)
+            salaries_list = []
+            for salary in salaries:
+                salaries_list.append(
+                    Payslip(
+                        employee=salary.employee,
+                        month=salary.month,
+                        year=salary.year,
+                        days_worked=salary.days_worked,
+                        daily_rate=salary.daily_rate,
+                        overtime=salary.overtime,
+                        total_amount=salary.total_amount
+                    )
+                )
+
+            Payslip.objects.bulk_create(salaries_list)
+            #print(salaries_list)
+
+        return redirect("payslips")
+    return render(request, "salaries/generate_payslips.html")
+
+
+def payslip_receipt(request, id):
+    payslip = Payslip.objects.get(id=id)
+
+    return render(request, "salaries/payslip_receipt.html", {"payslip": payslip})

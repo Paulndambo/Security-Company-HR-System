@@ -7,6 +7,7 @@ from apps.users.views import (
     edit_employee,
     delete_employee,
     employee_details,
+    upload_documents
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path("<int:employee_id>", employee_details, name="employee-details"),
     path("edit-employee/", edit_employee, name="edit-employee"),
     path("delete/", delete_employee, name="delete-employee"),
+    path("upload-documents/", upload_documents, name="upload-documents"),
 ]

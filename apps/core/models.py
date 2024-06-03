@@ -51,3 +51,25 @@ class Workstation(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
+TAX_BANDS = (
+    ("1st Band", "1st Band"),
+    ("2nd Band", "2nd Band"),
+    ("3rd Band", "3rd Band"),
+)
+
+class TaxBand(AbstractBaseModel):
+    category = models.CharField(max_length=255, choices=TAX_BANDS)
+    lower_end = models.DecimalField(max_digits=100, decimal_places=2)
+    upper_end = models.DecimalField(max_digits=100, decimal_places=2)
+    nhif = models.DecimalField(max_digits=100, decimal_places=2)
+    shif = models.DecimalField(max_digits=100, decimal_places=2)
+    nssf_tier_one = models.DecimalField(max_digits=100, decimal_places=2)
+    nssf_tier_two = models.DecimalField(max_digits=100, decimal_places=2)
+    housing_levy = models.DecimalField(max_digits=10, decimal_places=2)
+    tax_relief = models.DecimalField(max_digits=10, decimal_places=2)
+    allowable_deductions = models.DecimalField(max_digits=100, decimal_places=2)
+    insurance_relief = models.DecimalField(max_digits=100, decimal_places=2)
+
+    def __str__(self):
+        return self.category

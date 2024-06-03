@@ -80,6 +80,7 @@ def new_employee(request):
         college_certificate = request.FILES.get("college_certificate")
 
         passport_photo = request.FILES.get("passport_photo")
+        kra_pin = request.POST.get("kra_pin")
         #workstation = request.POST.get("workstation")
 
         employee = User.objects.create(
@@ -88,6 +89,7 @@ def new_employee(request):
             username=id_number,
             gender=gender,
             id_number=id_number,
+            kra_pin=kra_pin,
             phone_number=phone_number,
             email=email,
             physical_address=physical_address,
@@ -101,7 +103,8 @@ def new_employee(request):
             role="Employee",
             #workstation_id=workstation,
             passport_photo=passport_photo,
-            job_category_id=job_category
+            job_category_id=job_category,
+            status="Pending Approval"
         )
 
         documents = EmployeeDocument()
@@ -119,6 +122,53 @@ def new_employee(request):
         return redirect("employees")
     return render(request, "employees/new_employees.html")
 
+
+def upload_documents(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+
+        employee = User.objects.get(id=employee_id)
+        documents = EmployeeDocument.objects.filter(employee=employee).first()
+
+        chief_letter = request.FILES.get("chief_letter")
+        police_clearance = request.FILES.get("police_clearance")
+        referee_letter = request.FILES.get("referee_letter")
+        scanned_id = request.FILES.get("scanned_id")
+        kra_certificate = request.FILES.get("kra_certificate")
+        kcpe_certificate = request.FILES.get("kcpe_certificate")
+        kcse_certificate = request.FILES.get("kcse_certificate")
+        college_certificate = request.FILES.get("college_certificate")
+
+        if documents:
+            documents.kra_certificate = kra_certificate if kra_certificate else documents.kra_certificate
+            documents.chief_letter =chief_letter if chief_letter else documents.chief_letter
+            documents.police_clearance = police_clearance if police_clearance else documents.police_clearance
+            documents.referee_letter = referee_letter if referee_letter else documents.referee_letter
+            documents.scanned_id = scanned_id if scanned_id else documents.scanned_id
+            documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else documents.kcpe_certificate
+            documents.kcse_certificate = kcse_certificate if kcse_certificate else documents.kcse_certificate
+            documents.college_certificate = college_certificate if college_certificate else documents.college_certificate
+            documents.save()
+        else:
+            documents = EmployeeDocument()
+            documents.employee = employee
+            documents.kra_certificate = kra_certificate if kra_certificate else None
+            documents.chief_letter =chief_letter if chief_letter else None
+            documents.police_clearance = police_clearance if police_clearance else None
+            documents.referee_letter = referee_letter if referee_letter else None 
+            documents.scanned_id = scanned_id if scanned_id else None
+            documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
+            documents.kcse_certificate = kcse_certificate if kcse_certificate else None
+            documents.college_certificate = college_certificate if college_certificate else None
+            documents.save()
+
+        return redirect(f"/users/{employee_id}")
+    return redirect(request, "employees/upload_documents.html")
+
+
+def approval_all(request):
+    User.objects.update(status="Available")
+    return redirect("users")
 
 @login_required(login_url="/users/login/")
 def edit_employee(request):
@@ -138,6 +188,7 @@ def edit_employee(request):
         country = request.POST.get("country")
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
+        kra_pin = request.POST.get("kra_pin")
 
         job_category = request.POST.get("job_category")
 
@@ -158,6 +209,7 @@ def edit_employee(request):
         employee.nssf_number = nssf_number
         employee.client_id = client_id
         employee.job_category_id = job_category
+        employee.kra_pin = kra_pin
         employee.save()
 
         return redirect("employees")
