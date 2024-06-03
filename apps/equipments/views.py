@@ -46,18 +46,22 @@ def new_equipment(request):
 @login_required(login_url="/users/login")
 def edit_equipment(request):
     if request.method == "POST":
-        equipment_id = request.POST.get("equipment")
+        equipment_id = request.POST.get("equipment_id")
+        equipment = Equipment.objects.get(id=equipment_id)
+
+        
         name = request.POST.get("name")
         price = request.POST.get("price")
         quantity = request.POST.get("quantity")
         category = request.POST.get("category")
 
-        equipment = Equipment.objects.get(id=equipment_id)
         equipment.quantity = quantity
         equipment.category = category
         equipment.price = price
         equipment.name = name
         equipment.save()
+        
+        print(equipments)
 
         return redirect("equipments")
     return render(request, "equipments/edit_equipment.html")
@@ -114,8 +118,8 @@ def issue_equipment(request):
         boots_issued = request.POST.get("boots_issued")
         sweater_issued = request.POST.get("sweater_issued")
         baton_issued = request.POST.get("baton_issued")
-        trouser_issued = request.POST.get("trousers_issued")
-        
+        trouser_issued = request.POST.get("trouser_issued")
+
         EquipmentIssue.objects.create(
             employee_id=employee,
             date_issued=date_issued,
@@ -130,7 +134,6 @@ def issue_equipment(request):
             head_cap_issued = True if head_cap_issued else False,
             trouser_issued = True if trouser_issued else False,
         )
-        
 
         return redirect("issued-equipments")
     return render(request, "equipments/issue_equipment.html")

@@ -9,9 +9,11 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url="/users/login")
 def home(request):
     employees_count = User.objects.all().count()
+    clients_count = Client.objects.all().count()
 
     context = {
-        "employees_count": employees_count
+        "employees_count": employees_count,
+        "clients_count": clients_count
     }
     return render(request, "home.html", context)
 

@@ -1,0 +1,27 @@
+<div class="modal fade" id="salaryDetailModal{{salary.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5 text-center">Month Salary Breakdown</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+              <div class="modal-body">
+                <div class="row">
+                  <p><b>Name:</b> {{salary.employee}}</p>
+                  <hr>
+                  <p><b>Daily Rate:</b> {{salary.employee.job_category.daily_rate}}</p>
+                  <p><b>Days Worked:</b> {{salary.days_worked}}</p>
+                  <p><b>Daily Work Total:</b> {{salary.daily_total}}</p>
+                  <hr>
+                  <p><b>Overtime Rate:</b> {{salary.employee.job_category.overtime}}</p>
+                  <p><b>Total Overtime:</b> {{salary.overtime}}</p>
+                  <hr>
+                  <p><b>Month Total Salary:</b> {{salary.total_amount}}</p>
+                  <hr>
+                  <p><b>Date Today</b>: {{salary.current_date}}</p>
+                </div>
+            </div>
+              
+      </div>
+    </div>
+  </div>

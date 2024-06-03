@@ -16,6 +16,8 @@ GENDER_CHOICES = (
 
 
 EMPLOYEE_STATUS = (
+    ("Pending Approval", "Pending Approval"),
+    ("Declined", "Declined"),
     ("Available", "Available"),
     ("On Leave", "On Leave"),
     ("Suspended", "Suspended"),

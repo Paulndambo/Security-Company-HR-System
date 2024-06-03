@@ -3,23 +3,27 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Employee Salaries</h3>
+        <h3>Payslips</h3>
     </div>
-    <div class="col">
-      <form method="POST">
-        {% csrf_token %}
+  
+        <div class="col">
+          <form method="POST">
+            {% csrf_token %}
+              <div class="row">
+                <div class="col-8">
+                  <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-info">Search</button>
+                </div>
+              </div>
+          </form>
+        </div>
         
-          <div class="row">
-            <div class="col-8">
-              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
-            </div>
-            <div class="col-4">
-              <button class="btn btn-info">Search</button>
-            </div>
-          </div>
-      </form>
-    </div>
-
+    <div class="col">
+      <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterPayslipsModal">Filter</a>
+      <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generatePayslipModal">Generate Payslips</a>
+  </div>
 
 </div>
 <hr/>
@@ -38,19 +42,19 @@
             </tr>
           </thead>
           <tbody>
-            {% for salary in page_obj %}
+            {% for payslip in page_obj %}
             <tr>
-              <td>{{salary.id}}</td>
-              <td>{{salary.employee}}</td>
-              <td>{{salary.month}}-{{salary.year}}</td>
-              <td>{{salary.days_worked}}</td>
-              <td>{{salary.daily_rate}}</td>
-              <td>{{salary.overtime}}</td>
-              <td>{{salary.total_amount}}</td>
+              <td>{{payslip.id}}</td>
+              <td>{{payslip.employee}}</td>
+              <td>{{payslip.month}}-{{payslip.year}}</td>
+              <td>{{payslip.days_worked}}</td>
+              <td>{{payslip.daily_rate}}</td>
+              <td>{{payslip.overtime}}</td>
+              <td>{{payslip.total_amount}}</td>
               <td>
-                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#salaryDetailModal{{salary.id}}"><i class="bi bi-eye-fill"></i></a>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#deletePayslipModal{{payslip.id}}"><i class="bi bi-eye-fill"></i></a>
               </td>
-              {% include "salaries/salary_detail.html" %}
+              {% include "salaries/delete_payslip.html" %}
             </tr>
             {% endfor %}
 
