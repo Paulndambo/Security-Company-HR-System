@@ -29,7 +29,7 @@ def user_logout(request):
 
 @login_required(login_url="/users/login/")
 def employees(request):
-    employees = User.objects.all().order_by("-created")
+    employees = User.objects.filter(is_superuser=False).order_by("-created")
     clients = Client.objects.all()
     payment_configs = PaymentConfig.objects.all()
 
