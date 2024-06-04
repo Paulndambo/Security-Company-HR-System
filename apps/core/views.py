@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url="/users/login")
 def home(request):
-    employees_count = User.objects.all().count()
+    employees_count = User.objects.filter(role="Employee").count()
     clients_count = Client.objects.all().count()
 
     context = {

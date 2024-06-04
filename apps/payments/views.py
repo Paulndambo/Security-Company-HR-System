@@ -27,7 +27,7 @@ def employee_salaries(request):
 
 def overtimes(request):
     overtimes = EmployeeOvertime.objects.all()
-    employees = User.objects.all()
+    employees = User.objects.filter(is_superuser=False)
 
     paginator = Paginator(overtimes, 10)
     page_number = request.GET.get('page')
