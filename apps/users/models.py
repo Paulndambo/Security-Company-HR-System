@@ -52,6 +52,7 @@ class User(AbstractBaseModel, AbstractUser):
         null=True,
         related_name="clientsguards",
     )
+    workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True)
     job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
     passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
     status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Available")

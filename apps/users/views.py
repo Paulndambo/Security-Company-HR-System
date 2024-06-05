@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from apps.users.models import User
 
 
-from apps.core.models import Client, PaymentConfig
+from apps.core.models import Client, PaymentConfig, Workstation
 from apps.employees.models import EmployeeDocument, BankInformation
 # Create your views here.
 ################ Authentication URLs ##############
@@ -30,7 +30,7 @@ def user_logout(request):
 @login_required(login_url="/users/login/")
 def employees(request):
     employees = User.objects.filter(is_superuser=False).order_by("-created")
-    clients = Client.objects.all()
+    workstations = Workstation.objects.all()
     payment_configs = PaymentConfig.objects.all()
 
     if request.method == "POST":
@@ -46,7 +46,7 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "clients": clients, "payment_configs": payment_configs}
+    context = {"page_obj": page_obj, "workstations": workstations, "payment_configs": payment_configs}
     return render(request, "employees/employees.html", context)
 
 
@@ -240,6 +240,8 @@ def employee_details(request, employee_id=None):
     bank_details_found = False
     banking_details = BankInformation.objects.filter(employee=employee).first()
 
+    workstations = Workstation.objects.all()
+
     if banking_details:
         bank_details_found = True
 
@@ -249,7 +251,36 @@ def employee_details(request, employee_id=None):
         "education_details": education_details,
         "documents": documents,
         "banking_details_found": bank_details_found,
-        "banking_info": banking_details
+        "banking_info": banking_details,
+        "workstations": workstations
     }
 
     return render(request, "employees/employee_details.html", context)
+
+
+def approve_employee(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        workstation_id = request.POST.get("workstation_id")
+
+        employee = User.objects.get(id=employee_id)
+        workstation = Workstation.objects.get(id=workstation_id)
+
+        employee.client = workstation.client
+        employee.workstation = workstation
+        employee.status = "Approved"
+        employee.save()
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, "employees/approve_employee.html")
+
+def disapprove_employee(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        employee = User.objects.get(id=employee_id)
+
+        employee.status = "Declined"
+        employee.save()
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, "employees/decline_employee.html")

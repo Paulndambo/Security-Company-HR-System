@@ -7,7 +7,9 @@ from apps.users.views import (
     edit_employee,
     delete_employee,
     employee_details,
-    upload_documents
+    upload_documents,
+    approve_employee,
+    disapprove_employee
 )
 
 urlpatterns = [
@@ -20,4 +22,7 @@ urlpatterns = [
     path("edit-employee/", edit_employee, name="edit-employee"),
     path("delete/", delete_employee, name="delete-employee"),
     path("upload-documents/", upload_documents, name="upload-documents"),
+
+    path("approve-employee/", approve_employee, name="approve-employee"),
+    path("disapprove-employee/", disapprove_employee, name="disapprove-employee"),
 ]
