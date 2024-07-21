@@ -39,14 +39,18 @@ class User(AbstractBaseModel, AbstractUser):
     nhif_number = models.CharField(max_length=255, null=True)
     nssf_number = models.CharField(max_length=255, null=True)
     kra_pin = models.CharField(max_length=255, null=True)
-    position = models.ForeignKey("core.JobRole", on_delete=models.SET_NULL, null=True, related_name="staffpositions")
+    position = models.ForeignKey(
+        "core.JobRole",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="staffpositions",
+    )
     postal_address = models.CharField(max_length=255, null=True)
     physical_address = models.CharField(max_length=255, null=True)
     town = models.CharField(max_length=255, null=True)
     county = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
     basic_salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
-    
 
     def __str__(self):
         return self.first_name + " " + self.last_name

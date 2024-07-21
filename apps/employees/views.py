@@ -6,7 +6,12 @@ import calendar
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from apps.payments.models import EmployeeSalary
-from apps.employees.models import NextOfKin, EducationInformation, Employee, EmployeeDocument
+from apps.employees.models import (
+    NextOfKin,
+    EducationInformation,
+    Employee,
+    EmployeeDocument,
+)
 from apps.payments.models import EmployeeSalary, BankInformation
 from apps.core.models import Workstation, PaymentConfig, JobRole
 
@@ -18,6 +23,7 @@ current_year = str(date_today.year)
 # Employee Management
 
 SHIFT_CHOICES = ["Day Shift", "Night Shift", "24 Hours Shift"]
+
 
 @login_required(login_url="/users/login/")
 def employees(request):
@@ -38,7 +44,12 @@ def employees(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "workstations": workstations, "payment_configs": payment_configs}
+    context = {
+        "page_obj": page_obj,
+        "workstations": workstations,
+        "payment_configs": payment_configs,
+        "work_shifts": SHIFT_CHOICES,
+    }
     return render(request, "employees/employees.html", context)
 
 
@@ -80,7 +91,7 @@ def new_employee(request):
             nhif_number=nhif_number,
             nssf_number=nssf_number,
             job_category=payment_config,
-            status="Pending Approval"
+            status="Pending Approval",
         )
 
         return redirect("employees")
@@ -104,26 +115,44 @@ def upload_documents(request):
         college_certificate = request.FILES.get("college_certificate")
 
         if documents:
-            documents.kra_certificate = kra_certificate if kra_certificate else documents.kra_certificate
-            documents.chief_letter =chief_letter if chief_letter else documents.chief_letter
-            documents.police_clearance = police_clearance if police_clearance else documents.police_clearance
-            documents.referee_letter = referee_letter if referee_letter else documents.referee_letter
+            documents.kra_certificate = (
+                kra_certificate if kra_certificate else documents.kra_certificate
+            )
+            documents.chief_letter = (
+                chief_letter if chief_letter else documents.chief_letter
+            )
+            documents.police_clearance = (
+                police_clearance if police_clearance else documents.police_clearance
+            )
+            documents.referee_letter = (
+                referee_letter if referee_letter else documents.referee_letter
+            )
             documents.scanned_id = scanned_id if scanned_id else documents.scanned_id
-            documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else documents.kcpe_certificate
-            documents.kcse_certificate = kcse_certificate if kcse_certificate else documents.kcse_certificate
-            documents.college_certificate = college_certificate if college_certificate else documents.college_certificate
+            documents.kcpe_certificate = (
+                kcpe_certificate if kcpe_certificate else documents.kcpe_certificate
+            )
+            documents.kcse_certificate = (
+                kcse_certificate if kcse_certificate else documents.kcse_certificate
+            )
+            documents.college_certificate = (
+                college_certificate
+                if college_certificate
+                else documents.college_certificate
+            )
             documents.save()
         else:
             documents = EmployeeDocument()
             documents.employee = employee
             documents.kra_certificate = kra_certificate if kra_certificate else None
-            documents.chief_letter =chief_letter if chief_letter else None
+            documents.chief_letter = chief_letter if chief_letter else None
             documents.police_clearance = police_clearance if police_clearance else None
-            documents.referee_letter = referee_letter if referee_letter else None 
+            documents.referee_letter = referee_letter if referee_letter else None
             documents.scanned_id = scanned_id if scanned_id else None
             documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
             documents.kcse_certificate = kcse_certificate if kcse_certificate else None
-            documents.college_certificate = college_certificate if college_certificate else None
+            documents.college_certificate = (
+                college_certificate if college_certificate else None
+            )
             documents.save()
 
         return redirect(f"/users/{employee_id}")
@@ -133,6 +162,7 @@ def upload_documents(request):
 def approval_all(request):
     Employee.objects.update(status="Available")
     return redirect("users")
+
 
 @login_required(login_url="/users/login/")
 def edit_employee(request):
@@ -181,7 +211,7 @@ def edit_employee(request):
 @login_required(login_url="/users/login/")
 def delete_employee(request):
     if request.method == "POST":
-        
+
         employee_id = request.POST.get("employee_id")
         employee = Employee.objects.get(id=employee_id)
         employee.delete()
@@ -213,7 +243,8 @@ def employee_details(request, employee_id=None):
         "documents": documents,
         "banking_details_found": bank_details_found,
         "banking_info": banking_details,
-        "workstations": workstations
+        "workstations": workstations,
+        "work_shifts": SHIFT_CHOICES,
     }
 
     return render(request, "employees/employee_details.html", context)
@@ -223,6 +254,7 @@ def approve_employee(request):
     if request.method == "POST":
         employee_id = request.POST.get("employee_id")
         workstation_id = request.POST.get("workstation_id")
+        work_shift = request.POST.get("work_shift")
 
         employee = Employee.objects.get(id=employee_id)
         workstation = Workstation.objects.get(id=workstation_id)
@@ -230,10 +262,12 @@ def approve_employee(request):
         employee.client = workstation.client
         employee.workstation = workstation
         employee.status = "Approved"
+        employee.workshift = work_shift
         employee.save()
 
-        return redirect(f"/users/{employee_id}")
+        return redirect(f"/employees/{employee_id}")
     return render(request, "employees/approve_employee.html")
+
 
 def disapprove_employee(request):
     if request.method == "POST":
@@ -243,7 +277,7 @@ def disapprove_employee(request):
         employee.status = "Declined"
         employee.save()
 
-        return redirect(f"/users/{employee_id}")
+        return redirect(f"/employees/{employee_id}")
     return render(request, "employees/decline_employee.html")
 
 
@@ -259,19 +293,17 @@ def new_relative(request):
         phone_number = request.POST.get("phone_number")
 
         relative = NextOfKin.objects.create(
-            employee_id=employee_id, 
-            first_name=first_name, 
-            last_name=last_name, 
-            gender=gender, 
+            employee_id=employee_id,
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
             relation=relationship,
             email=email,
-            phone_number=phone_number
+            phone_number=phone_number,
         )
-        
 
-        return redirect(f"/users/{employee_id}")
+        return redirect(f"/employees/{employee_id}")
     return render(request, "family/new_family_member.html")
-
 
 
 def edit_relative(request):
@@ -285,15 +317,15 @@ def edit_relative(request):
         phone_number = request.POST.get("phone_number")
 
         relative = NextOfKin.objects.get(id=family_member_id)
-        relative.first_name=first_name
-        relative.last_name=last_name
-        relative.gender=gender
-        relative.relation=relationship
-        relative.email=email
-        relative.phone_number=phone_number
+        relative.first_name = first_name
+        relative.last_name = last_name
+        relative.gender = gender
+        relative.relation = relationship
+        relative.email = email
+        relative.phone_number = phone_number
         relative.save()
 
-        return redirect(f"/users/{relative.employee.id}")
+        return redirect(f"/employees/{relative.employee.id}")
     return render(request, "family/edit_relative.html")
 
 
@@ -304,11 +336,12 @@ def delete_relative(request):
         employee_id = relative.employee.id
         relative.delete()
         return redirect(f"/users/{employee_id}")
-    
+
     return render(request, "family/delete_relative.html")
 
 
 ## EDUCATION RECORDS MANAGEMENT
+
 
 def new_education_record(request):
     if request.method == "POST":
@@ -323,7 +356,7 @@ def new_education_record(request):
             school_name=school_name,
             level=level,
             start_year=start_year,
-            graduation_year=graduation_year
+            graduation_year=graduation_year,
         )
 
         return redirect(f"/users/{employee_id}")
@@ -339,14 +372,15 @@ def edit_education_record(request):
         graduation_year = request.POST.get("graduation_year")
 
         education = EducationInformation.objects.get(id=education_id)
-        education.school_name=school_name
-        education.level=level
-        education.start_year=start_year
-        education.graduation_year=graduation_year
+        education.school_name = school_name
+        education.level = level
+        education.start_year = start_year
+        education.graduation_year = graduation_year
         education.save()
-        
+
         return redirect(f"/users/{education.employee.id}")
     return render(request, "education/edit_education.html")
+
 
 def delete_education_record(request):
     if request.method == "POST":
@@ -361,15 +395,24 @@ def delete_education_record(request):
 
 ## Employees Assignments
 def employee_assignments(request):
-    employees = Employee.objects.all().order_by("-created")
+    employees = Employee.objects.exclude(
+        status__in=["Pending Approval", "Declined"]
+    ).order_by("-created")
+
+    if request.method == "POST":
+        search_text = request.POST.get("search_text")
+        employees = Employee.objects.filter(
+            Q(first_name__icontains=search_text)
+            | Q(first_name__icontains=search_text)
+            | Q(phone_number__icontains=search_text)
+            | Q(id_number__icontains=search_text)
+        ).order_by("-created")
+
     paginator = Paginator(employees, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj,
-        "work_shifts": SHIFT_CHOICES
-    }
+    context = {"page_obj": page_obj, "work_shifts": SHIFT_CHOICES}
     return render(request, "assignments/assignments.html", context)
 
 

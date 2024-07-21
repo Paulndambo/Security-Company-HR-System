@@ -76,10 +76,10 @@
                     <div class="col">
                       <label class="form-label fw-bold">Position</label>
                       <select class="form-select" id="job_category" name="job_category">
-                        <option value="{{employee.job_category.id}}">{{employee.job_category}}</option>
+                        <option value="{{employee.job_category.id}}">{{employee.position.group}}</option>
                         {% for config in payment_configs %}
                         {% if config.id != employee.job_category.id %}
-                          <option value="{{config.id}}">{{config.job_group}}</option>
+                          <option value="{{config.id}}">{{config.job_group.group}}</option>
                         {% endif %}
                         {% endfor %}
                       </select>

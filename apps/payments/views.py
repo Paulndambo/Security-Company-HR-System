@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect
-from apps.payments.models import EmployeeSalary, EmployeeOvertime, Payslip, BankInformation
+from apps.payments.models import (
+    EmployeeSalary,
+    EmployeeOvertime,
+    Payslip,
+    BankInformation,
+)
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -11,19 +16,20 @@ date_today = datetime.now().date()
 current_month = calendar.month_name[date_today.month]
 current_year = str(date_today.year)
 
+
 # Create your views here.
 @login_required(login_url="/users/login")
 def employee_salaries(request):
     salaries = EmployeeSalary.objects.all().order_by("-created")
 
     paginator = Paginator(salaries, 13)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
         "page_obj": page_obj,
     }
-    return render(request, 'salaries/salaries.html', context)
+    return render(request, "salaries/salaries.html", context)
 
 
 def overtimes(request):
@@ -31,13 +37,10 @@ def overtimes(request):
     employees = User.objects.filter(is_superuser=False)
 
     paginator = Paginator(overtimes, 10)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj,
-        "employees": employees
-    }
+    context = {"page_obj": page_obj, "employees": employees}
     return render(request, "salaries/overtimes.html", context)
 
 
@@ -56,14 +59,12 @@ def record_overtime(request):
             overtime_date=date_str,
             month=month_name,
             year=str(overtime_date.year),
-            amount=employee.job_category.overtime
+            amount=employee.job_category.overtime,
         )
 
         # Update Salary
         salary = EmployeeSalary.objects.filter(
-            employee=employee, 
-            year=current_year,
-            month=current_month
+            employee=employee, year=current_year, month=current_month
         ).first()
 
         if salary:
@@ -78,12 +79,11 @@ def record_overtime(request):
                 days_worked=1,
                 daily_rate=employee.job_category.daily_rate,
                 total_amount=employee.job_category.daily_rate,
-                overtime=employee.job_category.overtime
+                overtime=employee.job_category.overtime,
             )
 
-
         return redirect("overtimes")
-    
+
     return render(request, "salaries/record_overtime.html")
 
 
@@ -94,9 +94,7 @@ def payslips(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj
-    }
+    context = {"page_obj": page_obj}
 
     return render(request, "salaries/payslips.html", context)
 
@@ -110,13 +108,13 @@ def delete_payslip(request):
         return redirect("payslips")
     return redirect(request, "salaries/delete_payslip.html")
 
+
 def generate_payslips(request):
     if request.method == "POST":
         month_name = request.POST.get("month")
         year = request.POST.get("year")
         action_type = request.POST.get("action_type")
 
-        
         if action_type.lower() == "delete":
             payslips = Payslip.objects.filter(month=month_name, year=year)
             print(payslips)
@@ -132,12 +130,12 @@ def generate_payslips(request):
                         days_worked=salary.days_worked,
                         daily_rate=salary.daily_rate,
                         overtime=salary.overtime,
-                        total_amount=salary.total_amount
+                        total_amount=salary.total_amount,
                     )
                 )
 
             Payslip.objects.bulk_create(salaries_list)
-            #print(salaries_list)
+            # print(salaries_list)
 
         return redirect("payslips")
     return render(request, "salaries/generate_payslips.html")
@@ -151,14 +149,15 @@ def payslip_receipt(request, id):
 
 # Service Provider Payment Details
 
+
 def new_bank_details(request):
     if request.method == "POST":
-        employee_id = request.POST.get('employee_id')
-        bank_name = request.POST.get('bank_name')
-        branch_name = request.POST.get('branch_name')
-        account_name = request.POST.get('account_name')
-        account_type = request.POST.get('account_type')
-        account_number = request.POST.get('account_number')
+        employee_id = request.POST.get("employee_id")
+        bank_name = request.POST.get("bank_name")
+        branch_name = request.POST.get("branch_name")
+        account_name = request.POST.get("account_name")
+        account_type = request.POST.get("account_type")
+        account_number = request.POST.get("account_number")
 
         BankInformation.objects.create(
             employee_id=employee_id,
@@ -166,22 +165,22 @@ def new_bank_details(request):
             branch_name=branch_name,
             account_name=account_name,
             account_type=account_type,
-            account_number=account_number
+            account_number=account_number,
         )
 
         return redirect(f"/users/{employee_id}")
-    return render(request, 'bank/new_bank_details.html')
+    return render(request, "bank/new_bank_details.html")
 
 
 def edit_bank_details(request):
-    if request.method == 'POST':
-        banking_info_id = request.POST.get('banking_info_id')
-        employee_id = request.POST.get('employee_id')
-        bank_name = request.POST.get('bank_name')
-        branch_name = request.POST.get('branch_name')
-        account_name = request.POST.get('account_name')
-        account_type = request.POST.get('account_type')
-        account_number = request.POST.get('account_number')
+    if request.method == "POST":
+        banking_info_id = request.POST.get("banking_info_id")
+        employee_id = request.POST.get("employee_id")
+        bank_name = request.POST.get("bank_name")
+        branch_name = request.POST.get("branch_name")
+        account_name = request.POST.get("account_name")
+        account_type = request.POST.get("account_type")
+        account_number = request.POST.get("account_number")
 
         banking_info = BankInformation.objects.get(id=banking_info_id)
         banking_info.account_number = account_number
@@ -192,4 +191,4 @@ def edit_bank_details(request):
         banking_info.save()
 
         return redirect(f"/users/{employee_id}")
-    return render(request, 'bank/edit_bank_details.html')
+    return render(request, "bank/edit_bank_details.html")

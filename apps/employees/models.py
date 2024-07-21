@@ -59,19 +59,32 @@ class Employee(AbstractBaseModel):
         null=True,
         related_name="clientsguards",
     )
-    workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True)
-    job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
+    workstation = models.ForeignKey(
+        "core.Workstation", on_delete=models.SET_NULL, null=True
+    )
+    job_category = models.ForeignKey(
+        "core.PaymentConfig", on_delete=models.SET_NULL, null=True
+    )
     passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
-    status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Pending Approval")
+    status = models.CharField(
+        max_length=255, choices=EMPLOYEE_STATUS, default="Pending Approval"
+    )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
 class EmployeeDocument(AbstractBaseModel):
-    employee = models.OneToOneField(Employee, on_delete=models.CASCADE, related_name="employeedocuments")
-    police_clearance = models.FileField(upload_to="police_clearances/", null=True, blank=True)
+    employee = models.OneToOneField(
+        Employee, on_delete=models.CASCADE, related_name="employeedocuments"
+    )
+    police_clearance = models.FileField(
+        upload_to="police_clearances/", null=True, blank=True
+    )
     chief_letter = models.FileField(upload_to="chief_letters/", null=True, blank=True)
-    referee_letter = models.FileField(upload_to="recommended_letters/", null=True, blank=True)
+    referee_letter = models.FileField(
+        upload_to="recommended_letters/", null=True, blank=True
+    )
     scanned_id = models.FileField(upload_to="scanned_ids/", null=True, blank=True)
     kcse_certificate = models.FileField(upload_to="kcse_certificates/", null=True)
     kcpe_certificate = models.FileField(upload_to="kcpe_certificates/", null=True)
@@ -80,10 +93,12 @@ class EmployeeDocument(AbstractBaseModel):
 
     def __str__(self):
         return self.employee.username
-    
+
 
 class EducationInformation(AbstractBaseModel):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="educationdetails")
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name="educationdetails"
+    )
     level = models.CharField(max_length=255)
     school_name = models.CharField(max_length=255)
     start_year = models.CharField(max_length=255, null=True)
@@ -94,7 +109,9 @@ class EducationInformation(AbstractBaseModel):
 
 
 class NextOfKin(AbstractBaseModel):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="nextofkins")
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name="nextofkins"
+    )
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
@@ -103,4 +120,4 @@ class NextOfKin(AbstractBaseModel):
     gender = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.first_name + " " + self.last_name

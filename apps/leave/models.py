@@ -1,5 +1,6 @@
 from django.db import models
 from apps.core.models import AbstractBaseModel
+
 # Create your models here.
 STATUS_CHOICES = (
     ("Absent", "Absent"),
@@ -18,6 +19,8 @@ LEAVE_STATUS_CHOICES = (
     ("Pending Review", "Pending Review"),
     ("Complete", "Complete"),
 )
+
+
 class EmployeeLeave(AbstractBaseModel):
     employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
     days_applied = models.IntegerField(default=1)

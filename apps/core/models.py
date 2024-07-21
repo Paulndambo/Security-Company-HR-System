@@ -15,6 +15,7 @@ SP_GROUP_CHOICES = (
     ("CCTV Installer", "CCTV Installer"),
 )
 
+
 class AbstractBaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -28,6 +29,7 @@ SHIFT_CHOICES = (
     ("Night Shift", "Night Shift"),
     ("24 Hours Shift", "24 Hours Shift"),
 )
+
 
 class Client(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -46,22 +48,26 @@ class Client(AbstractBaseModel):
     def __str__(self):
         return self.name
 
+
 class Workstation(AbstractBaseModel):
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name="workstations")
+    client = models.ForeignKey(
+        Client, on_delete=models.SET_NULL, null=True, related_name="workstations"
+    )
     name = models.CharField(max_length=255)
     guards_posted = models.IntegerField(default=0)
     guards_needed = models.IntegerField(default=0)
     work_shift = models.CharField(max_length=255, choices=SHIFT_CHOICES)
-    
 
     def __str__(self):
         return self.name
+
 
 TAX_BANDS = (
     ("1st Band", "1st Band"),
     ("2nd Band", "2nd Band"),
     ("3rd Band", "3rd Band"),
 )
+
 
 class TaxBand(AbstractBaseModel):
     category = models.CharField(max_length=255, choices=TAX_BANDS)
@@ -78,7 +84,7 @@ class TaxBand(AbstractBaseModel):
 
     def __str__(self):
         return self.category
-    
+
 
 class JobRole(AbstractBaseModel):
     category = models.CharField(max_length=255, choices=SP_CATEGORIES_CHOICES)
@@ -86,7 +92,7 @@ class JobRole(AbstractBaseModel):
 
     def __str__(self):
         return self.category
-    
+
 
 class PaymentConfig(AbstractBaseModel):
     job_group = models.ForeignKey(JobRole, on_delete=models.SET_NULL, null=True)

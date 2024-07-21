@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 
 from apps.visitors.models import Visitor, Visit
 
+
 # Create your views here.
 def visitors(request):
     visitors = Visitor.objects.all().order_by("-created")
@@ -11,9 +12,7 @@ def visitors(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "page_obj": page_obj
-    }
+    context = {"page_obj": page_obj}
 
     return render(request, "visitors/visitors.html", context)
 
@@ -41,7 +40,7 @@ def new_visitor(request):
             visitation_reason=visitation_reason,
             car_plate_number=car_plate_number,
             car_model=car_model,
-            car_colour=car_colour
+            car_colour=car_colour,
         )
 
         return redirect("visitors")

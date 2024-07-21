@@ -11,11 +11,9 @@ from apps.employees.views import (
     new_relative,
     edit_relative,
     delete_relative,
-
     new_education_record,
     edit_education_record,
     delete_education_record,
-
     employee_assignments,
     reassign_employee,
 )
@@ -29,15 +27,16 @@ urlpatterns = [
     path("upload-documents/", upload_documents, name="upload-documents"),
     path("approve-employee/", approve_employee, name="approve-employee"),
     path("disapprove-employee/", disapprove_employee, name="disapprove-employee"),
-
     path("new-relative/", new_relative, name="new-relative"),
     path("edit-relative/", edit_relative, name="edit-relative"),
     path("delete-relative/", delete_relative, name="delete-relative"),
-
     path("new-education-record/", new_education_record, name="new-education-record"),
     path("edit-education-record/", edit_education_record, name="edit-education-record"),
-    path("delete-education-record/", delete_education_record, name="delete-education-record"),
-
+    path(
+        "delete-education-record/",
+        delete_education_record,
+        name="delete-education-record",
+    ),
     path("assignments/", employee_assignments, name="assignments"),
     path("reassign-employee/", reassign_employee, name="reassign-employee"),
 ]

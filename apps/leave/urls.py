@@ -4,7 +4,7 @@ from apps.leave.views import (
     apply_leave,
     mark_leave_application,
     delete_leave_application,
-    complete_leave
+    complete_leave,
 )
 
 urlpatterns = [

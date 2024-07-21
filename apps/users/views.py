@@ -9,6 +9,8 @@ from apps.users.models import User
 from apps.core.models import Client, PaymentConfig, Workstation
 from apps.employees.models import EmployeeDocument
 from apps.payments.models import BankInformation
+
+
 # Create your views here.
 ################ Authentication URLs ##############
 def user_login(request):

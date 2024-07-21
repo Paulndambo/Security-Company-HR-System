@@ -6,8 +6,10 @@ STATUS_CHOICES = (
     ("Absent", "Absent"),
     ("Present", "Present"),
 )
+
+
 class Attendance(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    employee = models.ForeignKey("employees.Employee", on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
     checkin_time = models.DateTimeField(null=True)
     checkout_time = models.DateTimeField(null=True, blank=True)
@@ -15,7 +17,8 @@ class Attendance(AbstractBaseModel):
         "users.User",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="checkinmanagers",)
+        related_name="checkinmanagers",
+    )
     marked = models.BooleanField(default=False)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES, default="Present")
 

@@ -20,6 +20,17 @@
                       {% endfor %}
                     </select>
                   </div>
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Work Shift</label>
+                    <select class="form-select" name="work_shift" id="work_shift">
+                        <option>{{employee.workshift}}</option>
+                        {% for shift in work_shifts %}
+                            {% if shift != employee.workshift %}
+                                <option value="{{shift}}">{{shift}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
          
                 <div class="text-center mt-2">
                   <button type="submit" class="btn btn-primary">Approve Employee</button>

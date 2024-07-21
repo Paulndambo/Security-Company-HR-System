@@ -8,12 +8,15 @@ from django.db.models import Q
 from apps.attendance.models import Attendance
 from apps.payments.models import EmployeeSalary, EmployeeOvertime
 from apps.users.models import User
+from apps.employees.models import Employee
 
 
 date_today = datetime.now().date()
 
 current_month = calendar.month_name[date_today.month]
 current_year = str(date_today.year)
+
+
 # Create your views here.
 @login_required(login_url="/users/login")
 def attendaces(request):
@@ -29,7 +32,7 @@ def attendaces(request):
             | Q(employee__id_number__icontains=search_text)
         )
 
-    employees = User.objects.filter(role="Employee")
+    employees = Employee.objects.exclude(status__in=["Pending Approval", "Declined"])
     attendances_today = Attendance.objects.filter(date=date_today).count()
 
     if attendances_today < employees.count():
@@ -48,7 +51,7 @@ def attendaces(request):
 
 @login_required(login_url="/users/login")
 def generate_attendance(request):
-    employees = User.objects.filter(role="Employee")
+    employees = Employee.objects.exclude(status__in=["Pending Approval", "Declined"])
     attendances_today = Attendance.objects.filter(date=date_today).count()
 
     print(f"The Attendance Today is: {attendances_today}")
@@ -64,7 +67,6 @@ def generate_attendance(request):
         Attendance.objects.bulk_create(attendace_list)
 
     return redirect("attendances")
-
 
 
 @login_required(login_url="/users/login")
@@ -85,7 +87,6 @@ def reset_attendance(request, id):
             salary.save()
 
     return redirect("attendances")
-
 
 
 @login_required(login_url="/users/login")

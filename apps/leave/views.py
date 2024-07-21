@@ -6,6 +6,7 @@ from django.db.models import Q
 from apps.users.models import User
 from apps.leave.models import EmployeeLeave
 
+
 # Create your views here.
 @login_required(login_url="/users/login")
 def leave_applications(request):
@@ -14,7 +15,10 @@ def leave_applications(request):
     if request.method == "POST":
         search_text = request.POST.get("search_text")
 
-        leave_applications = EmployeeLeave.objects.filter(Q(employee__first_name__icontains=search_text) | Q(employee__last_name__icontains=search_text))
+        leave_applications = EmployeeLeave.objects.filter(
+            Q(employee__first_name__icontains=search_text)
+            | Q(employee__last_name__icontains=search_text)
+        )
 
     paginator = Paginator(leave_applications, 15)
     page_number = request.GET.get("page")
@@ -68,6 +72,7 @@ def mark_leave_application(request):
         return redirect("leave-applications")
     return render(request, "leaves/mark_leave.html")
 
+
 def complete_leave(request):
     if request.method == "POST":
         leave_id = request.POST.get("leave_id")
@@ -78,8 +83,9 @@ def complete_leave(request):
         leave.employee.status = "Available"
         leave.employee.save()
         return redirect("leave-applications")
-    
+
     return render(request, "leaves/mark_leave_complete.html")
+
 
 @login_required(login_url="/users/login")
 def delete_leave_application(request):
