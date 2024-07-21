@@ -1,16 +1,13 @@
 from django.urls import path
 from apps.employees.views import (
-    attendaces,
-    new_attendance,
-    generate_attendance,
-    mark_absent,
-    mark_present,
-    leave_applications,
-    apply_leave,
-    reset_attendance,
-    mark_leave_application,
-    delete_leave_application,
-
+    employees,
+    new_employee,
+    edit_employee,
+    delete_employee,
+    employee_details,
+    upload_documents,
+    approve_employee,
+    disapprove_employee,
     new_relative,
     edit_relative,
     delete_relative,
@@ -18,26 +15,17 @@ from apps.employees.views import (
     new_education_record,
     edit_education_record,
     delete_education_record,
-
-    new_bank_details,
-    edit_bank_details,
 )
 
 urlpatterns = [
-    path("attendances/", attendaces, name="attendances"),
-    path("new-attendance/", new_attendance, name="new-attendance"),
-    path("generate-attendance/", generate_attendance, name="generate-attendance"),
-    path(
-        "reset-attendance/<int:attendance_id>/",
-        reset_attendance,
-        name="reset-attendance",
-    ),
-    path("mark-present/<int:attendance_id>/", mark_present, name="mark-present"),
-    path("mark-absent/<int:attendance_id>/", mark_absent, name="mark-absent"),
-    path("leave-applications/", leave_applications, name="leave-applications"),
-    path("apply-leave/", apply_leave, name="apply-leave"),
-    path("mark-leave/", mark_leave_application, name="mark-leave"),
-    path("delete-leave/", delete_leave_application, name="delete-leave"),
+    path("", employees, name="employees"),
+    path("new-employee/", new_employee, name="new-employee"),
+    path("<int:employee_id>", employee_details, name="employee-details"),
+    path("edit-employee/", edit_employee, name="edit-employee"),
+    path("delete/", delete_employee, name="delete-employee"),
+    path("upload-documents/", upload_documents, name="upload-documents"),
+    path("approve-employee/", approve_employee, name="approve-employee"),
+    path("disapprove-employee/", disapprove_employee, name="disapprove-employee"),
 
     path("new-relative/", new_relative, name="new-relative"),
     path("edit-relative/", edit_relative, name="edit-relative"),
@@ -46,7 +34,4 @@ urlpatterns = [
     path("new-education-record/", new_education_record, name="new-education-record"),
     path("edit-education-record/", edit_education_record, name="edit-education-record"),
     path("delete-education-record/", delete_education_record, name="delete-education-record"),
-
-    path("new-bank-details/", new_bank_details, name="new-bank-details"),
-    path("edit-bank-details/", edit_bank_details, name="edit-bank-details"),
 ]

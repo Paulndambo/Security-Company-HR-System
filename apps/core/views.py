@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from apps.core.models import Workstation, Client, PaymentConfig, TaxBand
+from apps.core.models import Workstation, Client, PaymentConfig, TaxBand, JobRole
 from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+SP_CATEGORIES_CHOICES = ["Staff", "Service Provider"]
+SP_GROUP_CHOICES = ["Security Manager", "Supervisor" "Finance Officer", "HR Admin", "Security Guard","CCTV Installer"]
+
 @login_required(login_url="/users/login")
 def home(request):
     employees_count = User.objects.filter(role="Employee").count()
@@ -180,10 +183,55 @@ def delete_workstation(request):
     return render(request, "workstations/delete_workstation.html")
 
 
+def job_roles(request):
+    job_roles = JobRole.objects.all()
+    context = {
+        "job_roles": job_roles,
+        "job_groups": SP_GROUP_CHOICES,
+        "job_categories": SP_CATEGORIES_CHOICES
+    }
+    return render(request, "job_roles/job_roles.html", context)
+
+
+def new_job_role(request):
+    if request.method == "POST":
+        category = request.POST.get("category")
+        group = request.POST.get("group")
+
+        JobRole.objects.create(category=category, group=group)
+        return redirect("job-roles")
+    return render(request, "job_roles/new_job_role.html")
+
+def edit_job_role(request):
+    if request.method == "POST":
+        category = request.POST.get("category")
+        group = request.POST.get("group")
+        role_id = request.POST.get("job_role_id")
+
+        job_role = JobRole.objects.get(id=role_id)
+        job_role.category = category
+        job_role.group = group
+        job_role.save()
+
+        return redirect("job-roles")
+    return render(request, "job_roles/edit_job_role.html")
+
+def delete_job_role(request):
+    if request.method == "POST":
+        role_id = request.POST.get("job_role_id")
+        job_role = JobRole.objects.get(id=role_id)
+        job_role.delete()
+        
+        return redirect("job-roles")
+    return render(request, "job_roles/delete_job_role.html")
+
+
 def payments(request):
     payments = PaymentConfig.objects.all()
+    job_roles = JobRole.objects.all()
     context = {
-        "payments": payments
+        "payments": payments,
+        "job_roles": job_roles
     }
 
     return render(request, "salaries/payments.html", context)
@@ -194,11 +242,14 @@ def new_payment_config(request):
         job_group = request.POST.get("job_group")
         overtime = request.POST.get("overtime")
         daily_rate = request.POST.get("daily_rate")
+        monthly_rate = request.POST.get("monthly_rate")
+
 
         PaymentConfig.objects.create(
             job_group=job_group,
             overtime=overtime,
-            daily_rate=daily_rate
+            daily_rate=daily_rate,
+            monthly_rate=monthly_rate
         )
 
         return redirect("payment-configs")
@@ -211,11 +262,13 @@ def edit_payment_config(request):
         job_group = request.POST.get("job_group")
         overtime = request.POST.get("overtime")
         daily_rate = request.POST.get("daily_rate")
+        monthly_rate = request.POST.get("monthly_rate")
 
         payment_config = PaymentConfig.objects.get(id=payment_id)
         payment_config.job_group = job_group
         payment_config.overtime = overtime
         payment_config.daily_rate = daily_rate
+        payment_config.monthly_rate = monthly_rate
         payment_config.save()
 
         return redirect("payment-configs")

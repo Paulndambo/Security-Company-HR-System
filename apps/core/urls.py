@@ -19,7 +19,12 @@ from apps.core.views import (
     tax_configurations,
     new_tax_config,
     edit_tax_config,
-    delete_tax_config
+    delete_tax_config,
+
+    job_roles,
+    new_job_role,
+    edit_job_role,
+    delete_job_role
 )
 
 urlpatterns = [
@@ -33,6 +38,11 @@ urlpatterns = [
     path("new-workstation", new_workstation, name="new-workstation"),
     path("edit-workstation", edit_workstation, name="edit-workstation"),
     path("delete-workstation", delete_workstation, name="delete-workstation"),
+
+    path("job-roles/", job_roles, name="job-roles"),
+    path("new-job-role/", new_job_role, name="new-job-role"),
+    path("edit-job-role/", edit_job_role, name="edit-job-role"),
+    path("delete-job-role/", delete_job_role, name="delete-job-role"),
 
     path("payment-configs/", payments, name="payment-configs"),
     path("new-payment-config/", new_payment_config, name="new-payment-config"),

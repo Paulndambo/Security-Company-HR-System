@@ -64,3 +64,14 @@ class Payslip(AbstractBaseModel):
     
     def current_date(self):
         return datetime.now().date()
+    
+class BankInformation(AbstractBaseModel):
+    employee = models.OneToOneField("employees.Employee", on_delete=models.CASCADE, related_name="bankingdetails")
+    bank_name  = models.CharField(max_length=255, default="Equity Bank Kenya")
+    branch_name = models.CharField(max_length=255)
+    account_name = models.CharField(max_length=255)
+    account_type = models.CharField(max_length=255, null=True)
+    account_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.account_name

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from apps.payments.models import EmployeeSalary, EmployeeOvertime, Payslip
+from apps.payments.models import EmployeeSalary, EmployeeOvertime, Payslip, BankInformation
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from apps.users.models import User
 import calendar
+
 
 date_today = datetime.now().date()
 current_month = calendar.month_name[date_today.month]
@@ -146,3 +147,49 @@ def payslip_receipt(request, id):
     payslip = Payslip.objects.get(id=id)
 
     return render(request, "salaries/payslip_receipt.html", {"payslip": payslip})
+
+
+# Service Provider Payment Details
+
+def new_bank_details(request):
+    if request.method == "POST":
+        employee_id = request.POST.get('employee_id')
+        bank_name = request.POST.get('bank_name')
+        branch_name = request.POST.get('branch_name')
+        account_name = request.POST.get('account_name')
+        account_type = request.POST.get('account_type')
+        account_number = request.POST.get('account_number')
+
+        BankInformation.objects.create(
+            employee_id=employee_id,
+            bank_name=bank_name,
+            branch_name=branch_name,
+            account_name=account_name,
+            account_type=account_type,
+            account_number=account_number
+        )
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, 'bank/new_bank_details.html')
+
+
+def edit_bank_details(request):
+    if request.method == 'POST':
+        banking_info_id = request.POST.get('banking_info_id')
+        employee_id = request.POST.get('employee_id')
+        bank_name = request.POST.get('bank_name')
+        branch_name = request.POST.get('branch_name')
+        account_name = request.POST.get('account_name')
+        account_type = request.POST.get('account_type')
+        account_number = request.POST.get('account_number')
+
+        banking_info = BankInformation.objects.get(id=banking_info_id)
+        banking_info.account_number = account_number
+        banking_info.account_type = account_type
+        banking_info.account_name = account_name
+        banking_info.bank_name = bank_name
+        banking_info.branch_name = branch_name
+        banking_info.save()
+
+        return redirect(f"/users/{employee_id}")
+    return render(request, 'bank/edit_bank_details.html')

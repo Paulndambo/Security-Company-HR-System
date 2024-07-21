@@ -49,6 +49,9 @@
               <td>{{attendance.checkin_time.time}}</td>
               <td>{{attendance.checked_in_by}}</td>
               <td>
+                {% if attendance.employee.status == "On Leave" %}
+                <span class="badge rounded-pill text-bg-info">On Leave</span>
+                {% else %}
                 {% if attendance.status == "Present" %}
                 <span class="badge rounded-pill text-bg-success">{{attendance.status}}</span>
                 {% elif attendance.status == "Absent" %}
@@ -56,17 +59,20 @@
                 {% else %}
                 <span class="badge rounded-pill text-bg-info">Pending</span>
                 {% endif %}
+                {% endif %}
               </td>
               <td>
+                {% if attendance.employee.status == "On Leave" %}
+                {% else %}
               {% if attendance.marked %}
-              <a href="{% url 'reset-attendance' attendance.id %}" class="btn btn-info btn-sm">Reset</a>
               {% else %}
                
               <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#markAttendanceModal{{ attendance.id }}">
-                Mark
+                Mark Absent
               </a>
               {% endif %}
-            </td>
+              {% endif %}
+            </td>  
               
               {% include "attendances/mark_absent.html" %}
               {% include "attendances/mark_attendance.html" %}

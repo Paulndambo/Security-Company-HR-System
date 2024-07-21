@@ -19,9 +19,54 @@ LEAVE_STATUS_CHOICES = (
     ("Pending Review", "Pending Review"),
 )
 
+GENDER_CHOICES = (
+    ("Male", "Male"),
+    ("Female", "Female"),
+)
+
+
+EMPLOYEE_STATUS = (
+    ("Pending Approval", "Pending Approval"),
+    ("Declined", "Declined"),
+    ("Available", "Available"),
+    ("On Leave", "On Leave"),
+    ("Suspended", "Suspended"),
+)
+
+
+class Employee(AbstractBaseModel):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES)
+    phone_number = models.CharField(max_length=255)
+    id_number = models.CharField(max_length=255, null=True)
+    nhif_number = models.CharField(max_length=255, null=True)
+    nssf_number = models.CharField(max_length=255, null=True)
+    kra_pin = models.CharField(max_length=255, null=True)
+    position = models.ForeignKey("core.JobRole", on_delete=models.SET_NULL, null=True)
+    postal_address = models.CharField(max_length=255, null=True)
+    physical_address = models.CharField(max_length=255, null=True)
+    town = models.CharField(max_length=255, null=True)
+    county = models.CharField(max_length=255, null=True)
+    country = models.CharField(max_length=255, null=True)
+    basic_salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=350)
+    client = models.ForeignKey(
+        "core.Client",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="clientsguards",
+    )
+    workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True)
+    job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
+    passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
+    status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Available")
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 class EmployeeDocument(AbstractBaseModel):
-    employee = models.OneToOneField("users.User", on_delete=models.CASCADE, related_name="employeedocuments")
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE, related_name="employeedocuments")
     police_clearance = models.FileField(upload_to="police_clearances/", null=True, blank=True)
     chief_letter = models.FileField(upload_to="chief_letters/", null=True, blank=True)
     referee_letter = models.FileField(upload_to="recommended_letters/", null=True, blank=True)
@@ -35,45 +80,8 @@ class EmployeeDocument(AbstractBaseModel):
         return self.employee.username
     
 
-
-class Attendance(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    date = models.DateField(null=True, blank=True)
-    checkin_time = models.DateTimeField(null=True)
-    checkout_time = models.DateTimeField(null=True, blank=True)
-    checked_in_by = models.ForeignKey(
-        "users.User",
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="checkinmanagers",
-    )
-    marked = models.BooleanField(default=False)
-    status = models.CharField(
-        max_length=255, choices=STATUS_CHOICES, null=True, blank=True
-    )
-
-    def __str__(self):
-        return self.employee.first_name + " " + self.employee.last_name
-
-
-class EmployeeLeave(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    days_applied = models.IntegerField(default=1)
-    leave_type = models.CharField(max_length=255, choices=LEAVE_TYPES)
-    status = models.CharField(
-        max_length=255, choices=LEAVE_STATUS_CHOICES, default="Pending Review"
-    )
-    leave_from = models.DateField(null=True, blank=True)
-    leave_to = models.DateField(null=True)
-    approved_by = models.ForeignKey(
-        "users.User",
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="leaveapprovers",
-    )
-
 class EducationInformation(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="educationdetails")
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="educationdetails")
     level = models.CharField(max_length=255)
     school_name = models.CharField(max_length=255)
     start_year = models.CharField(max_length=255, null=True)
@@ -82,20 +90,9 @@ class EducationInformation(AbstractBaseModel):
     def __str__(self):
         return self.school_name
 
-class BankInformation(AbstractBaseModel):
-    employee = models.OneToOneField("users.User", on_delete=models.CASCADE, related_name="bankingdetails")
-    bank_name  = models.CharField(max_length=255, default="Equity Bank Kenya")
-    branch_name = models.CharField(max_length=255)
-    account_name = models.CharField(max_length=255)
-    account_type = models.CharField(max_length=255, null=True)
-    account_number = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.account_name
-    
 
 class NextOfKin(AbstractBaseModel):
-    employee = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="nextofkins")
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="nextofkins")
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)

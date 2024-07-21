@@ -10,38 +10,49 @@
                 <div class="modal-body">
 
                 <div class="mb-3">
-                    <label class="form-label">Job Group</label>
+                    <label class="form-label fw-bold">Job Group</label>
                     <select class="form-select" id="job_group" name="job_group">
-                        <option value="Security Guard">Security Guard</option>
-                        <option value="Security Manager">Security Manager</option>
-                        <option value="CCTV Installer">CCTV Installer</option>
-                        </select>
+                      {% for job_role in job_roles %}
+                        <option value="{{job_role.id}}">{{job_role.group}}</option>
+                      {% endfor %}
+                    </select>
                 </div>
               
                 <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Daily Rate</label>
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Monthly Rate</label>
                       <input
                         type="number"
                         class="form-control"
-                        id="daily_rate"
-                        name="daily_rate"
+                        id="monthly_rate"
+                        name="monthly_rate"
+                        value="0"
                         required
                       />
                 </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label fw-bold">Daily Rate</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="daily_rate"
+                    name="daily_rate"
+                    value="0"
+                    required
+                  />
+            </div>
 
                     <div class="col">
-                        <label for="exampleInputPassword1" class="form-label">Overtime Rate</label>
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Overtime Rate</label>
                         <input
                           type="number"
                           class="form-control"
                           id="overtime"
                           name="overtime"
+                          value="0"
                           required
                         />
                       </div>
                   </div>
-                 
-                 
                 <div class="text-center mt-3 mb-3">
                   <button type="submit" class="btn btn-primary">Recond Config</button>
                 </div>

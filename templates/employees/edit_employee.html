@@ -74,13 +74,15 @@
                       />
                     </div>
                     <div class="col">
-                        <label class="form-label">Position</label>
-                        <select class="form-select" id="position" name="position">
-                            <option value="">- Position</option>
-                            <option value="Security Manager">Security Manager</option>
-                            <option value="Security Guard">Security Guard</option>
-                            <option value="CCTV Installer">CCTV Installer</option>
-                        </select>
+                      <label class="form-label fw-bold">Position</label>
+                      <select class="form-select" id="job_category" name="job_category">
+                        <option value="{{employee.job_category.id}}">{{employee.job_category}}</option>
+                        {% for config in payment_configs %}
+                        {% if config.id != employee.job_category.id %}
+                          <option value="{{config.id}}">{{config.job_group}}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </select>
                     </div>
                     </div>
                     <div class="row mb-3">
@@ -114,7 +116,6 @@
                     <select class="form-select" id="gender" name="gender">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
-    
                       </select>
                   </div>
                   <div class="col">
@@ -180,15 +181,6 @@
                     </div>
                   </div>
 
-                  <div class="mb-3">
-                    <label class="form-label fw-bold">Job Category</label>
-                    <select class="form-select" id="job_category" name="job_category">
-                      {% for config in payment_configs %}
-                        <option value="{{config.id}}">{{config.job_group}}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-         
                 <div class="text-center mt-2">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

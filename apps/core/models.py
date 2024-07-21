@@ -2,6 +2,19 @@ from django.db import models
 
 
 # Create your models here.
+SP_CATEGORIES_CHOICES = (
+    ("Staff", "Staff"),
+    ("Service Provider", "Service Provider"),
+)
+SP_GROUP_CHOICES = (
+    ("Security Manager", "Security Manager"),
+    ("Supervisor", "Supervisor"),
+    ("Finance Officer", "Finance Officer"),
+    ("HR Admin", "HR Admin"),
+    ("Security Guard", "Security Guard"),
+    ("CCTV Installer", "CCTV Installer"),
+)
+
 class AbstractBaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -15,14 +28,6 @@ SHIFT_CHOICES = (
     ("Night Shift", "Night Shift"),
     ("24 Hours Shift", "24 Hours Shift"),
 )
-
-class PaymentConfig(AbstractBaseModel):
-    job_group = models.CharField(max_length=255)
-    daily_rate = models.DecimalField(max_digits=100, decimal_places=2)
-    overtime = models.DecimalField(max_digits=100, decimal_places=0)
-
-    def __str__(self):
-        return self.job_group
 
 class Client(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -73,3 +78,21 @@ class TaxBand(AbstractBaseModel):
 
     def __str__(self):
         return self.category
+    
+
+class JobRole(AbstractBaseModel):
+    category = models.CharField(max_length=255, choices=SP_CATEGORIES_CHOICES)
+    group = models.CharField(max_length=255, choices=SP_GROUP_CHOICES)
+
+    def __str__(self):
+        return self.name
+    
+
+class PaymentConfig(AbstractBaseModel):
+    job_group = models.ForeignKey(JobRole, on_delete=models.SET_NULL, null=True)
+    monthly_rate = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    overtime = models.DecimalField(max_digits=100, decimal_places=0, default=0)
+
+    def __str__(self):
+        return self.job_group.name

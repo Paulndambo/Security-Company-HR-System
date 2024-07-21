@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from apps.employees.models import Attendance, EmployeeLeave
 from django.core.paginator import Paginator
 from apps.users.models import User
 from datetime import datetime
@@ -7,226 +6,276 @@ import calendar
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from apps.payments.models import EmployeeSalary
-from apps.employees.models import NextOfKin, EducationInformation, BankInformation
+from apps.employees.models import NextOfKin, EducationInformation, Employee, EmployeeDocument
+from apps.payments.models import EmployeeSalary, BankInformation
+from apps.core.models import Workstation, PaymentConfig
 
 date_today = datetime.now().date()
 
 current_month = calendar.month_name[date_today.month]
 current_year = str(date_today.year)
-# Create your views here.
-@login_required(login_url="/users/login")
-def attendaces(request):
-    atteandaces = Attendance.objects.all().order_by("-created")
 
-    show_generate_attendance = False
+# Employee Management
+
+@login_required(login_url="/users/login/")
+def employees(request):
+    employees = Employee.objects.all().order_by("-created")
+    workstations = Workstation.objects.all()
+    payment_configs = PaymentConfig.objects.all()
 
     if request.method == "POST":
         search_text = request.POST.get("search_text")
-        atteandaces = Attendance.objects.filter(
-            Q(employee__first_name__icontains=search_text)
-            | Q(employee__last_name__icontains=search_text)
-            | Q(employee__id_number__icontains=search_text)
-        )
+        employees = Employee.objects.filter(
+            Q(first_name__icontains=search_text)
+            | Q(first_name__icontains=search_text)
+            | Q(phone_number__icontains=search_text)
+            | Q(id_number__icontains=search_text)
+        ).order_by("-created")
 
-    employees = User.objects.filter(role="Employee")
-    attendances_today = Attendance.objects.filter(date=date_today).count()
-
-    if attendances_today < employees.count():
-        show_generate_attendance = True
-
-    paginator = Paginator(atteandaces, 12)
+    paginator = Paginator(employees, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj, "workstations": workstations, "payment_configs": payment_configs}
+    return render(request, "employees/employees.html", context)
+
+
+@login_required(login_url="/users/login/")
+def new_employee(request):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        id_number = request.POST.get("id_number")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+        physical_address = request.POST.get("address")
+        postal_address = request.POST.get("address")
+        city = request.POST.get("city")
+        country = request.POST.get("country")
+        county = request.POST.get("county")
+        position = request.POST.get("job_category")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
+
+        job_category = request.POST.get("job_category")
+
+        chief_letter = request.FILES.get("chief_letter")
+        police_clearance = request.FILES.get("police_clearance")
+        referee_letter = request.FILES.get("referee_letter")
+        scanned_id = request.FILES.get("scanned_id")
+        kra_certificate = request.FILES.get("kra_certificate")
+        kcpe_certificate = request.FILES.get("kcpe_certificate")
+        kcse_certificate = request.FILES.get("kcse_certificate")
+        college_certificate = request.FILES.get("college_certificate")
+
+        passport_photo = request.FILES.get("passport_photo")
+        kra_pin = request.POST.get("kra_pin")
+        #workstation = request.POST.get("workstation")
+
+        employee = Employee.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            username=id_number,
+            gender=gender,
+            id_number=id_number,
+            kra_pin=kra_pin,
+            phone_number=phone_number,
+            email=email,
+            physical_address=physical_address,
+            postal_address=postal_address,
+            town=city,
+            county=county,
+            country=country,
+            position_id=position,
+            nhif_number=nhif_number,
+            nssf_number=nssf_number,
+            role="Employee",
+            #workstation_id=workstation,
+            passport_photo=passport_photo,
+            job_category_id=job_category,
+            status="Pending Approval"
+        )
+
+        documents = EmployeeDocument()
+        documents.employee = employee
+        documents.kra_certificate = kra_certificate if kra_certificate else None
+        documents.chief_letter =chief_letter if chief_letter else None
+        documents.police_clearance = police_clearance if police_clearance else None
+        documents.referee_letter = referee_letter if referee_letter else None 
+        documents.scanned_id = scanned_id if scanned_id else None
+        documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
+        documents.kcse_certificate = kcse_certificate if kcse_certificate else None
+        documents.college_certificate = college_certificate if college_certificate else None
+        documents.save()
+
+        return redirect("employees")
+    return render(request, "employees/new_employees.html")
+
+
+def upload_documents(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+
+        employee = Employee.objects.get(id=employee_id)
+        documents = EmployeeDocument.objects.filter(employee=employee).first()
+
+        chief_letter = request.FILES.get("chief_letter")
+        police_clearance = request.FILES.get("police_clearance")
+        referee_letter = request.FILES.get("referee_letter")
+        scanned_id = request.FILES.get("scanned_id")
+        kra_certificate = request.FILES.get("kra_certificate")
+        kcpe_certificate = request.FILES.get("kcpe_certificate")
+        kcse_certificate = request.FILES.get("kcse_certificate")
+        college_certificate = request.FILES.get("college_certificate")
+
+        if documents:
+            documents.kra_certificate = kra_certificate if kra_certificate else documents.kra_certificate
+            documents.chief_letter =chief_letter if chief_letter else documents.chief_letter
+            documents.police_clearance = police_clearance if police_clearance else documents.police_clearance
+            documents.referee_letter = referee_letter if referee_letter else documents.referee_letter
+            documents.scanned_id = scanned_id if scanned_id else documents.scanned_id
+            documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else documents.kcpe_certificate
+            documents.kcse_certificate = kcse_certificate if kcse_certificate else documents.kcse_certificate
+            documents.college_certificate = college_certificate if college_certificate else documents.college_certificate
+            documents.save()
+        else:
+            documents = EmployeeDocument()
+            documents.employee = employee
+            documents.kra_certificate = kra_certificate if kra_certificate else None
+            documents.chief_letter =chief_letter if chief_letter else None
+            documents.police_clearance = police_clearance if police_clearance else None
+            documents.referee_letter = referee_letter if referee_letter else None 
+            documents.scanned_id = scanned_id if scanned_id else None
+            documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
+            documents.kcse_certificate = kcse_certificate if kcse_certificate else None
+            documents.college_certificate = college_certificate if college_certificate else None
+            documents.save()
+
+        return redirect(f"/users/{employee_id}")
+    return redirect(request, "employees/upload_documents.html")
+
+
+def approval_all(request):
+    Employee.objects.update(status="Available")
+    return redirect("users")
+
+@login_required(login_url="/users/login/")
+def edit_employee(request):
+    if request.method == "POST":
+        client_id = request.POST.get("client_id")
+        employee_id = request.POST.get("employee_id")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        gender = request.POST.get("gender")
+        id_number = request.POST.get("id_number")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        county = request.POST.get("county")
+        country = request.POST.get("country")
+        nhif_number = request.POST.get("nhif_number")
+        nssf_number = request.POST.get("nssf_number")
+        kra_pin = request.POST.get("kra_pin")
+
+        job_category = request.POST.get("job_category")
+
+        employee = Employee.objects.get(id=employee_id)
+        employee.first_name = first_name
+        employee.last_name = last_name
+        employee.gender = gender
+        employee.id_number = id_number
+        employee.email = email
+        employee.phone_number = phone_number
+        employee.physical_address = address
+        employee.postal_address = address
+        employee.town = city
+        employee.position_id = job_category
+        employee.county = county
+        employee.country = country
+        employee.nhif_number = nhif_number
+        employee.nssf_number = nssf_number
+        employee.client_id = client_id
+        employee.job_category_id = job_category
+        employee.kra_pin = kra_pin
+        employee.save()
+
+        return redirect("employees")
+
+    return render(request, "employees/edit_employee.html")
+
+
+@login_required(login_url="/users/login/")
+def delete_employee(request):
+    if request.method == "POST":
+        
+        employee_id = request.POST.get("employee_id")
+        employee = Employee.objects.get(id=employee_id)
+        employee.delete()
+
+        return redirect("employees")
+
+    return render(request, "employees/delete_employee.html")
+
+
+@login_required(login_url="/users/login/")
+def employee_details(request, employee_id=None):
+    employee = Employee.objects.get(id=employee_id)
+    family_members = employee.nextofkins.all()
+    education_details = employee.educationdetails.all()
+    documents = EmployeeDocument.objects.filter(employee=employee).first()
+
+    bank_details_found = False
+    banking_details = BankInformation.objects.filter(employee=employee).first()
+
+    workstations = Workstation.objects.all()
+
+    if banking_details:
+        bank_details_found = True
 
     context = {
-        "page_obj": page_obj,
-        "show_generate_attendance": show_generate_attendance,
+        "employee": employee,
+        "family_members": family_members,
+        "education_details": education_details,
+        "documents": documents,
+        "banking_details_found": bank_details_found,
+        "banking_info": banking_details,
+        "workstations": workstations
     }
-    return render(request, "attendances/attendances.html", context)
+
+    return render(request, "employees/employee_details.html", context)
 
 
-@login_required(login_url="/users/login")
-def generate_attendance(request):
-    employees = User.objects.filter(role="Employee")
-    attendances_today = Attendance.objects.filter(date=date_today).count()
-
-    print(f"The Attendance Today is: {attendances_today}")
-
-    if employees.count() > attendances_today:
-        attendace_list = []
-
-        for employee in employees:
-            attendace_list.append(
-                Attendance(employee=employee, date=date_today, marked=False)
-            )
-
-        Attendance.objects.bulk_create(attendace_list)
-
-    return redirect("attendances")
-
-
-@login_required(login_url="/users/login")
-def new_attendance(request):
+def approve_employee(request):
     if request.method == "POST":
-        employee = request.POST.get("employee")
+        employee_id = request.POST.get("employee_id")
+        workstation_id = request.POST.get("workstation_id")
 
-    return render(request, "attendances/new_attendance.html")
+        employee = Employee.objects.get(id=employee_id)
+        workstation = Workstation.objects.get(id=workstation_id)
 
+        employee.client = workstation.client
+        employee.workstation = workstation
+        employee.status = "Approved"
+        employee.save()
 
-@login_required(login_url="/users/login")
-def mark_attendance(request):
-    user = request.user
+        return redirect(f"/users/{employee_id}")
+    return render(request, "employees/approve_employee.html")
+
+def disapprove_employee(request):
     if request.method == "POST":
-        attendance_id = request.POST.get("attendance_id")
-        action_type = request.POST.get("action_type")
+        employee_id = request.POST.get("employee_id")
+        employee = Employee.objects.get(id=employee_id)
 
-        attendace = Attendance.objects.get(id=attendance_id)
-        attendace.marked = True
-        attendace.status = action_type
-        attendace.checked_in_by = user
-        attendace.checkin_time = datetime.now()
+        employee.status = "Declined"
+        employee.save()
 
-        attendace.save()
-
-        return redirect("attendances")
-    return render(request, "attendances/mark_attendance.html")
+        return redirect(f"/users/{employee_id}")
+    return render(request, "employees/decline_employee.html")
 
 
-@login_required(login_url="/users/login")
-def reset_attendance(request, attendance_id):
-    attendance = Attendance.objects.get(id=attendance_id)
-    current_status = attendance.status
-    attendance.marked = False
-    attendance.status = None
-    attendance.save()
-
-    ## Update Salary
-    if current_status == "Present":
-        salary = EmployeeSalary.objects.filter(employee=attendance.employee).first()
-
-        if salary:
-            salary.total_amount -= salary.employee.job_category.daily_rate
-            salary.days_worked -= 1
-            salary.save()
-
-    return redirect("attendances")
-
-
-@login_required(login_url="/users/login")
-def mark_present(request, attendance_id):
-    user = request.user
-    attendace = Attendance.objects.get(id=attendance_id)
-    attendace.marked = True
-    attendace.status = "Present"
-    attendace.checked_in_by = user
-    attendace.checkin_time = datetime.now()
-    attendace.save()
-
-    # Update Salary
-    salary = EmployeeSalary.objects.filter(
-        employee=attendace.employee, 
-        year=current_year,
-        month=current_month
-    ).first()
-
-    if salary:
-        salary.total_amount += attendace.employee.job_category.daily_rate
-        salary.days_worked += 1
-        salary.save()
-    else:
-        salary = EmployeeSalary.objects.create(
-            employee=attendace.employee,
-            month=current_month,
-            year=current_year,
-            days_worked=1,
-            daily_rate=attendace.employee.job_category.daily_rate,
-            total_amount=attendace.employee.job_category.daily_rate
-        )
-
-    return redirect("attendances")
-
-
-@login_required(login_url="/users/login")
-def mark_absent(request, attendance_id):
-    user = request.user
-    attendace = Attendance.objects.get(id=attendance_id)
-    attendace.marked = True
-    attendace.status = "Absent"
-    attendace.checked_in_by = user
-    attendace.checkin_time = datetime.now()
-    attendace.save()
-    return redirect("attendances")
-
-
-
-# Employee Leave Management
-@login_required(login_url="/users/login")
-def leave_applications(request):
-    leave_applications = EmployeeLeave.objects.all().order_by("-created")
-
-    if request.method == "POST":
-        search_text = request.POST.get("search_text")
-
-        leave_applications = EmployeeLeave.objects.filter(Q(employee__first_name__icontains=search_text) | Q(employee__last_name__icontains=search_text))
-
-    paginator = Paginator(leave_applications, 15)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    employees = User.objects.filter(role="Employee")
-
-    context = {"page_obj": page_obj, "employees": employees}
-
-    return render(request, "leaves/leaves.html", context)
-
-
-@login_required(login_url="/users/login")
-def apply_leave(request):
-    if request.method == "POST":
-        employee_id = request.POST.get("employee")
-        days_applied = request.POST.get("days_applied")
-        leave_type = request.POST.get("leave_type")
-        leave_from = request.POST.get("leave_from")
-        leave_to = request.POST.get("leave_to")
-
-        EmployeeLeave.objects.create(
-            employee_id=employee_id,
-            days_applied=days_applied,
-            leave_type=leave_type,
-            leave_from=leave_from,
-            leave_to=leave_to,
-        )
-
-        return redirect("leave-applications")
-
-    return render(request, "leaves/apply_leave.html")
-
-
-@login_required(login_url="/users/login")
-def mark_leave_application(request):
-    if request.method == "POST":
-        leave_id = request.POST.get("leave_id")
-        action_type = request.POST.get("action_type")
-
-        leave = EmployeeLeave.objects.get(id=leave_id)
-        leave.status = action_type
-        leave.save()
-
-        return redirect("leave-applications")
-    return render(request, "leaves/mark_leave.html")
-
-
-@login_required(login_url="/users/login")
-def delete_leave_application(request):
-    if request.method == "POST":
-        leave_id = request.POST.get("leave_id")
-        leave = EmployeeLeave.objects.get(id=leave_id)
-        leave.delete()
-        return redirect("leave-applications")
-    return render(request, "leaves/delete_leave.html")
-
-
-### NEXT OF KIN RECORDS MANAGEMENT
+# Employee Relatives
 def new_relative(request):
     if request.method == "POST":
         employee_id = request.POST.get("employee_id")
@@ -336,47 +385,3 @@ def delete_education_record(request):
 
         return redirect(f"/users/{employee_id}")
     return render(request, "education/delete_education.html")
-
-
-def new_bank_details(request):
-    if request.method == "POST":
-        employee_id = request.POST.get('employee_id')
-        bank_name = request.POST.get('bank_name')
-        branch_name = request.POST.get('branch_name')
-        account_name = request.POST.get('account_name')
-        account_type = request.POST.get('account_type')
-        account_number = request.POST.get('account_number')
-
-        BankInformation.objects.create(
-            employee_id=employee_id,
-            bank_name=bank_name,
-            branch_name=branch_name,
-            account_name=account_name,
-            account_type=account_type,
-            account_number=account_number
-        )
-
-        return redirect(f"/users/{employee_id}")
-    return render(request, 'bank/new_bank_details.html')
-
-
-def edit_bank_details(request):
-    if request.method == 'POST':
-        banking_info_id = request.POST.get('banking_info_id')
-        employee_id = request.POST.get('employee_id')
-        bank_name = request.POST.get('bank_name')
-        branch_name = request.POST.get('branch_name')
-        account_name = request.POST.get('account_name')
-        account_type = request.POST.get('account_type')
-        account_number = request.POST.get('account_number')
-
-        banking_info = BankInformation.objects.get(id=banking_info_id)
-        banking_info.account_number = account_number
-        banking_info.account_type = account_type
-        banking_info.account_name = account_name
-        banking_info.bank_name = bank_name
-        banking_info.branch_name = branch_name
-        banking_info.save()
-
-        return redirect(f"/users/{employee_id}")
-    return render(request, 'bank/edit_bank_details.html')

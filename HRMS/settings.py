@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     "apps.payments",
     "apps.equipments",
     "apps.visitors",
+    "apps.leave",
+    "apps.staff",
+    "apps.attendance",
 ]
 
 MIDDLEWARE = [
