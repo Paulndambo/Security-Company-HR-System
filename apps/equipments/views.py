@@ -232,3 +232,25 @@ def delete_vehicle(request):
         vehicle.delete()
         return redirect("vehicles")
     return render(request, "vehicles/delete_vehicle.html")
+
+
+@login_required(login_url="/users/login")
+def vehicle_fueling_history(request, id):
+    fueling_history = VehicleFuelHistory.objects.filter(vehicle_id=id).order_by("-created")
+    paginator = Paginator(fueling_history, 15)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
+    return render(request, "vehicles/fuel_history.html", context)
+
+
+@login_required(login_url="/users/login")
+def vehicle_service_history(request, id):
+    service_history = VehicleServiceHistory.objects.filter(vehicle_id=id).order_by("-created")
+    paginator = Paginator(service_history, 15)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
+    return render(request, "vehicles/service_history.html", context)
