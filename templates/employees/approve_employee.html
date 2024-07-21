@@ -1,0 +1,42 @@
+<div class="modal fade" id="approveEmployeeModal{{employee.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Approve Employee</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'approve-employee' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                  <input type="hidden" name="employee_id" id="employee_id" value="{{employee.id}}" />
+              
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Work Station</label>
+                    <select class="form-select" id="workstation_id" name="workstation_id">
+                      {% for workstation in workstations %}
+                        <option value="{{workstation.id}}">{{workstation.client}} - {{workstation.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Work Shift</label>
+                    <select class="form-select" name="work_shift" id="work_shift">
+                        <option>{{employee.workshift}}</option>
+                        {% for shift in work_shifts %}
+                            {% if shift != employee.workshift %}
+                                <option value="{{shift}}">{{shift}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+         
+                <div class="text-center mt-2">
+                  <button type="submit" class="btn btn-primary">Approve Employee</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

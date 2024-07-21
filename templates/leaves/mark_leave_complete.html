@@ -1,0 +1,35 @@
+<div class="modal fade" id="leaveCompleteModal{{leave.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">Mark Leave Complete</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'complete-leave' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <div class="mb-2">
+                    <p>Are you sure to mark leave for <b>{{leave.employee}}'s</b> as complete?</p>
+                </div>
+                <div class="mb-2">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="leave_id"
+                      name="leave_id"
+                      value="{{leave.id}}"
+                      readonly
+                      hidden
+                      required
+                    />
+                  </div>
+                 
+                <div class="text-center mt-2">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Close</button>
+                    <button type="submit" class="btn btn-success">Yes, Mark As Complete</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

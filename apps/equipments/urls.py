@@ -8,6 +8,12 @@ from apps.equipments.views import (
     issue_equipment,
     delete_issued_equipment,
     mark_issued_equipment,
+    vehicles,
+    new_vehicle,
+    edit_vehicle,
+    delete_vehicle,
+    vehicle_fueling_history,
+    vehicle_service_history,
 )
 
 urlpatterns = [
@@ -23,4 +29,10 @@ urlpatterns = [
         delete_issued_equipment,
         name="delete-issued-equipment",
     ),
+    path("vehicles/", vehicles, name="vehicles"),
+    path("new-vehicle/", new_vehicle, name="new-vehicle"),
+    path("edit-vehicle/", edit_vehicle, name="edit-vehicle"),
+    path("delete-vehicle/", delete_vehicle, name="delete-vehicle"),
+    path("vehicles/<int:id>/fueling-history/", vehicle_fueling_history, name="fueling-history"),
+    path("vehicles/<int:id>/service-history/", vehicle_service_history, name="servicing-history"),
 ]

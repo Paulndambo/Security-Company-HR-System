@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Job Roles</h3>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newJobRoleModal">New Role</a>
+    </div>
+</div>
+<hr/>
+      <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Job Group</th>
+              <th scope="col">Category</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job_role in job_roles %}
+            <tr>
+              <td>{{job_role.id}}</td>
+              <td>{{job_role.group}}</td>
+              <td>{{job_role.category}}</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editJobRoleModal{{ job_role.id }}"><i class="bi bi-pencil-square"></i></a>
+              </td>
+              <td>
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteJobRoleModal{{ job_role.id }}"><i class="bi bi-trash"></i></a>
+              </td>
+              {% include "job_roles/edit_job_role.html" %}
+              {% include "job_roles/delete_job_role.html" %}
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+{% endblock content %}

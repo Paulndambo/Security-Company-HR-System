@@ -2,6 +2,20 @@ from django.db import models
 
 
 # Create your models here.
+SP_CATEGORIES_CHOICES = (
+    ("Staff", "Staff"),
+    ("Service Provider", "Service Provider"),
+)
+SP_GROUP_CHOICES = (
+    ("Security Manager", "Security Manager"),
+    ("Supervisor", "Supervisor"),
+    ("Finance Officer", "Finance Officer"),
+    ("HR Admin", "HR Admin"),
+    ("Security Guard", "Security Guard"),
+    ("CCTV Installer", "CCTV Installer"),
+)
+
+
 class AbstractBaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -16,13 +30,6 @@ SHIFT_CHOICES = (
     ("24 Hours Shift", "24 Hours Shift"),
 )
 
-class PaymentConfig(AbstractBaseModel):
-    job_group = models.CharField(max_length=255)
-    daily_rate = models.DecimalField(max_digits=100, decimal_places=2)
-    overtime = models.DecimalField(max_digits=100, decimal_places=0)
-
-    def __str__(self):
-        return self.job_group
 
 class Client(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -41,22 +48,26 @@ class Client(AbstractBaseModel):
     def __str__(self):
         return self.name
 
+
 class Workstation(AbstractBaseModel):
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name="workstations")
+    client = models.ForeignKey(
+        Client, on_delete=models.SET_NULL, null=True, related_name="workstations"
+    )
     name = models.CharField(max_length=255)
     guards_posted = models.IntegerField(default=0)
     guards_needed = models.IntegerField(default=0)
     work_shift = models.CharField(max_length=255, choices=SHIFT_CHOICES)
-    
 
     def __str__(self):
         return self.name
+
 
 TAX_BANDS = (
     ("1st Band", "1st Band"),
     ("2nd Band", "2nd Band"),
     ("3rd Band", "3rd Band"),
 )
+
 
 class TaxBand(AbstractBaseModel):
     category = models.CharField(max_length=255, choices=TAX_BANDS)
@@ -73,3 +84,21 @@ class TaxBand(AbstractBaseModel):
 
     def __str__(self):
         return self.category
+
+
+class JobRole(AbstractBaseModel):
+    category = models.CharField(max_length=255, choices=SP_CATEGORIES_CHOICES)
+    group = models.CharField(max_length=255, choices=SP_GROUP_CHOICES)
+
+    def __str__(self):
+        return self.category
+
+
+class PaymentConfig(AbstractBaseModel):
+    job_group = models.ForeignKey(JobRole, on_delete=models.SET_NULL, null=True)
+    monthly_rate = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    overtime = models.DecimalField(max_digits=100, decimal_places=0, default=0)
+
+    def __str__(self):
+        return self.job_group.category

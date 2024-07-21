@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row mt-5"></div>
+<div class="row">
+    <div class="col">
+        <h3>Fuel History</h3>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newFuelRecordModal{{employee.id}}">Add Fuel Record</a>
+    </div>
+
+</div>
+<hr/>
+    <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Fueled At.</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Date Fueled</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fuel_record in page_obj %}
+            <tr>
+              <td>{{fuel_record.id}}</td>
+              <td>{{fuel_record.vehicle}}</td>
+              <td>{{fuel_record.fueled_at}}</td>
+              <td>{{fuel_record.amount}}</td>
+              <td>{{fuel_record.cost}}</td>
+              <td>{{fuel_record.date_fueled}}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      
+      </div>
+<div class="row mt-5"></div>
+<hr>
+<div class="row mt-4">
+    <div class="col">
+        <h3>Education Details</h3>
+    </div>
+  
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newEducationModal{{employee.id}}">Add Education Record</a>
+
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">School Name</th>
+              <th scope="col">Level</th>
+              <th scope="col">Start Year</th>
+              <th scope="col">Graduation Year</th>
+              <th scope="col">Created At.</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for education in education_details %}
+            <tr>
+              <td>{{education.id}}</td>
+              <td>{{education.school_name}}</td>
+              <td>{{education.level}}</td>
+              <td>{{education.start_year}}</td>
+              <td>{{education.graduation_year}}</td>
+              <td>{{education.created}}</td>
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEducationModal{{education.id}}">
+                <i class="bi bi-pencil-square"></i>
+              </a></td>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEducationModal{{education.id}}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "education/delete_education.html" %}
+              {% include "education/edit_education.html" %}
+            </tr> 
+            {% endfor %}
+
+          </tbody>
+        </table>
+</div>
+</div>
+<div class="row mt-5"></div>
+<hr>
+<div class="row">
+  <div class="col">
+    <h3>Employee Documents</h3>
+  </div>
+  <div class="col">
+    <a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadDocumentsModal{{employee.id}}">
+      Upload Documents
+    </a>
+  </div>
+</div>
+{% include "employees/upload_documents.html" %}
+<hr>
+<div class="row mb-3">
+  <div class="table-responsive small">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Date Created</th>
+          <th scope="col">Document Name</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if documents.kcpe_certificate %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>KCPE Certificate</td>
+          <td>
+            <a href="{{ documents.kcpe_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.kcse_certificate %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>KCSE Certificate</td>
+          <td>
+            <a href="{{ documents.kcse_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.kra_certificate %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>KRA PIN Certificate</td>
+          <td>
+            <a href="{{ documents.kra_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.police_clearance %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Police Clearance</td>
+          <td>
+            <a href="{{ documents.police_clearance.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.chief_letter %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Chief's Letter</td>
+          <td>
+            <a href="{{ documents.chief_letter.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.scanned_id %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Scanned ID</td>
+          <td>
+            <a href="{{ documents.scanned_id.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.college_certificate %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>College/University Certificate</td>
+          <td>
+            <a href="{{ documents.college_certificate.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if documents.referee_letter %}
+        <tr>
+          <td>{{documents.created}}</td>
+          <td>Referee Letter</td>
+          <td>
+            <a href="{{ documents.referee_letter.url }}" target="_blank" class="btn btn-info btn-sm">View Document</a>
+          </td>
+        </tr>
+        {% endif %}
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="d-flex mt-5 mb-5 border">
+  <div class="flex-fill p-4">
+    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveEmployeeModal{{employee.id}}">Approve Employee</a>
+  </div>
+  
+  <div class="flex-fill p-4">
+    <a href="" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#disapproveEmployeeModal{{employee.id}}">Disapprove Employee</a>
+  </div>
+ {% include "employees/approve_employee.html" %}
+ {% include "employees/decline_employee.html" %}
+</div>
+{% endblock content %}

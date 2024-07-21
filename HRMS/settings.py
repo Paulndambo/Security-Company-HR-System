@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     "apps.payments",
     "apps.equipments",
     "apps.visitors",
+    "apps.leave",
+    "apps.staff",
+    "apps.attendance",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -75,7 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "HRMS.wsgi.application"
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

@@ -1,20 +1,27 @@
 from django.shortcuts import render, redirect
-from apps.core.models import Workstation, Client, PaymentConfig, TaxBand
+from apps.core.models import Workstation, Client, PaymentConfig, TaxBand, JobRole
 from apps.users.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+SP_CATEGORIES_CHOICES = ["Staff", "Service Provider"]
+SP_GROUP_CHOICES = [
+    "Security Manager",
+    "Supervisor" "Finance Officer",
+    "HR Admin",
+    "Security Guard",
+    "CCTV Installer",
+]
+
+
 @login_required(login_url="/users/login")
 def home(request):
     employees_count = User.objects.filter(role="Employee").count()
     clients_count = Client.objects.all().count()
 
-    context = {
-        "employees_count": employees_count,
-        "clients_count": clients_count
-    }
+    context = {"employees_count": employees_count, "clients_count": clients_count}
     return render(request, "home.html", context)
 
 
@@ -23,7 +30,7 @@ def clients(request):
     work_stations = Client.objects.all().order_by("-created")
 
     if request.method == "POST":
-        search_text = request.POST.get("search_text") 
+        search_text = request.POST.get("search_text")
         work_stations = Client.objects.filter(Q(name__icontains=search_text))
 
     paginator = Paginator(work_stations, 12)
@@ -71,6 +78,7 @@ def new_client(request):
         return redirect("clients")
     return render(request, "clients/new_client.html")
 
+
 @login_required(login_url="/users/login")
 def edit_client(request):
     if request.method == "POST":
@@ -107,6 +115,7 @@ def edit_client(request):
         return redirect("clients")
     return render(request, "clients/edit_client.html")
 
+
 @login_required(login_url="/users/login")
 def delete_client(request):
     if request.method == "POST":
@@ -115,6 +124,7 @@ def delete_client(request):
         client.delete()
         return redirect("clients")
     return render(request, "clients/delete_client.html")
+
 
 @login_required(login_url="/users/login")
 def client_detail(request, client_id):
@@ -131,6 +141,7 @@ def client_detail(request, client_id):
 
 
 ## Work stations
+@login_required(login_url="/users/login")
 def new_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -140,17 +151,18 @@ def new_workstation(request):
         work_shift = request.POST.get("work_shift")
 
         Workstation.objects.create(
-            name=name, 
-            client_id=client_id, 
-            guards_needed=guards_needed, 
+            name=name,
+            client_id=client_id,
+            guards_needed=guards_needed,
             guards_posted=guards_posted,
-            work_shift=work_shift
+            work_shift=work_shift,
         )
 
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/new_workstation.html")
 
 
+@login_required(login_url="/users/login")
 def edit_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -170,57 +182,119 @@ def edit_workstation(request):
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/edit_workstation.html")
 
+
+@login_required(login_url="/users/login")
 def delete_workstation(request):
     if request.method == "POST":
-        workstation_id = request.POST.get('workstation_id')
-        client_id = request.POST.get('client_id')
+        workstation_id = request.POST.get("workstation_id")
+        client_id = request.POST.get("client_id")
         workstation = Workstation.objects.get(id=workstation_id)
         workstation.delete()
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/delete_workstation.html")
 
 
+@login_required(login_url="/users/login")
+def job_roles(request):
+    job_roles = JobRole.objects.all()
+    context = {
+        "job_roles": job_roles,
+        "job_groups": SP_GROUP_CHOICES,
+        "job_categories": SP_CATEGORIES_CHOICES,
+    }
+    return render(request, "job_roles/job_roles.html", context)
+
+
+@login_required(login_url="/users/login")
+def new_job_role(request):
+    if request.method == "POST":
+        category = request.POST.get("category")
+        group = request.POST.get("group")
+
+        JobRole.objects.create(category=category, group=group)
+        return redirect("job-roles")
+    return render(request, "job_roles/new_job_role.html")
+
+
+@login_required(login_url="/users/login")
+def edit_job_role(request):
+    if request.method == "POST":
+        category = request.POST.get("category")
+        group = request.POST.get("group")
+        role_id = request.POST.get("job_role_id")
+
+        job_role = JobRole.objects.get(id=role_id)
+        job_role.category = category
+        job_role.group = group
+        job_role.save()
+
+        return redirect("job-roles")
+    return render(request, "job_roles/edit_job_role.html")
+
+
+@login_required(login_url="/users/login")
+def delete_job_role(request):
+    if request.method == "POST":
+        role_id = request.POST.get("job_role_id")
+        job_role = JobRole.objects.get(id=role_id)
+        job_role.delete()
+
+        return redirect("job-roles")
+    return render(request, "job_roles/delete_job_role.html")
+
+
+@login_required(login_url="/users/login")
 def payments(request):
     payments = PaymentConfig.objects.all()
-    context = {
-        "payments": payments
-    }
+    job_roles = JobRole.objects.all()
+    context = {"payments": payments, "job_roles": job_roles}
 
     return render(request, "salaries/payments.html", context)
 
 
+@login_required(login_url="/users/login")
 def new_payment_config(request):
     if request.method == "POST":
         job_group = request.POST.get("job_group")
         overtime = request.POST.get("overtime")
         daily_rate = request.POST.get("daily_rate")
+        monthly_rate = request.POST.get("monthly_rate")
+
+        job_role = JobRole.objects.get(id=job_group)
 
         PaymentConfig.objects.create(
-            job_group=job_group,
+            job_group=job_role,
             overtime=overtime,
-            daily_rate=daily_rate
+            daily_rate=daily_rate,
+            monthly_rate=monthly_rate,
         )
 
         return redirect("payment-configs")
     return render(request, "salaries/new_payment_config.html")
 
 
+@login_required(login_url="/users/login")
 def edit_payment_config(request):
     if request.method == "POST":
         payment_id = request.POST.get("payment_id")
         job_group = request.POST.get("job_group")
         overtime = request.POST.get("overtime")
         daily_rate = request.POST.get("daily_rate")
+        monthly_rate = request.POST.get("monthly_rate")
+        job_role = JobRole.objects.get(id=job_group)
 
         payment_config = PaymentConfig.objects.get(id=payment_id)
-        payment_config.job_group = job_group
+        payment_config.job_group = job_role
         payment_config.overtime = overtime
         payment_config.daily_rate = daily_rate
+        payment_config.monthly_rate = monthly_rate
         payment_config.save()
 
         return redirect("payment-configs")
     return render(request, "salaries/edit_payment_config.html")
 
+
+@login_required(login_url="/users/login")
 def delete_payment_config(request):
     if request.method == "POST":
         payment_id = request.POST.get("payment_id")
@@ -234,10 +308,9 @@ def delete_payment_config(request):
 ### Tax Configurations
 def tax_configurations(request):
     tax_configurations = TaxBand.objects.all()
-    context = {
-        "tax_configurations": tax_configurations
-    }
+    context = {"tax_configurations": tax_configurations}
     return render(request, "taxes/tax_configs.html", context)
+
 
 def new_tax_config(request):
     if request.method == "POST":
@@ -264,7 +337,7 @@ def new_tax_config(request):
             housing_levy=housing_levy,
             tax_relief=tax_relief,
             allowable_deductions=allowable_deductions,
-            insurance_relief=insurance_relief
+            insurance_relief=insurance_relief,
         )
 
         return redirect("tax-configurations")
@@ -287,19 +360,19 @@ def edit_tax_config(request):
         insurance_relief = request.POST.get("insurance_relief")
 
         tax_band = TaxBand.objects.get(id=tax_config_id)
-        tax_band.category=category
-        tax_band.lower_end=lower_end
-        tax_band.upper_end=upper_end
-        tax_band.nhif=nhif
-        tax_band.shif=shif
-        tax_band.nssf_tier_one=nssf_tier_one
-        tax_band.nssf_tier_two=nssf_tier_two
-        tax_band.housing_levy=housing_levy
-        tax_band.tax_relief=tax_relief
-        tax_band.allowable_deductions=allowable_deductions
-        tax_band.insurance_relief=insurance_relief
+        tax_band.category = category
+        tax_band.lower_end = lower_end
+        tax_band.upper_end = upper_end
+        tax_band.nhif = nhif
+        tax_band.shif = shif
+        tax_band.nssf_tier_one = nssf_tier_one
+        tax_band.nssf_tier_two = nssf_tier_two
+        tax_band.housing_levy = housing_levy
+        tax_band.tax_relief = tax_relief
+        tax_band.allowable_deductions = allowable_deductions
+        tax_band.insurance_relief = insurance_relief
         tax_band.save()
-        
+
         return redirect("tax-configurations")
     return render(request, "taxes/edit_tax_config.html")
 

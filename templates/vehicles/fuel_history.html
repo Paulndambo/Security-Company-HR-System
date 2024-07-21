@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row mt-5"></div>
+<div class="row">
+    <div class="col">
+        <h3>Fuel History</h3>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newFuelRecordModal{{employee.id}}">Add Fuel Record</a>
+    </div>
+
+</div>
+<hr/>
+    <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Fueled At.</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Date Fueled</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fuel_record in page_obj %}
+            <tr>
+              <td>{{fuel_record.id}}</td>
+              <td>{{fuel_record.vehicle}}</td>
+              <td>{{fuel_record.fueled_at}}</td>
+              <td>{{fuel_record.amount}}</td>
+              <td>{{fuel_record.cost}}</td>
+              <td>{{fuel_record.date_fueled}}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      
+      </div>
+
+</div>
+{% endblock content %}

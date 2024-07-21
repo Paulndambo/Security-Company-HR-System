@@ -1,5 +1,7 @@
 from django.db import models
 from apps.core.models import AbstractBaseModel
+
+
 # Create your models here.
 class Visitor(AbstractBaseModel):
     place = models.ForeignKey("core.Client", on_delete=models.SET_NULL, null=True)
@@ -13,7 +15,6 @@ class Visitor(AbstractBaseModel):
     car_plate_number = models.CharField(max_length=255, null=True)
     car_model = models.CharField(max_length=255, null=True)
     car_colour = models.CharField(max_length=255, null=True)
-
 
 
 class Visit(AbstractBaseModel):

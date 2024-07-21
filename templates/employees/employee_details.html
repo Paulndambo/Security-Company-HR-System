@@ -15,26 +15,27 @@
     <h4>Personal Information</h4>
     <hr>
     <div class="col-4">
-        <p>Name: {{employee.first_name}} {{employee.last_name}}</p>
-        <p>Position: {{employee.position}}</p>
-        <p>Gender: {{employee.gender}}</p>
-        <p>Phone Number: {{employee.phone_number}}</p>
+        <p><b>Name:</b> {{employee.first_name}} {{employee.last_name}}</p>
+        <p><b>Position:</b> {{employee.position}}</p>
+        <p><b>Gender:</b> {{employee.gender}}</p>
+        <p><b>Phone Number:</b> {{employee.phone_number}}</p>
     </div>
     <div class="col-4">
-        <p>ID Number: {{employee.id_number}}</p>
-        <p>NHIF Number: {{employee.nhif_number}}</p>
-        <p>NSSF Number: {{employee.nssf_number}}</p>
-        <p>Daily Pay: {{employee.daily_rate}}</p>
+        <p><b>ID Number:</b> {{employee.id_number}}</p>
+        <p><b>NHIF Number:</b> {{employee.nhif_number}}</p>
+        <p><b>NSSF Number:</b> {{employee.nssf_number}}</p>
+        <p><b>Daily Pay:</b> {{employee.daily_rate}}</p>
     </div>
     <div class="col-4">
-        <p>Address: {{employee.postal_address}}</p>
-        <p>Town: {{employee.town}}</p>
-        <p>County: {{employee.county}}</p>
-        <p>Country: {{employee.country}}</p>
+        <p><b>Address:</b> {{employee.postal_address}}</p>
+        <p><b>Town:</b> {{employee.town}}</p>
+        <p><b>County:</b> {{employee.county}}</p>
+        <p><b>Country:</b> {{employee.country}}</p>
     </div>
 </div>
 <div class="row mt-5"></div>
 <hr>
+<!--
 <div class="row mb-3">
   <div class="col">
     <h4>Bank Information</h4>
@@ -63,6 +64,7 @@
 {% include "bank/edit_bank_details.html" %}
 <div class="row mt-5"></div>
 <hr>
+-->
 <div class="row">
     <div class="col">
         <h3>Next of Kins</h3>
@@ -74,6 +76,8 @@
 
 </div>
 <hr/>
+
+
     <div class="table-responsive small">
         <table class="table table-sm">
           <thead>
@@ -271,5 +275,15 @@
     </table>
   </div>
 </div>
-<div class="row mb-5"></div>
+<div class="d-flex mt-5 mb-5 border">
+  <div class="flex-fill p-4">
+    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveEmployeeModal{{employee.id}}">Approve Employee</a>
+  </div>
+  
+  <div class="flex-fill p-4">
+    <a href="" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#disapproveEmployeeModal{{employee.id}}">Disapprove Employee</a>
+  </div>
+ {% include "employees/approve_employee.html" %}
+ {% include "employees/decline_employee.html" %}
+</div>
 {% endblock content %}
