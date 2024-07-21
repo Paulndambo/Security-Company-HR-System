@@ -85,7 +85,7 @@ class JobRole(AbstractBaseModel):
     group = models.CharField(max_length=255, choices=SP_GROUP_CHOICES)
 
     def __str__(self):
-        return self.name
+        return self.category
     
 
 class PaymentConfig(AbstractBaseModel):
@@ -95,4 +95,4 @@ class PaymentConfig(AbstractBaseModel):
     overtime = models.DecimalField(max_digits=100, decimal_places=0, default=0)
 
     def __str__(self):
-        return self.job_group.name
+        return self.job_group.category

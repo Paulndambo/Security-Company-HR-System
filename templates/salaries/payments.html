@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Payments Configuration</h3>
+        <h3>Salary Information</h3>
     </div>
     <div class="col">
         <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newConfigModal">Record Config</a>
@@ -16,6 +16,7 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Job Group</th>
+              <th scope="col">Monthly Rate</th>
               <th scope="col">Daily Rate</th>
               <th scope="col">Overtime Rate</th>
               <th scope="col" colspan="2"></th>
@@ -25,7 +26,8 @@
             {% for payment in payments %}
             <tr>
               <td>{{payment.id}}</td>
-              <td>{{payment.job_group}}</td>
+              <td>{{payment.job_group.category}} (<b>{{payment.job_group.group}}</b>)</td>
+              <td>{{payment.monthly_rate}}</td>
               <td>{{payment.daily_rate}}</td>
               <td>{{payment.overtime}}</td>
               <td>

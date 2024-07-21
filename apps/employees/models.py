@@ -51,6 +51,8 @@ class Employee(AbstractBaseModel):
     country = models.CharField(max_length=255, null=True)
     basic_salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     daily_rate = models.DecimalField(max_digits=100, decimal_places=2, default=350)
+    residence = models.TextField(null=True)
+    workshift = models.CharField(max_length=255, null=True)
     client = models.ForeignKey(
         "core.Client",
         on_delete=models.SET_NULL,
@@ -60,7 +62,7 @@ class Employee(AbstractBaseModel):
     workstation = models.ForeignKey("core.Workstation", on_delete=models.SET_NULL, null=True)
     job_category = models.ForeignKey("core.PaymentConfig", on_delete=models.SET_NULL, null=True)
     passport_photo = models.ImageField(upload_to="passport_photos/", null=True)
-    status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Available")
+    status = models.CharField(max_length=255, choices=EMPLOYEE_STATUS, default="Pending Approval")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

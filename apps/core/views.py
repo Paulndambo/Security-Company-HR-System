@@ -134,6 +134,7 @@ def client_detail(request, client_id):
 
 
 ## Work stations
+@login_required(login_url="/users/login")
 def new_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -153,7 +154,7 @@ def new_workstation(request):
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/new_workstation.html")
 
-
+@login_required(login_url="/users/login")
 def edit_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -173,6 +174,7 @@ def edit_workstation(request):
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/edit_workstation.html")
 
+@login_required(login_url="/users/login")
 def delete_workstation(request):
     if request.method == "POST":
         workstation_id = request.POST.get('workstation_id')
@@ -182,7 +184,7 @@ def delete_workstation(request):
         return redirect(f"/clients/{client_id}")
     return render(request, "workstations/delete_workstation.html")
 
-
+@login_required(login_url="/users/login")
 def job_roles(request):
     job_roles = JobRole.objects.all()
     context = {
@@ -192,7 +194,7 @@ def job_roles(request):
     }
     return render(request, "job_roles/job_roles.html", context)
 
-
+@login_required(login_url="/users/login")
 def new_job_role(request):
     if request.method == "POST":
         category = request.POST.get("category")
@@ -202,6 +204,7 @@ def new_job_role(request):
         return redirect("job-roles")
     return render(request, "job_roles/new_job_role.html")
 
+@login_required(login_url="/users/login")
 def edit_job_role(request):
     if request.method == "POST":
         category = request.POST.get("category")
@@ -216,6 +219,7 @@ def edit_job_role(request):
         return redirect("job-roles")
     return render(request, "job_roles/edit_job_role.html")
 
+@login_required(login_url="/users/login")
 def delete_job_role(request):
     if request.method == "POST":
         role_id = request.POST.get("job_role_id")
@@ -225,7 +229,7 @@ def delete_job_role(request):
         return redirect("job-roles")
     return render(request, "job_roles/delete_job_role.html")
 
-
+@login_required(login_url="/users/login")
 def payments(request):
     payments = PaymentConfig.objects.all()
     job_roles = JobRole.objects.all()
@@ -236,7 +240,7 @@ def payments(request):
 
     return render(request, "salaries/payments.html", context)
 
-
+@login_required(login_url="/users/login")
 def new_payment_config(request):
     if request.method == "POST":
         job_group = request.POST.get("job_group")
@@ -244,9 +248,11 @@ def new_payment_config(request):
         daily_rate = request.POST.get("daily_rate")
         monthly_rate = request.POST.get("monthly_rate")
 
+        job_role = JobRole.objects.get(id=job_group)
+
 
         PaymentConfig.objects.create(
-            job_group=job_group,
+            job_group=job_role,
             overtime=overtime,
             daily_rate=daily_rate,
             monthly_rate=monthly_rate
@@ -256,6 +262,7 @@ def new_payment_config(request):
     return render(request, "salaries/new_payment_config.html")
 
 
+@login_required(login_url="/users/login")
 def edit_payment_config(request):
     if request.method == "POST":
         payment_id = request.POST.get("payment_id")
@@ -263,9 +270,10 @@ def edit_payment_config(request):
         overtime = request.POST.get("overtime")
         daily_rate = request.POST.get("daily_rate")
         monthly_rate = request.POST.get("monthly_rate")
+        job_role = JobRole.objects.get(id=job_group)
 
         payment_config = PaymentConfig.objects.get(id=payment_id)
-        payment_config.job_group = job_group
+        payment_config.job_group = job_role
         payment_config.overtime = overtime
         payment_config.daily_rate = daily_rate
         payment_config.monthly_rate = monthly_rate
@@ -274,6 +282,7 @@ def edit_payment_config(request):
         return redirect("payment-configs")
     return render(request, "salaries/edit_payment_config.html")
 
+@login_required(login_url="/users/login")
 def delete_payment_config(request):
     if request.method == "POST":
         payment_id = request.POST.get("payment_id")

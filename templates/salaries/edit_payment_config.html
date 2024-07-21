@@ -20,13 +20,15 @@
                       required
                     />
                 
-
                 <div class="mb-3">
                     <label class="form-label">Job Group</label>
                     <select class="form-select" id="job_group" name="job_group" value="{{payment.job_group}}">
-                        <option value="Security Guard">Security Guard</option>
-                        <option value="Security Manager">Security Manager</option>
-                        <option value="CCTV Installer">CCTV Installer</option>
+                        <option>{{payment.job_group.group}}</option>
+                        {% for role in job_roles %}
+                          {% if role.id != payment.job_group.id %}
+                          <option value="{{role.id}}">{{role.group}}</option>
+                          {% endif %}
+                        {% endfor %}
                         </select>
                 </div>
               

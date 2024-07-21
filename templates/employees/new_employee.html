@@ -69,22 +69,12 @@
                         <label class="form-label fw-bold">Position</label>
                         <select class="form-select" id="job_category" name="job_category">
                           {% for config in payment_configs %}
-                            <option value="{{config.id}}">{{config.job_group}}</option>
+                            <option value="{{config.id}}">{{config.job_group.group}}</option>
                           {% endfor %}
                         </select>
                     </div>
                     </div>
                     <div class="row mb-3">
-                    <div class="col">
-                        <label for="exampleInputPassword1" class="form-label fw-bold">Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="email"
-                          name="email"
-                          required
-                        />
-                      </div>
                     <div class="col">
                       <label for="exampleInputPassword1" class="form-label fw-bold">Phone Number</label>
                       <input
@@ -164,6 +154,17 @@
                       />
                     </div>
                   </div>
+                
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Place of Residence</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="place_of_residence"
+                        name="place_of_residence"
+                        required
+                      />
+                    </div>
                   
                 <div class="text-center mt-2">
                   <button type="submit" class="btn btn-primary">Submit</button>

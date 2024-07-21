@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from apps.payments.models import EmployeeSalary
 from apps.employees.models import NextOfKin, EducationInformation, Employee, EmployeeDocument
 from apps.payments.models import EmployeeSalary, BankInformation
-from apps.core.models import Workstation, PaymentConfig
+from apps.core.models import Workstation, PaymentConfig, JobRole
 
 date_today = datetime.now().date()
 
@@ -16,6 +16,8 @@ current_month = calendar.month_name[date_today.month]
 current_year = str(date_today.year)
 
 # Employee Management
+
+SHIFT_CHOICES = ["Day Shift", "Night Shift", "24 Hours Shift"]
 
 @login_required(login_url="/users/login/")
 def employees(request):
@@ -47,67 +49,39 @@ def new_employee(request):
         last_name = request.POST.get("last_name")
         gender = request.POST.get("gender")
         id_number = request.POST.get("id_number")
-        email = request.POST.get("email")
         phone_number = request.POST.get("phone_number")
         physical_address = request.POST.get("address")
         postal_address = request.POST.get("address")
         city = request.POST.get("city")
         country = request.POST.get("country")
         county = request.POST.get("county")
-        position = request.POST.get("job_category")
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
+        residence = request.POST.get("place_of_residence")
 
         job_category = request.POST.get("job_category")
-
-        chief_letter = request.FILES.get("chief_letter")
-        police_clearance = request.FILES.get("police_clearance")
-        referee_letter = request.FILES.get("referee_letter")
-        scanned_id = request.FILES.get("scanned_id")
-        kra_certificate = request.FILES.get("kra_certificate")
-        kcpe_certificate = request.FILES.get("kcpe_certificate")
-        kcse_certificate = request.FILES.get("kcse_certificate")
-        college_certificate = request.FILES.get("college_certificate")
-
-        passport_photo = request.FILES.get("passport_photo")
+        payment_config = PaymentConfig.objects.get(id=job_category)
         kra_pin = request.POST.get("kra_pin")
-        #workstation = request.POST.get("workstation")
 
-        employee = Employee.objects.create(
+        Employee.objects.create(
             first_name=first_name,
             last_name=last_name,
-            username=id_number,
             gender=gender,
             id_number=id_number,
             kra_pin=kra_pin,
             phone_number=phone_number,
-            email=email,
             physical_address=physical_address,
             postal_address=postal_address,
             town=city,
             county=county,
             country=country,
-            position_id=position,
+            residence=residence,
+            position=payment_config.job_group,
             nhif_number=nhif_number,
             nssf_number=nssf_number,
-            role="Employee",
-            #workstation_id=workstation,
-            passport_photo=passport_photo,
-            job_category_id=job_category,
+            job_category=payment_config,
             status="Pending Approval"
         )
-
-        documents = EmployeeDocument()
-        documents.employee = employee
-        documents.kra_certificate = kra_certificate if kra_certificate else None
-        documents.chief_letter =chief_letter if chief_letter else None
-        documents.police_clearance = police_clearance if police_clearance else None
-        documents.referee_letter = referee_letter if referee_letter else None 
-        documents.scanned_id = scanned_id if scanned_id else None
-        documents.kcpe_certificate = kcpe_certificate if kcpe_certificate else None
-        documents.kcse_certificate = kcse_certificate if kcse_certificate else None
-        documents.college_certificate = college_certificate if college_certificate else None
-        documents.save()
 
         return redirect("employees")
     return render(request, "employees/new_employees.html")
@@ -163,13 +137,11 @@ def approval_all(request):
 @login_required(login_url="/users/login/")
 def edit_employee(request):
     if request.method == "POST":
-        client_id = request.POST.get("client_id")
         employee_id = request.POST.get("employee_id")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         gender = request.POST.get("gender")
         id_number = request.POST.get("id_number")
-        email = request.POST.get("email")
         phone_number = request.POST.get("phone_number")
         address = request.POST.get("address")
         city = request.POST.get("city")
@@ -178,27 +150,27 @@ def edit_employee(request):
         nhif_number = request.POST.get("nhif_number")
         nssf_number = request.POST.get("nssf_number")
         kra_pin = request.POST.get("kra_pin")
-
+        residence = request.POST.get("place_of_residence")
         job_category = request.POST.get("job_category")
+        payment_config = PaymentConfig.objects.get(id=job_category)
 
         employee = Employee.objects.get(id=employee_id)
         employee.first_name = first_name
         employee.last_name = last_name
         employee.gender = gender
         employee.id_number = id_number
-        employee.email = email
         employee.phone_number = phone_number
         employee.physical_address = address
         employee.postal_address = address
         employee.town = city
-        employee.position_id = job_category
+        employee.position = payment_config.job_group
         employee.county = county
         employee.country = country
         employee.nhif_number = nhif_number
         employee.nssf_number = nssf_number
-        employee.client_id = client_id
-        employee.job_category_id = job_category
+        employee.job_category = payment_config
         employee.kra_pin = kra_pin
+        employee.residence = residence
         employee.save()
 
         return redirect("employees")
@@ -385,3 +357,35 @@ def delete_education_record(request):
 
         return redirect(f"/users/{employee_id}")
     return render(request, "education/delete_education.html")
+
+
+## Employees Assignments
+def employee_assignments(request):
+    employees = Employee.objects.all().order_by("-created")
+    paginator = Paginator(employees, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "work_shifts": SHIFT_CHOICES
+    }
+    return render(request, "assignments/assignments.html", context)
+
+
+def reassign_employee(request):
+    if request.method == "POST":
+        employee_id = request.POST.get("employee")
+        workstation_id = request.POST.get("workstation")
+        work_shift = request.POST.get("work_shift")
+
+        workstation = Workstation.objects.get(id=workstation_id)
+
+        employee = Employee.objects.get(id=employee_id)
+        employee.workstation = workstation
+        employee.client = workstation.client
+        employee.workshift = work_shift
+        employee.save()
+
+        return redirect("assignemnts")
+    return render(request, "assignments/reassign.html")
