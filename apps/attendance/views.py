@@ -46,7 +46,7 @@ def attendaces(request):
         "page_obj": page_obj,
         "show_generate_attendance": show_generate_attendance,
     }
-    return render(request, "attendances/attendances.html", context)
+    return render(request, "service_providers/attendances/attendances.html", context)
 
 
 @login_required(login_url="/users/login")

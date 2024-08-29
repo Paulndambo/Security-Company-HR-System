@@ -1,0 +1,36 @@
+<div class="modal fade" id="recordFuelModal{{vehicle.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-center">New Fuel Record</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="{% url 'record-fuel' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                <input type="text" id="vehicle" name="vehicle" value="{{vehicle.id}}" hidden readonly />
+
+                <div class="mb-3">
+                    <label class="form-label">Petrol Station</label>
+                    <input type="text" id="fueled_at" name="fueled_at" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" id="amount" name="amount" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Total Cost</label>
+                    <input type="number" id="cost" name="cost" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date Fueled</label>
+                    <input type="date" id="date_fueled" name="date_fueled" class="form-control" />
+                </div>
+                <div class="text-center mt-3 mb-3">
+                  <button type="submit" class="btn btn-primary">Record Fuel</button>
+                </div>
+              </div>
+              </form>
+      </div>
+    </div>
+  </div>

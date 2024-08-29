@@ -32,6 +32,12 @@ VEHICLE_TYPES = (
     ("Motorbike", "Motorbike"),
 )
 
+VEHICLE_STATUS = (
+    ("Good", "Good"),
+    ("Retired", "Retired"),
+    ("Broken", "Broken"),
+)
+
 
 class Equipment(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -87,24 +93,23 @@ class Vehicle(AbstractBaseModel):
     assigned_to = models.ForeignKey(
         "employees.Employee", on_delete=models.SET_NULL, null=True
     )
+    vehicle_status = models.CharField(max_length=255, choices=VEHICLE_STATUS, default="Good")
 
     def __str__(self):
-        self.plate_number
+        return self.plate_number
 
 
 class VehicleFuelHistory(AbstractBaseModel):
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="fuelingrecords")
     fueled_at = models.CharField(max_length=255, null=True)
     amount = models.FloatField(default=0)
     cost = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     date_fueled = models.DateField()
 
-    def __str__(self):
-        return self.vehicle.plate_number
 
 
 class VehicleServiceHistory(AbstractBaseModel):
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="servicerecords")
     cost = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     date_serviced = models.DateField()
     serviced_at = models.CharField(max_length=255, null=True)

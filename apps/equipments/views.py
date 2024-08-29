@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from apps.users.models import User
 from django.db.models import Q
+from apps.employees.models import Employee
 
 
 # Create your views here.
@@ -30,7 +31,7 @@ def equipments(request):
         "page_obj": page_obj,
     }
 
-    return render(request, "equipments/equipments.html", context)
+    return render(request, "operations/equipments/equipments.html", context)
 
 
 @login_required(login_url="/users/login")
@@ -46,7 +47,7 @@ def new_equipment(request):
         )
 
         return redirect("equipments")
-    return render(request, "equipments/new_equipment.html")
+    return render(request, "operations/equipments/new_equipment.html")
 
 
 @login_required(login_url="/users/login")
@@ -69,7 +70,7 @@ def edit_equipment(request):
         print(equipments)
 
         return redirect("equipments")
-    return render(request, "equipments/edit_equipment.html")
+    return render(request, "operations/equipments/edit_equipment.html")
 
 
 @login_required(login_url="/users/login")
@@ -81,7 +82,7 @@ def delete_equipment(request):
 
         return redirect("equipments")
 
-    return render(request, "equipments/delete_equipment.html")
+    return render(request, "operations/equipments/delete_equipment.html")
 
 
 @login_required(login_url="/users/login")
@@ -105,7 +106,7 @@ def issued_equipment(request):
 
     context = {"page_obj": page_obj, "employees": employees, "equipments": equipments}
 
-    return render(request, "equipments/issued_equipment.html", context)
+    return render(request, "operations/equipments/issued_equipment.html", context)
 
 
 @login_required(login_url="/users/login")
@@ -141,7 +142,7 @@ def issue_equipment(request):
         )
 
         return redirect("issued-equipments")
-    return render(request, "equipments/issue_equipment.html")
+    return render(request, "operations/equipments/issue_equipment.html")
 
 
 @login_required(login_url="/users/login")
@@ -155,7 +156,7 @@ def mark_issued_equipment(request):
         issued_equipment.save()
 
         return redirect("issued-equipments")
-    return render(request, "equipments/mark.html")
+    return render(request, "operations/equipments/mark.html")
 
 
 @login_required(login_url="/users/login")
@@ -167,13 +168,14 @@ def delete_issued_equipment(request):
         issued_equipment.delete()
 
         return redirect("issued-equipments")
-    return render(request, "equipments/delete_issue.html")
+    return render(request, "operations/equipments/delete_issue.html")
 
 
 ## Vehicles Management
 @login_required(login_url="/users/login")
 def vehicles(request):
     vehicles = Vehicle.objects.all().order_by("-created")
+    employees = Employee.objects.all()
     if request.method == "POST":
         search_text = request.POST.get("search_text")
         vehicles = Vehicle.objects.filter(
@@ -186,8 +188,31 @@ def vehicles(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj}
-    return render(request, "vehicles/vehicles.html", context)
+    context = {"page_obj": page_obj, "employees": employees}
+    return render(request, "operations/vehicles/vehicles.html", context)
+
+@login_required(login_url="/users/login")
+def vehicle_details(request, id):
+    vehicle = Vehicle.objects.get(id=id)
+
+    # Fueling records
+    fuel_records = vehicle.fuelingrecords.all().order_by("-created")
+    fuel_paginator = Paginator(fuel_records, 5)
+    fuel_page_number = request.GET.get("fuel_page")
+    fuel_page_obj = fuel_paginator.get_page(fuel_page_number)
+
+    # Fueling records
+    service_records = vehicle.servicerecords.all().order_by("-created")
+    service_paginator = Paginator(service_records, 5)
+    service_page_number = request.GET.get("service_page")
+    service_page_obj = service_paginator.get_page(service_page_number)
+    
+    context = {
+        "vehicle": vehicle,
+        "fuel_page_obj": fuel_page_obj,
+        "service_page_obj": service_page_obj
+    }
+    return render(request, "operations/vehicles/vehicle_details.html", context)
 
 
 @login_required(login_url="/users/login")
@@ -197,13 +222,16 @@ def new_vehicle(request):
         plate_number = request.POST.get("plate_number")
         vehicle_type = request.POST.get("vehicle_type")
 
+        vehicle_status = request.POST.get("vehicle_status")
+
         Vehicle.objects.create(
             vehicle_model=vehicle_model,
             plate_number=plate_number,
             vehicle_type=vehicle_type,
+            vehicle_status=vehicle_status
         )
         return redirect("vehicles")
-    return render(request, "vehicles/new_vehicle.html")
+    return render(request, "operations/vehicles/new_vehicle.html")
 
 
 @login_required(login_url="/users/login")
@@ -213,15 +241,17 @@ def edit_vehicle(request):
         vehicle_model = request.POST.get("vehicle_model")
         plate_number = request.POST.get("plate_number")
         vehicle_type = request.POST.get("vehicle_type")
+        vehicle_status = request.POST.get("vehicle_status")
 
         vehicle = Vehicle.objects.get(id=vehicle_id)
         vehicle.vehicle_model = vehicle_model
         vehicle.plate_number = plate_number
         vehicle.vehicle_type = vehicle_type
+        vehicle.vehicle_status = vehicle_status
         vehicle.save()
 
         return redirect("vehicles")
-    return render(request, "vehicles/edit_vehicle.html")
+    return render(request, "operations/vehicles/edit_vehicle.html")
 
 
 @login_required(login_url="/users/login")
@@ -231,7 +261,21 @@ def delete_vehicle(request):
         vehicle = Vehicle.objects.get(id=vehicle_id)
         vehicle.delete()
         return redirect("vehicles")
-    return render(request, "vehicles/delete_vehicle.html")
+    return render(request, "operations/vehicles/delete_vehicle.html")
+
+
+@login_required(login_url="/users/login")
+def assign_vehicle(request):
+    if request.method == "POST":
+        vehicle_id = request.POST.get("vehicle")
+        employee = request.POST.get("employee")
+
+        vehicle = Vehicle.objects.get(id=vehicle_id)
+        vehicle.assigned_to_id = employee
+        vehicle.save()
+
+        return redirect("vehicles")
+    return render(request, "operations/vehicles/assign_vehicle.html")
 
 
 @login_required(login_url="/users/login")
@@ -242,7 +286,27 @@ def vehicle_fueling_history(request, id):
     page_obj = paginator.get_page(page_number)
 
     context = {"page_obj": page_obj}
-    return render(request, "vehicles/fuel_history.html", context)
+    return render(request, "operations/vehicles/fuel_history.html", context)
+
+
+@login_required(login_url="/users/login")
+def new_fuel_record(request):
+    if request.method == "POST":
+        vehicle = request.POST.get("vehicle")
+        fueled_at = request.POST.get("fueled_at")
+        amount = request.POST.get("amount")
+        cost = request.POST.get("cost")
+        date_fueled = request.POST.get("date_fueled")
+
+        VehicleFuelHistory.objects.create(
+            vehicle_id=vehicle,
+            fueled_at=fueled_at,
+            amount=amount,
+            cost=cost,
+            date_fueled=date_fueled
+        )
+        return redirect(f"/equipments/vehicles/{vehicle}")
+    return render(request, "operations/fuel/record_fuel.html")
 
 
 @login_required(login_url="/users/login")
@@ -254,3 +318,21 @@ def vehicle_service_history(request, id):
 
     context = {"page_obj": page_obj}
     return render(request, "vehicles/service_history.html", context)
+
+@login_required(login_url="/users/login")
+def new_repair_record(request):
+    if request.method == "POST":
+        vehicle = request.POST.get("vehicle")
+        cost = request.POST.get("cost")
+        date_serviced = request.POST.get("date_serviced")
+        serviced_at = request.POST.get("serviced_at")
+
+        VehicleServiceHistory.objects.create(
+            vehicle_id=vehicle,
+            cost=cost,
+            date_serviced=date_serviced,
+            serviced_at=serviced_at
+        )
+        return redirect(f"/equipments/vehicles/{vehicle}")
+    return render(request, "operations/repair/record_repair.html")
+

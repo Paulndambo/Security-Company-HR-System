@@ -1,39 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="row mb-3">
+    <div class="col-4"></div>
+    <div class="col-4">
+      {% if employee.passport_photo %}
+        <img src="{{employee.passport_photo.url}}" height="100" width="100" alt="Employee Passport Image" />
+      {% endif %}
+    </div>
+    <div class="col-4"></div>
+    
+</div>
+<div class="row">
+    <h4>Personal Information</h4>
+    <hr>
+    <div class="col-4">
+        <p><b>Name:</b> {{employee.first_name}} {{employee.last_name}}</p>
+        <p><b>Position:</b> {{employee.position}}</p>
+        <p><b>Gender:</b> {{employee.gender}}</p>
+        <p><b>Phone Number:</b> {{employee.phone_number}}</p>
+    </div>
+    <div class="col-4">
+        <p><b>ID Number:</b> {{employee.id_number}}</p>
+        <p><b>NHIF Number:</b> {{employee.nhif_number}}</p>
+        <p><b>NSSF Number:</b> {{employee.nssf_number}}</p>
+        <p><b>Daily Pay:</b> {{employee.daily_rate}}</p>
+    </div>
+    <div class="col-4">
+        <p><b>Address:</b> {{employee.postal_address}}</p>
+        <p><b>Town:</b> {{employee.town}}</p>
+        <p><b>County:</b> {{employee.county}}</p>
+        <p><b>Country:</b> {{employee.country}}</p>
+    </div>
+</div>
 <div class="row mt-5"></div>
+<hr>
+
 <div class="row">
     <div class="col">
-        <h3>Fuel History</h3>
+        <h3>Next of Kins</h3>
     </div>
     <div class="col">
-        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newFuelRecordModal{{employee.id}}">Add Fuel Record</a>
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newRelativeModal{{employee.id}}">Add Relative</a>
+
     </div>
 
 </div>
 <hr/>
+
+
     <div class="table-responsive small">
         <table class="table table-sm">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Vehicle</th>
-              <th scope="col">Fueled At.</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Cost</th>
-              <th scope="col">Date Fueled</th>
+              <th scope="col">Name</th>
+              <th scope="col">Relationship</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Gender</th>
+              <th scope="col" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
-            {% for fuel_record in page_obj %}
+            {% for family_member in family_members %}
             <tr>
-              <td>{{fuel_record.id}}</td>
-              <td>{{fuel_record.vehicle}}</td>
-              <td>{{fuel_record.fueled_at}}</td>
-              <td>{{fuel_record.amount}}</td>
-              <td>{{fuel_record.cost}}</td>
-              <td>{{fuel_record.date_fueled}}</td>
+              <td>{{family_member.id}}</td>
+              <td>{{family_member.first_name}} {{family_member.last_name}}</td>
+              <td>{{family_member.relation}}</td>
+              <td>{{family_member.email}}</td>
+              <td>{{family_member.phone_number}}</td>
+              <td>{{family_member.gender}}</td>
+              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editRelativeModal{{family_member.id}}">
+                <i class="bi bi-pencil-square"></i>
+              </a></td>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRelativeModal{{family_member.id}}">
+                <i class="bi bi-trash"></i>
+              </a></td>
+              {% include "service_providers/family/edit_relative.html" %}
+              {% include "service_providers/family/delete_relative.html" %}
             </tr>
             {% endfor %}
 
@@ -83,8 +128,8 @@
               <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEducationModal{{education.id}}">
                 <i class="bi bi-trash"></i>
               </a></td>
-              {% include "education/delete_education.html" %}
-              {% include "education/edit_education.html" %}
+              {% include "service_providers/education/delete_education.html" %}
+              {% include "service_providers/education/edit_education.html" %}
             </tr> 
             {% endfor %}
 
@@ -104,7 +149,7 @@
     </a>
   </div>
 </div>
-{% include "employees/upload_documents.html" %}
+{% include "service_providers/employees/upload_documents.html" %}
 <hr>
 <div class="row mb-3">
   <div class="table-responsive small">
@@ -209,7 +254,7 @@
   <div class="flex-fill p-4">
     <a href="" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#disapproveEmployeeModal{{employee.id}}">Disapprove Employee</a>
   </div>
- {% include "employees/approve_employee.html" %}
- {% include "employees/decline_employee.html" %}
+ {% include "service_providers/employees/approve_employee.html" %}
+ {% include "service_providers/employees/decline_employee.html" %}
 </div>
 {% endblock content %}

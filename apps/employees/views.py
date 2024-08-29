@@ -50,7 +50,7 @@ def employees(request):
         "payment_configs": payment_configs,
         "work_shifts": SHIFT_CHOICES,
     }
-    return render(request, "employees/employees.html", context)
+    return render(request, "service_providers/employees/employees.html", context)
 
 
 @login_required(login_url="/users/login/")
@@ -95,7 +95,7 @@ def new_employee(request):
         )
 
         return redirect("employees")
-    return render(request, "employees/new_employees.html")
+    return render(request, "service_providers/employees/new_employees.html")
 
 
 def upload_documents(request):
@@ -156,7 +156,7 @@ def upload_documents(request):
             documents.save()
 
         return redirect(f"/users/{employee_id}")
-    return redirect(request, "employees/upload_documents.html")
+    return redirect(request, "service_providers/employees/upload_documents.html")
 
 
 def approval_all(request):
@@ -205,7 +205,7 @@ def edit_employee(request):
 
         return redirect("employees")
 
-    return render(request, "employees/edit_employee.html")
+    return render(request, "service_providers/employees/edit_employee.html")
 
 
 @login_required(login_url="/users/login/")
@@ -218,7 +218,7 @@ def delete_employee(request):
 
         return redirect("employees")
 
-    return render(request, "employees/delete_employee.html")
+    return render(request, "service_providers/employees/delete_employee.html")
 
 
 @login_required(login_url="/users/login/")
@@ -247,7 +247,7 @@ def employee_details(request, employee_id=None):
         "work_shifts": SHIFT_CHOICES,
     }
 
-    return render(request, "employees/employee_details.html", context)
+    return render(request, "service_providers/employees/employee_details.html", context)
 
 
 def approve_employee(request):
@@ -266,7 +266,7 @@ def approve_employee(request):
         employee.save()
 
         return redirect(f"/employees/{employee_id}")
-    return render(request, "employees/approve_employee.html")
+    return render(request, "service_providers/employees/approve_employee.html")
 
 
 def disapprove_employee(request):
@@ -278,7 +278,7 @@ def disapprove_employee(request):
         employee.save()
 
         return redirect(f"/employees/{employee_id}")
-    return render(request, "employees/decline_employee.html")
+    return render(request, "service_providers/employees/decline_employee.html")
 
 
 # Employee Relatives
@@ -303,7 +303,7 @@ def new_relative(request):
         )
 
         return redirect(f"/employees/{employee_id}")
-    return render(request, "family/new_family_member.html")
+    return render(request, "service_providers/family/new_family_member.html")
 
 
 def edit_relative(request):
@@ -326,7 +326,7 @@ def edit_relative(request):
         relative.save()
 
         return redirect(f"/employees/{relative.employee.id}")
-    return render(request, "family/edit_relative.html")
+    return render(request, "service_providers/family/edit_relative.html")
 
 
 def delete_relative(request):
@@ -337,7 +337,7 @@ def delete_relative(request):
         relative.delete()
         return redirect(f"/users/{employee_id}")
 
-    return render(request, "family/delete_relative.html")
+    return render(request, "service_providers/family/delete_relative.html")
 
 
 ## EDUCATION RECORDS MANAGEMENT
@@ -360,7 +360,7 @@ def new_education_record(request):
         )
 
         return redirect(f"/users/{employee_id}")
-    return render(request, "education/new_education.html")
+    return render(request, "service_providers/education/new_education.html")
 
 
 def edit_education_record(request):
@@ -379,7 +379,7 @@ def edit_education_record(request):
         education.save()
 
         return redirect(f"/users/{education.employee.id}")
-    return render(request, "education/edit_education.html")
+    return render(request, "service_providers/education/edit_education.html")
 
 
 def delete_education_record(request):
@@ -390,7 +390,7 @@ def delete_education_record(request):
         education.delete()
 
         return redirect(f"/users/{employee_id}")
-    return render(request, "education/delete_education.html")
+    return render(request, "service_providers/education/delete_education.html")
 
 
 ## Employees Assignments
@@ -413,7 +413,7 @@ def employee_assignments(request):
     page_obj = paginator.get_page(page_number)
 
     context = {"page_obj": page_obj, "work_shifts": SHIFT_CHOICES}
-    return render(request, "assignments/assignments.html", context)
+    return render(request, "service_providers/assignments/assignments.html", context)
 
 
 def reassign_employee(request):
@@ -431,4 +431,4 @@ def reassign_employee(request):
         employee.save()
 
         return redirect("assignemnts")
-    return render(request, "assignments/reassign.html")
+    return render(request, "service_providers/assignments/reassign.html")

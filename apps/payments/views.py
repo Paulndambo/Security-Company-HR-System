@@ -29,7 +29,7 @@ def employee_salaries(request):
     context = {
         "page_obj": page_obj,
     }
-    return render(request, "salaries/salaries.html", context)
+    return render(request, "finance/salaries/salaries.html", context)
 
 
 def overtimes(request):
@@ -41,7 +41,7 @@ def overtimes(request):
     page_obj = paginator.get_page(page_number)
 
     context = {"page_obj": page_obj, "employees": employees}
-    return render(request, "salaries/overtimes.html", context)
+    return render(request, "finance/salaries/overtimes.html", context)
 
 
 def record_overtime(request):
@@ -84,7 +84,7 @@ def record_overtime(request):
 
         return redirect("overtimes")
 
-    return render(request, "salaries/record_overtime.html")
+    return render(request, "finance/salaries/record_overtime.html")
 
 
 def payslips(request):
@@ -96,7 +96,7 @@ def payslips(request):
 
     context = {"page_obj": page_obj}
 
-    return render(request, "salaries/payslips.html", context)
+    return render(request, "finance/salaries/payslips.html", context)
 
 
 def delete_payslip(request):
@@ -106,7 +106,7 @@ def delete_payslip(request):
         payslip.delete()
 
         return redirect("payslips")
-    return redirect(request, "salaries/delete_payslip.html")
+    return redirect(request, "finance/salaries/delete_payslip.html")
 
 
 def generate_payslips(request):
@@ -138,13 +138,13 @@ def generate_payslips(request):
             # print(salaries_list)
 
         return redirect("payslips")
-    return render(request, "salaries/generate_payslips.html")
+    return render(request, "finance/salaries/generate_payslips.html")
 
 
 def payslip_receipt(request, id):
     payslip = Payslip.objects.get(id=id)
 
-    return render(request, "salaries/payslip_receipt.html", {"payslip": payslip})
+    return render(request, "finance/salaries/payslip_receipt.html", {"payslip": payslip})
 
 
 # Service Provider Payment Details
@@ -169,7 +169,7 @@ def new_bank_details(request):
         )
 
         return redirect(f"/users/{employee_id}")
-    return render(request, "bank/new_bank_details.html")
+    return render(request, "finance/bank/new_bank_details.html")
 
 
 def edit_bank_details(request):
@@ -191,4 +191,4 @@ def edit_bank_details(request):
         banking_info.save()
 
         return redirect(f"/users/{employee_id}")
-    return render(request, "bank/edit_bank_details.html")
+    return render(request, "finance/bank/edit_bank_details.html")

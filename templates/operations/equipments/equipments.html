@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h3>Employees Assigments</h3>
+        <h3>Equipment List</h3>
     </div>
     <div class="col">
       <form method="POST">
@@ -11,7 +11,7 @@
         
           <div class="row">
             <div class="col-8">
-              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name/ID No. ...">
+              <input type="text" class="form-control" name="search_text" id="search_text" placeholder="Name. ...">
             </div>
             <div class="col-4">
               <button class="btn btn-info">Search</button>
@@ -19,6 +19,12 @@
           </div>
       </form>
     </div>
+   
+    <div class="col">
+      <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newEquipmentModal">New Equipment</a>
+  </div>
+  
+
 </div>
 <hr/>
       <div class="table-responsive small">
@@ -27,30 +33,32 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Position</th>
-              <th scope="col">Client</th>
-              <th scope="col">Workstation</th>
-              <th scope="col">Status</th>
-              <th scope="col" colspan="3">Actions</th>
+              <th scope="col">Category</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Cost</th>
+              <th scope="col" colspan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for employee in page_obj %}
+            {% for equipment in page_obj %}
             <tr>
-              <td>{{employee.id}}</td>
-              <td>{{employee.first_name}} {{employee.last_name}}</td>
-              <td>{{employee.position}}</td>
-              <td>{{employee.client}}</td>
-              <td>{{employee.workstation}}</td>
-              <td>{{employee.status}}</td>
+              <td>{{equipment.id}}</td>
+              <td>{{equipment.name}}</td>
+              <td>{{equipment.category}}</td>
+              <td>{{equipment.quantity}}</td>
+              <td>{{equipment.price}}</td>
+            
               <td>
-                <a href="{% url 'employee-details' employee.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editEquipmentModal{{ equipment.id }}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
               </td>
               
-              <td><a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#reassignModal{{ employee.id }}">
-                <i class="bi bi-pencil-square"></i>
+              <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEquipmentModal{{ equipment.id }}">
+                <i class="bi bi-trash"></i>
               </a></td>
-            {% include "assignments/reassign.html" %}
+              {% include "operations/equipments/edit_equipment.html" %}
+              {% include "operations/equipments/delete_equipment.html" %}
             </tr>
             {% endfor %}
 

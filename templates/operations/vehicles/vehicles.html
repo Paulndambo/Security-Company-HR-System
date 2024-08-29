@@ -35,8 +35,9 @@
               <th scope="col">Plate Number</th>
               <th scope="col">Model</th>
               <th scope="col">Type</th>
+              <th scope="col">Status</th>
               <th scope="col">Assigned To</th>
-              <th scope="col" colspan="5">Actions</th>
+              <th scope="col" colspan="4">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -46,18 +47,14 @@
               <td>{{vehicle.plate_number}}</td>
               <td>{{vehicle.vehicle_model}}</td>
               <td>{{vehicle.vehicle_type}}</td>
+              <td>{{vehicle.vehicle_status}}</td>
               <td>{{vehicle.assigned_to}}</td>
-
               <td>
-                <a href="" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
+                <a href="{% url 'vehicle-details' vehicle.id %}" class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i></a>
               </td>
               <td>
-                <a href="{% url 'servicing-history' vehicle.id %}" class="btn btn-info btn-sm"><i class="bi bi-gear-wide-connected"></i></a>
+                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assignVehicleModal{{ vehicle.id }}"><i class="bi bi-person-gear"></i></a>
               </td>
-              <td>
-                <a href="{% url 'fueling-history' vehicle.id %}" class="btn btn-info btn-sm"><i class="bi bi-fuel-pump"></i></a>
-              </td>
-            
               <td>
                 <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editVehicleModal{{ vehicle.id }}">
                   <i class="bi bi-pencil-square"></i>
@@ -66,8 +63,9 @@
               <td><a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteVehicleModal{{ vehicle.id }}">
                 <i class="bi bi-trash"></i>
               </a></td>
-              {% include "vehicles/edit_vehicle.html" %}
-              {% include "vehicles/delete_vehicle.html" %}
+              {% include "operations/vehicles/edit_vehicle.html" %}
+              {% include "operations/vehicles/delete_vehicle.html" %}
+              {% include "operations/vehicles/assign_vehicle.html" %}
             </tr>
             {% endfor %}
 

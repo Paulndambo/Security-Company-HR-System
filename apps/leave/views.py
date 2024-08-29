@@ -28,7 +28,7 @@ def leave_applications(request):
 
     context = {"page_obj": page_obj, "employees": employees}
 
-    return render(request, "leaves/leaves.html", context)
+    return render(request, "service_providers/leaves/leaves.html", context)
 
 
 @login_required(login_url="/users/login")
@@ -50,7 +50,7 @@ def apply_leave(request):
 
         return redirect("leave-applications")
 
-    return render(request, "leaves/apply_leave.html")
+    return render(request, "service_providers/leaves/apply_leave.html")
 
 
 @login_required(login_url="/users/login")
@@ -70,7 +70,7 @@ def mark_leave_application(request):
             pass
 
         return redirect("leave-applications")
-    return render(request, "leaves/mark_leave.html")
+    return render(request, "service_providers/leaves/mark_leave.html")
 
 
 def complete_leave(request):
@@ -84,7 +84,7 @@ def complete_leave(request):
         leave.employee.save()
         return redirect("leave-applications")
 
-    return render(request, "leaves/mark_leave_complete.html")
+    return render(request, "service_providers/leaves/mark_leave_complete.html")
 
 
 @login_required(login_url="/users/login")
@@ -94,4 +94,4 @@ def delete_leave_application(request):
         leave = EmployeeLeave.objects.get(id=leave_id)
         leave.delete()
         return redirect("leave-applications")
-    return render(request, "leaves/delete_leave.html")
+    return render(request, "service_providers/leaves/delete_leave.html")

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Fuel History</h3>
+    </div>
+    <div class="col">
+        <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#recordFuelModal{{vehicle.id}}">Add Fuel Record</a>
+    </div>
+</div>
+<hr/>
+{% include "operations/fuel/record_fuel.html" %}
+    <div class="table-responsive small">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Fueled At.</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Date Fueled</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fuel_record in fuel_page_obj %}
+            <tr>
+              <td>{{fuel_record.id}}</td>
+              <td>{{fuel_record.vehicle}}</td>
+              <td>{{fuel_record.fueled_at}}</td>
+              <td>{{fuel_record.amount}}</td>
+              <td>{{fuel_record.cost}}</td>
+              <td>{{fuel_record.date_fueled}}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if fuel_page_obj.has_previous %}   
+                <li class="page-item"><a class="page-link" href="?fuel_page={{ fuel_page_obj.previous_page_number }}">Previous</a></li>
+              {% endif %}
+              <a class="page-link" href="#">{{ fuel_page_obj.number }} of {{ fuel_page_obj.paginator.num_pages }}</a>
+              {% if fuel_page_obj.has_next %}    
+              <li class="page-item"><a class="page-link" href="?fuel_page={{ fuel_page_obj.next_page_number }}">Next</a></li>
+              {% endif %}   
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+            <h3>Repair History</h3>
+        </div>
+        <div class="col">
+            <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#recordRepairModal{{vehicle.id}}">Add Repair Record</a>
+        </div>
+    </div>
+    {% include "operations/repair/record_repair.html" %}
+    <hr/>
+        <div class="table-responsive small">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Vehicle</th>
+                  <th scope="col">Repaired At.</th>
+                  <th scope="col">Cost</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service_record in service_page_obj %}
+                <tr>
+                  <td>{{service_record.id}}</td>
+                  <td>{{service_record.vehicle}}</td>
+                  <td>{{service_record.serviced_at}}</td>
+                  <td>{{service_record.cost}}</td>
+                  <td>{{service_record.date_serviced}}</td>
+                </tr>
+                {% endfor %}
+    
+              </tbody>
+            </table>
+            <div>
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                  {% if service_page_obj.has_previous %}   
+                    <li class="page-item"><a class="page-link" href="?service_page={{ service_page_obj.previous_page_number }}">Previous</a></li>
+                  {% endif %}
+                  <a class="page-link" href="#">{{ service_page_obj.number }} of {{ service_page_obj.paginator.num_pages }}</a>
+                  {% if service_page_obj.has_next %}    
+                  <li class="page-item"><a class="page-link" href="?service_page={{ service_page_obj.next_page_number }}">Next</a></li>
+                  {% endif %}   
+                </ul>
+              </nav>
+            </div>
+          </div>
+    
+    </div>
+
+
+{% endblock content %}
