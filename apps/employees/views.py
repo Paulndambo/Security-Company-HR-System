@@ -399,6 +399,8 @@ def employee_assignments(request):
         status__in=["Pending Approval", "Declined"]
     ).order_by("-created")
 
+    workstations = Workstation.objects.all()
+
     if request.method == "POST":
         search_text = request.POST.get("search_text")
         employees = Employee.objects.filter(
@@ -412,7 +414,7 @@ def employee_assignments(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "work_shifts": SHIFT_CHOICES}
+    context = {"page_obj": page_obj, "workstations": workstations, "work_shifts": SHIFT_CHOICES}
     return render(request, "service_providers/assignments/assignments.html", context)
 
 

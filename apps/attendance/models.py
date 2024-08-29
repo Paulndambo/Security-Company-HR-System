@@ -11,7 +11,7 @@ STATUS_CHOICES = (
 class Attendance(AbstractBaseModel):
     employee = models.ForeignKey("employees.Employee", on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
-    checkin_time = models.DateTimeField(null=True)
+    checkin_time = models.DateTimeField(auto_now_add=True, null=True)
     checkout_time = models.DateTimeField(null=True, blank=True)
     checked_in_by = models.ForeignKey(
         "users.User",

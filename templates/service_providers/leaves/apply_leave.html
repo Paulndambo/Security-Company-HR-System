@@ -11,7 +11,7 @@
               
                   <div class="row mb-3">
                     <div class="col">
-                      <label for="exampleInputPassword1" class="form-label">Employee</label>
+                      <label for="exampleInputPassword1" class="form-label fw-bold">Employee</label>
                         <select class="form-select" id="employee" name="employee">
                             {% for employee in employees %}
                                 <option value="{{ employee.id }}">{{employee.first_name}} {{employee.last_name}}</option>
@@ -22,7 +22,7 @@
                   
                   <div class="row mb-3">
                     <div class="col">
-                        <label class="form-label">Leave Type</label>
+                        <label class="form-label fw-bold">Leave Type</label>
                         <select class="form-select" id="leave_type" name="leave_type">
                           <option value="Sick Leave">Sick Leave</option>
                           <option value="Emergency Leave">Emergency Leave</option>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="exampleInputPassword1" class="form-label">Days Applied</label>
+                            <label for="exampleInputPassword1" class="form-label fw-bold">Days Applied</label>
                             <input
                               type="number"
                               class="form-control"
@@ -44,7 +44,7 @@
                       </div>
                     <div class="row mb-3">
                     <div class="col">
-                        <label for="exampleInputPassword1" class="form-label">Start Date</label>
+                        <label for="exampleInputPassword1" class="form-label fw-bold">Start Date</label>
                         <input
                           type="date"
                           class="form-control"
@@ -54,7 +54,7 @@
                         />
                       </div>
                       <div class="col">
-                        <label for="exampleInputPassword1" class="form-label">End Date</label>
+                        <label for="exampleInputPassword1" class="form-label fw-bold">End Date</label>
                         <input
                           type="date"
                           class="form-control"

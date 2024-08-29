@@ -279,13 +279,19 @@ def assign_vehicle(request):
 
 
 @login_required(login_url="/users/login")
-def vehicle_fueling_history(request, id):
-    fueling_history = VehicleFuelHistory.objects.filter(vehicle_id=id).order_by("-created")
-    paginator = Paginator(fueling_history, 15)
+def vehicle_fueling_history(request):
+    fueling_history = VehicleFuelHistory.objects.all().order_by("-created")
+    vehicles = Vehicle.objects.all().order_by("-created")
+
+    if request.method == "POST":
+        search_text = request.POST.get("search_text")
+        fueling_history = VehicleFuelHistory.objects.filter(Q(vehicle__plate_number__icontains=search_text)).order_by("-created")
+
+    paginator = Paginator(fueling_history, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj}
+    context = {"page_obj": page_obj, "vehicles": vehicles}
     return render(request, "operations/vehicles/fuel_history.html", context)
 
 
@@ -306,18 +312,23 @@ def new_fuel_record(request):
             date_fueled=date_fueled
         )
         return redirect(f"/equipments/vehicles/{vehicle}")
-    return render(request, "operations/fuel/record_fuel.html")
+    return render(request, "operations/operations/fuel/record_fuel.html")
 
 
 @login_required(login_url="/users/login")
-def vehicle_service_history(request, id):
-    service_history = VehicleServiceHistory.objects.filter(vehicle_id=id).order_by("-created")
-    paginator = Paginator(service_history, 15)
+def vehicle_service_history(request):
+    service_history = VehicleServiceHistory.objects.all().order_by("-created")
+    vehicles = Vehicle.objects.all().order_by("-created")
+    if request.method == "POST":
+        search_text = request.POST.get("search_text")
+        service_history = VehicleServiceHistory.objects.filter(Q(vehicle__plate_number__icontains=search_text)).order_by("-created")
+
+    paginator = Paginator(service_history, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj}
-    return render(request, "vehicles/service_history.html", context)
+    context = {"page_obj": page_obj, "vehicles": vehicles}
+    return render(request, "operations/vehicles/service_history.html", context)
 
 @login_required(login_url="/users/login")
 def new_repair_record(request):

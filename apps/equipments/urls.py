@@ -20,6 +20,8 @@ from apps.equipments.views import (
     assign_vehicle
 )
 
+from apps.equipments.vehicles.views import new_service_record, new_fueling_record
+
 urlpatterns = [
     path("", equipments, name="equipments"),
     path("new-equipment", new_equipment, name="new-equipment"),
@@ -36,9 +38,11 @@ urlpatterns = [
     path("delete-vehicle/", delete_vehicle, name="delete-vehicle"),
     path("assign-vehicle/", assign_vehicle, name="assign-vehicle"),
 
-    path("vehicles/<int:id>/fueling-history/", vehicle_fueling_history, name="fueling-history"),
+    path("vehicles/fueling-history/", vehicle_fueling_history, name="fueling-history"),
     path("record-fuel/", new_fuel_record, name="record-fuel"),
+    path("new-fueling-record/", new_fueling_record, name="new-fueling-record"),
 
-    path("vehicles/<int:id>/service-history/", vehicle_service_history, name="servicing-history"),
+    path("vehicles/service-history/", vehicle_service_history, name="servicing-history"),
     path("record-repair/", new_repair_record, name="record-repair"),
+    path("new-service-record/", new_service_record, name="new-service-record"),
 ]

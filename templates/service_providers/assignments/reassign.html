@@ -14,10 +14,10 @@
                 <div class="mb-3"> 
                     <label class="form-label fw-bold">Workstation</label>
                     <select class="form-select" name="workstation" id="workstation">
-                        <option>{{employee.workstation.name}}</option>
+                        <option>{{employee.workstation.client}} <b><==></b>{{employee.workstation.name}}</option>
                         {% for workstation in workstations %}
                             {% if workstation.id != employee.workstation.id %}
-                                <option value="{{workstation.id}}">{{workstation.name}}</option>
+                                <option value="{{workstation.id}}">{{workstation.client}}<==>{{workstation.name}}</option>
                             {% endif %}
                         {% endfor %}
                     </select>

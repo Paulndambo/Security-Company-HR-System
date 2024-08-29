@@ -21,6 +21,7 @@ from apps.core.views import (
     new_job_role,
     edit_job_role,
     delete_job_role,
+    workstations
 )
 
 urlpatterns = [
@@ -30,6 +31,7 @@ urlpatterns = [
     path("edit-client", edit_client, name="edit-client"),
     path("delete-client", delete_client, name="delete-client"),
     path("new-client", new_client, name="new-client"),
+    path("workstations/", workstations, name="workstations"),
     path("new-workstation", new_workstation, name="new-workstation"),
     path("edit-workstation", edit_workstation, name="edit-workstation"),
     path("delete-workstation", delete_workstation, name="delete-workstation"),

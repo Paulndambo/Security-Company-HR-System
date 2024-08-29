@@ -142,6 +142,21 @@ def client_detail(request, client_id):
 
 ## Work stations
 @login_required(login_url="/users/login")
+def workstations(request):
+    workstations = Workstation.objects.all().order_by("-created")
+
+    if request.method == "POST":
+        search_text = request.POST.get("search_text")
+        workstations = Workstation.objects.filter(Q(client__name__icontains=search_text))
+
+    paginator = Paginator(workstations, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
+    return render(request, "workstations/workstations.html", context)
+
+@login_required(login_url="/users/login")
 def new_workstation(request):
     if request.method == "POST":
         name = request.POST.get("name")

@@ -106,6 +106,8 @@ class VehicleFuelHistory(AbstractBaseModel):
     cost = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     date_fueled = models.DateField()
 
+    def __str__(self):
+        return self.vehicle.plate_number
 
 
 class VehicleServiceHistory(AbstractBaseModel):
